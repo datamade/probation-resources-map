@@ -6,8 +6,8 @@ var CartoDbLib = {
   lastClickedLayer: null,
   locationScope:   "chicago",
   currentPinpoint: null,
-  layerUrl: 'https://datamade.cartodb.com/api/v2/viz/1362b06a-3345-11e6-9b44-0ef7f98ade21/viz.json',
-  tableName: 'zoning_asof_19may2016',
+  layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
+  tableName: 'probationresourcesmap_mergeddata_resources',
 
   initialize: function(){
 
@@ -19,21 +19,20 @@ var CartoDbLib = {
 
     // initiate leaflet map
     if (!CartoDbLib.map) {
-      CartoDbLib.map = new L.Map('mapCanvas', { 
+      CartoDbLib.map = new L.Map('mapCanvas', {
         center: CartoDbLib.map_centroid,
         zoom: CartoDbLib.defaultZoom,
-        track_id: CartoDbLib.maptiks_tracking_code,
-        sa_id: '2nd City Zoning'
+        track_id: CartoDbLib.maptiks_tracking_code
       });
 
       CartoDbLib.google = new L.Google('ROADMAP', {animate: false});
-        
+
       CartoDbLib.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/datamade.k92mcmc8/{z}/{x}/{y}.png', {
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
         detectRetina: true,
         sa_id: 'satellite'
       });
-        
+
       CartoDbLib.buildings = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         detectRetina: true,
@@ -52,31 +51,31 @@ var CartoDbLib = {
       };
 
       // method that we will use to update the control based on feature properties passed
-      CartoDbLib.info.update = function (props) {
-        if (props) {
-          var zone_info = CartoDbLib.getZoneInfo(props.zone_class);
-          this._div.innerHTML = "<img src='/images/icons/" + zone_info.zone_icon + ".png' /> " + props.zone_class + " - " + zone_info.title;
-        }
-        else {
-          this._div.innerHTML = 'Hover over an area';
-        }
-      };
+      // CartoDbLib.info.update = function (props) {
+      //   if (props) {
+      //     var zone_info = CartoDbLib.getZoneInfo(props.zone_class);
+      //     this._div.innerHTML = "<img src='/images/icons/" + zone_info.zone_icon + ".png' /> " + props.zone_class + " - " + zone_info.title;
+      //   }
+      //   else {
+      //     this._div.innerHTML = 'Hover over an area';
+      //   }
+      // };
 
-      CartoDbLib.info.clear = function(){
-        this._div.innerHTML = '';
-      };
+      // CartoDbLib.info.clear = function(){
+      //   this._div.innerHTML = '';
+      // };
 
-      CartoDbLib.info.addTo(CartoDbLib.map);
+      // CartoDbLib.info.addTo(CartoDbLib.map);
 
-      var fields = "cartodb_id, zone_type, zone_class, ordinance_"
+      var fields = "cartodb_id, organization_name"
       var layerOpts = {
-        user_name: 'datamade',
+        user_name: 'clearstreets',
         type: 'cartodb',
         cartodb_logo: false,
         sublayers: [
           {
             sql: "select * from " + CartoDbLib.tableName,
-            cartocss: $('#second-city-zoning-styles').html().trim(),
+            cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }
         ]
@@ -109,134 +108,28 @@ var CartoDbLib = {
           //   sublayer.show();
           // })
 
-          window.setTimeout(function(){
-            if($.address.parameter('id')){
-              CartoDbLib.getOneZone($.address.parameter('id'))
-            }
-          }, 500)
+          // window.setTimeout(function(){
+          //   if($.address.parameter('id')){
+          //     CartoDbLib.getOneZone($.address.parameter('id'))
+          //   }
+          // }, 500)
         }).error(function(e) {
           //console.log('ERROR')
           //console.log(e)
-        }); 
+        });
       }
 
     CartoDbLib.doSearch();
   },
 
-  getZoneInfo: function(zone_class) {
-    // console.log("looking up zone_class: " + zone_class);
-    // PD and PMD have different numbers for each district. Fix for displaying generic title and link.
-    if (zone_class.substring(0, 'PMD'.length) === 'PMD') {
-      title = 'Planned Manufacturing District';
-      description = "All kinds of manufacturing, warehouses, and waste disposal. Special service district - not technically a manufacturing district - intended to protect the city's industrial base.";
-      zone_class_link = "PMD";
-      project_link = "https://gisapps.cityofchicago.org/gisimages/zoning_pds/" + zone_class.replace(" ","") + ".pdf"
-    }
-    else if (zone_class.substring(0, 'PD'.length) === 'PD') {
-      title = 'Planned Development';
-      description = "Tall buildings, campuses, and other large developments that must be negotiated with city planners. Developers gain freedom in building design, but must work with city to ensure project serves and integrates with surrounding neighborhood.";
-      zone_class_link = "PD";
-      project_link = "https://gisapps.cityofchicago.org/gisimages/zoning_pds/" + zone_class.replace(" ","") + ".pdf"
-
-      //https://gisapps.cityofchicago.org/gisimages/zoning_pds/PD43.pdf
-    }
-    else {
-      title = ZoningTable[zone_class].district_title;
-      description = ZoningTable[zone_class].juan_description;
-      zone_class_link = zone_class;
-      project_link = "";
-    }
-
-    return {
-      'title': title, 
-      'description': description, 
-      'zone_class_link': zone_class_link, 
-      'zone_icon': CartoDbLib.getZoneIcon(zone_class),
-      'project_link': project_link
-    };
-  },
-
-  getZoneIcon: function(zone_class) {
-    var zone_prefix = zone_class.replace( new RegExp("[^A-Z]","gm"),"");
-
-    var zone_icon = '';
-    switch(zone_prefix) {
-      case 'B'   : zone_icon = 'commercial'; break;
-      case 'C'   : zone_icon = 'commercial'; break;
-      case 'M'   : zone_icon = 'industrial'; break;
-      case 'R'   : zone_icon = 'residential'; break;
-      case 'RS'  : zone_icon = 'residential'; break;
-      case 'RT'  : zone_icon = 'residential'; break;
-      case 'RTA' : zone_icon = 'residential'; break;
-      case 'RM'  : zone_icon = 'residential'; break;
-      case 'PD'  : zone_icon = 'government'; break;
-      case 'PMD' : zone_icon = 'industrial'; break;
-      case 'DX'  : zone_icon = 'commercial'; break;
-      case 'DC'  : zone_icon = 'commercial'; break;
-      case 'DR'  : zone_icon = 'residential'; break;
-      case 'DS'  : zone_icon = 'commercial'; break;
-      case 'T'   : zone_icon = 'trains'; break;
-      case 'POS' : zone_icon = 'parks-entertainment'; break;
-    }
-
-    return zone_icon;
-  },
-
-  getOneZone: function(cartodb_id, click_latlng){
-    if (CartoDbLib.lastClickedLayer){
-      CartoDbLib.map.removeLayer(CartoDbLib.lastClickedLayer);
-    }
-    $.address.parameter('id', cartodb_id);
-    var sql = new cartodb.SQL({user: 'datamade', format: 'geojson'});
-    sql.execute('select * from ' + CartoDbLib.tableName + ' where cartodb_id = {{cartodb_id}}', {cartodb_id:cartodb_id})
-    .done(function(data){
-      var shape = data.features[0];
-      CartoDbLib.lastClickedLayer = L.geoJson(shape);
-      CartoDbLib.lastClickedLayer.addTo(CartoDbLib.map);
-      CartoDbLib.lastClickedLayer.setStyle({weight: 2, fillOpacity: 0, color: '#000'});
-      CartoDbLib.map.fitBounds(CartoDbLib.lastClickedLayer.getBounds(), {maxZoom: 16});
-
-      // show custom popup
-      var props = shape.properties;
-      var zone_info = CartoDbLib.getZoneInfo(props.zone_class);
-      var popup_content = "\
-        <h4>\
-          <img src='/images/icons/" + zone_info.zone_icon + ".png' />\
-          <a href='/zone/" + zone_info.zone_class_link + "/'>" + props.zone_class + "\
-            <small>" + zone_info.title + "</small>\
-          </a>\
-        </h4>\
-        <p><strong>What's here?</strong><br />\
-        " + zone_info.description + "\
-        <a href='/zone/" + zone_info.zone_class_link + "/'>Learn&nbsp;more&nbsp;»</a></p>\
-        ";
-
-      if (zone_info.project_link != "")
-        popup_content += "<p><a target='_blank' href='" + zone_info.project_link + "'>Read the full development plan for " + props.zone_class + "&nbsp;»</a></p>"
-
-      // console.log(click_latlng);
-      if (click_latlng) {
-        CartoDbLib.popup = L.popup()
-        .setContent(popup_content)
-        .setLatLng(click_latlng)
-        .openOn(CartoDbLib.map);
-      }
-      else {
-        CartoDbLib.lastClickedLayer.bindPopup(popup_content);
-        CartoDbLib.lastClickedLayer.openPopup();
-      }
-
-    }).error(function(e){console.log(e)});
-  },
-
   doSearch: function() {
     CartoDbLib.clearSearch();
     var address = $("#search_address").val();
-    
+
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
         address = address + " " + CartoDbLib.locationScope;
-      
+
       geocoder.geocode( { 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
@@ -256,7 +149,7 @@ var CartoDbLib = {
           }).error(function(e){console.log(e)});
 
           // CartoDbLib.drawCircle(CartoDbLib.currentPinpoint);
-        } 
+        }
         else {
           alert("We could not find your address: " + status);
         }
@@ -282,7 +175,7 @@ var CartoDbLib = {
   findMe: function() {
     // Try W3C Geolocation (Preferred)
     var foundLocation;
-    
+
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         foundLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -293,7 +186,7 @@ var CartoDbLib = {
       alert("Sorry, we could not find your location.");
     }
   },
-  
+
   addrFromLatLng: function(latLngPoint) {
     geocoder.geocode({'latLng': latLngPoint}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {

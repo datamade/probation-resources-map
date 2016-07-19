@@ -51,7 +51,7 @@ var CartoDbLib = {
 
       CartoDbLib.info.addTo(CartoDbLib.map);
 
-      var fields = "cartodb_id, full_address, organization_name"
+      var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
       var layerOpts = {
         user_name: 'clearstreets',
         type: 'cartodb',
@@ -83,9 +83,30 @@ var CartoDbLib = {
           // })
           // Modal pop-up.
           sublayer.on('featureClick', function(e, latlng, pos, data){
-                // $( '#' + $(this).data('modal-id') ).modal();
-                $('#modal-pop').modal();
+              var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
+
+              $('#modal-pop').modal();
+              $('#modal-title').empty();
+              $('#modal-body').empty();
+
+              $('#modal-title').append(data.organization_name)
+              $('#modal-body').append(modalText);
+
+// How to handle YES and NO fields?
+              if (data.spanish_language_emphasized.toLowerCase() == "yes") {
+                $('#modal-body').append("<p>Spanish language assistance available.</p>");
+              }
+              if (data.asl_or_other_assistance_for_hearing_impaired.toLowerCase() == "yes") {
+                $('#modal-body').append("<p>ASL and assistance for hearing impaired available.</p>");
+              }
+
+              $('#modal-body').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
+              console.log(data);
           })
+
+
+
+// hours_of_operation, website, intake_number
 
           // after layer is loaded, add the layer toggle control
           L.control.layers(CartoDbLib.baseMaps, {"Zoning": layer}, { collapsed: false, autoZIndex: true }).addTo(CartoDbLib.map);

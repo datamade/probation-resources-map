@@ -78,8 +78,13 @@ var CartoDbLib = {
             $('#mapCanvas div').css('cursor','inherit');
             CartoDbLib.info.clear();
           })
+          // sublayer.on('featureClick', function(e, latlng, pos, data){
+          //   CartoDbLib.getOneZone(data['cartodb_id'], latlng);
+          // })
+          // Modal pop-up.
           sublayer.on('featureClick', function(e, latlng, pos, data){
-            CartoDbLib.getOneZone(data['cartodb_id'], latlng);
+                // $( '#' + $(this).data('modal-id') ).modal();
+                $('#modal-pop').modal();
           })
 
           // after layer is loaded, add the layer toggle control

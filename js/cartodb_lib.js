@@ -13,7 +13,6 @@ var CartoDbLib = {
 
     //reset filters
     $("#search_address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
-    $(":checkbox").attr("checked", "checked");
 
     geocoder = new google.maps.Geocoder();
 
@@ -21,25 +20,11 @@ var CartoDbLib = {
     if (!CartoDbLib.map) {
       CartoDbLib.map = new L.Map('mapCanvas', {
         center: CartoDbLib.map_centroid,
-        zoom: CartoDbLib.defaultZoom,
-        track_id: CartoDbLib.maptiks_tracking_code
+        zoom: CartoDbLib.defaultZoom
       });
 
       CartoDbLib.google = new L.Google('ROADMAP', {animate: false});
 
-      CartoDbLib.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/datamade.k92mcmc8/{z}/{x}/{y}.png', {
-        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
-        detectRetina: true,
-        sa_id: 'satellite'
-      });
-
-      CartoDbLib.buildings = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        detectRetina: true,
-        sa_id: 'buildings'
-      });
-
-      CartoDbLib.baseMaps = {"Streets": CartoDbLib.google, "Building addresses": CartoDbLib.buildings, "Satellite": CartoDbLib.satellite};
       CartoDbLib.map.addLayer(CartoDbLib.google);
 
       CartoDbLib.info = L.control({position: 'bottomleft'});
@@ -51,23 +36,22 @@ var CartoDbLib = {
       };
 
       // method that we will use to update the control based on feature properties passed
-      // CartoDbLib.info.update = function (props) {
-      //   if (props) {
-      //     var zone_info = CartoDbLib.getZoneInfo(props.zone_class);
-      //     this._div.innerHTML = "<img src='/images/icons/" + zone_info.zone_icon + ".png' /> " + props.zone_class + " - " + zone_info.title;
-      //   }
-      //   else {
-      //     this._div.innerHTML = 'Hover over an area';
-      //   }
-      // };
+      CartoDbLib.info.update = function (props) {
+        if (props) {
+          this._div.innerHTML = props.full_address;
+        }
+        else {
+          this._div.innerHTML = 'Hover over an area';
+        }
+      };
 
-      // CartoDbLib.info.clear = function(){
-      //   this._div.innerHTML = '';
-      // };
+      CartoDbLib.info.clear = function(){
+        this._div.innerHTML = '';
+      };
 
-      // CartoDbLib.info.addTo(CartoDbLib.map);
+      CartoDbLib.info.addTo(CartoDbLib.map);
 
-      var fields = "cartodb_id, organization_name"
+      var fields = "cartodb_id, full_address, organization_name"
       var layerOpts = {
         user_name: 'clearstreets',
         type: 'cartodb',

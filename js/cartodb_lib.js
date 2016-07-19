@@ -86,22 +86,57 @@ var CartoDbLib = {
               var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
 
               $('#modal-pop').modal();
-              $('#modal-title').empty();
-              $('#modal-body').empty();
+              $('#modal-title, #modal-main, #language-header, #insurance-header').empty();
 
               $('#modal-title').append(data.organization_name)
-              $('#modal-body').append(modalText);
+              $('#modal-main').append(modalText);
 
-// How to handle YES and NO fields?
-              if (data.spanish_language_emphasized.toLowerCase() == "yes") {
-                $('#modal-body').append("<p>Spanish language assistance available.</p>");
-              }
-              if (data.asl_or_other_assistance_for_hearing_impaired.toLowerCase() == "yes") {
-                $('#modal-body').append("<p>ASL and assistance for hearing impaired available.</p>");
-              }
+// // How to handle YES and NO fields?
+//               if (data.spanish_language_emphasized.toLowerCase() == "yes") {
+//                 $('#modal-main').append("<p>Spanish language assistance available.</p>");
+//               }
+//               if (data.asl_or_other_assistance_for_hearing_impaired.toLowerCase() == "yes") {
+//                 $('#modal-main').append("<p>ASL and assistance for hearing impaired available.</p>");
+//               }
 
-              $('#modal-body').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
               console.log(data);
+
+              var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
+
+              var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
+
+              var insurance_count = 0
+              var language_count = 0
+              for (prop in data) {
+                var value = data[prop];
+                if (String(value).toLowerCase() == "yes") {
+                  for (val in insurance) {
+                    if (insurance[val] == String(prop)) {
+                      $("#insurance-subsection").append("<p>" + prop + "</p>");
+                      insurance_count += 1;
+                    }
+
+                  }
+                  for (val in language) {
+                    if (language[val] == String(prop)) {
+                      $("#language-subsection").append("<p>" + prop + "</p>");
+                      language_count += 1;
+                    }
+                  }
+                }
+
+              }
+
+              if (insurance_count > 0) {
+                $("#insurance-header").append("Insurance");
+              }
+
+              if (language_count > 0) {
+                $("#language-header").append("Language");
+              }
+
+
+              $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
           })
 
 

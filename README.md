@@ -1,21 +1,17 @@
-# 2nd City Zoning
+# Probation Resources Map
 
-2nd City Zoning is an interactive map that lets you:
+Probation Resources Map is an online interactive, searchable map that helps users:
 
--   find out **how your building is zoned**
--   learn **where to locate your business**
--   explore **zoning patterns** throughout the city
+-   find **social, health, and cultural resources** throughout Chicago
+-   identify services within **certain geographic boundaries**
+-   suggest **updates, changes, and additions** to the directory
 
-To make Chicago’s zoning code digestible by humans, we took inspiration
-from one of our favorite games: [Sim City 2000](http://en.wikipedia.org/wiki/SimCity_2000). It started with the color scheme and from there we got a little carried away. Graphics, sounds, music, oh my.
-
-2nd City Zoning is entirely [open
-source](http://secondcityzoning.org/about#code) and built with [open data](http://secondcityzoning.org/about#data).
+Built in collaboration with the Cook County Adult Probation Department (CCAPD) and Cook County Juvenile Probation Department (CCJPD), Probation Resourcecs Map helps criminal justice personnel refer clients to culturally relevant and geographically specific community-based services.
 
 ## Installation
 
 <pre>
-  $ git clone git@github.com:datamade/second-city-zoning.git
+  $ git clone https://github.com/datamade/probation-resources-map.git
   $ cd site_template
   $ gem install jekyll
   $ jekyll serve -w
@@ -34,16 +30,15 @@ source](http://secondcityzoning.org/about#code) and built with [open data](http:
 ## Team
 
 * [Derek Eder](mailto:derek.eder+git@gmail.com)
-* [Juan-Pablo Velez](mailto:jpvelez@gmail.com)
+* [Regina Compton](mailto:reginafcompton@datamade.us)
 
 ## Errors / Bugs
 
 If something is not behaving intuitively, it is a bug, and should be reported.
-Report it here: https://github.com/datamade/second-city-zoning/issues
-
+Report it here: https://github.com/datamade/probation-resources-map/issues
 
 ## Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Commit, do not mess with rakefile, version, or history.
@@ -51,6 +46,6 @@ Report it here: https://github.com/datamade/second-city-zoning/issues
 
 ## Copyright
 
-Copyright (c) 2013 Derek Eder and Juan-Pablo Velez of Open City. Released under the MIT License.
+Copyright (c) 2016 DataMade. Released under the MIT License.
 
-[See LICENSE for details](https://github.com/datamade/second-city-zoning/blob/master/LICENSE)
+[See LICENSE for details](https://github.com/datamade/probation-resources-map/blob/master/LICENSE)

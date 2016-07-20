@@ -147,7 +147,7 @@ var CartoDbLib = {
           $.address.parameter('address', encodeURIComponent(address));
           CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), 16)
           CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
-            iconUrl: '/images/blue-pushpin.png',
+            iconUrl: '/img/blue-pushpin.png',
             iconSize: [32, 32],
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);

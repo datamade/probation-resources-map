@@ -51,8 +51,7 @@ var CartoDbLib = {
       };
 
       CartoDbLib.info.addTo(CartoDbLib.map);
-      // CartoDbLib.renderMap();
-      // CartoDbLib.doSearch();
+      CartoDbLib.doSearch();
     }
   },
 
@@ -62,14 +61,13 @@ var CartoDbLib = {
       if (CartoDbLib.geoSearch != "") {
         whereClause += CartoDbLib.geoSearch;
       }
-      console.log(whereClause);
       var layerOpts = {
         user_name: CartoDbLib.userName,
         type: 'cartodb',
         cartodb_logo: false,
         sublayers: [
           {
-            sql: "SELECT * FROM " + CartoDbLib.tableName,
+            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause,
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }
@@ -80,17 +78,17 @@ var CartoDbLib = {
         .addTo(CartoDbLib.map)
         .done(function(layer) {
           console.log(layer);
-          var sublayer = layer.getSubLayer(0);
-          sublayer.setInteraction(true);
-          sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
+          CartoDbLib.sublayer = layer.getSubLayer(0);
+          CartoDbLib.sublayer.setInteraction(true);
+          CartoDbLib.sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','pointer');
             CartoDbLib.info.update(data);
           })
-          sublayer.on('featureOut', function(e, latlng, pos, data, subLayerIndex) {
+          CartoDbLib.sublayer.on('featureOut', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','inherit');
             CartoDbLib.info.clear();
           })
-          sublayer.on('featureClick', function(e, latlng, pos, data) {
+          CartoDbLib.sublayer.on('featureClick', function(e, latlng, pos, data) {
               CartoDbLib.modalPop(data);
           })
         }).error(function(e) {
@@ -137,6 +135,7 @@ var CartoDbLib = {
   doSearch: function() {
     CartoDbLib.clearSearch();
     var address = $("#search_address").val();
+    var radius = $("#search-radius").val();
 
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
@@ -153,7 +152,7 @@ var CartoDbLib = {
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);
 
-          CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, 100)";
+          CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + radius + ")";
           CartoDbLib.renderMap();
           // Comments below: for Geosearch with CartoDB layer.
           // var sql = new cartodb.SQL({user: CartoDbLib.userName, format: 'geojson'});
@@ -176,8 +175,8 @@ var CartoDbLib = {
   },
 
   clearSearch: function(){
-    if (CartoDbLib.lastClickedLayer) {
-      CartoDbLib.map.removeLayer(CartoDbLib.lastClickedLayer);
+    if (CartoDbLib.sublayer) {
+      CartoDbLib.sublayer.remove();
     }
     if (CartoDbLib.centerMark)
       CartoDbLib.map.removeLayer( CartoDbLib.centerMark );

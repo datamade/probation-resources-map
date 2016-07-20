@@ -8,7 +8,8 @@ var CartoDbLib = {
   currentPinpoint: null,
   layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
   tableName: 'probationresourcesmap_mergeddata_resources',
-
+  userName: 'clearstreets',
+  geoSearch: '',
   initialize: function(){
 
     //reset filters
@@ -50,15 +51,25 @@ var CartoDbLib = {
       };
 
       CartoDbLib.info.addTo(CartoDbLib.map);
+      // CartoDbLib.renderMap();
+      // CartoDbLib.doSearch();
+      CartoDbLib.modalPop();
+    }
+  },
 
-      var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
+  renderMap: function() {
+      var whereClause = " WHERE the_geom is not null AND "
+      if (CartoDbLib.geoSearch != "") {
+        whereClause += CartoDbLib.geoSearch;
+      }
+      console.log(whereClause);
       var layerOpts = {
-        user_name: 'clearstreets',
+        user_name: CartoDbLib.userName,
         type: 'cartodb',
         cartodb_logo: false,
         sublayers: [
           {
-            sql: "select * from " + CartoDbLib.tableName,
+            sql: "SELECT * FROM " + CartoDbLib.tableName,
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }
@@ -68,6 +79,7 @@ var CartoDbLib = {
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
+          console.log(layer);
           var sublayer = layer.getSubLayer(0);
           sublayer.setInteraction(true);
           sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
@@ -78,10 +90,35 @@ var CartoDbLib = {
             $('#mapCanvas div').css('cursor','inherit');
             CartoDbLib.info.clear();
           })
-          // sublayer.on('featureClick', function(e, latlng, pos, data){
-          //   CartoDbLib.getOneZone(data['cartodb_id'], latlng);
-          // })
-          // Modal pop-up.
+        }).error(function(e) {
+          //console.log('ERROR')
+        });
+
+  },
+
+  modalPop: function() {
+      var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
+
+      var layerOpts = {
+        user_name: CartoDbLib.userName,
+        type: 'cartodb',
+        cartodb_logo: false,
+        sublayers: [
+          {
+            sql: "SELECT * FROM " + CartoDbLib.tableName,
+            cartocss: $('#probation-maps-styles').html().trim(),
+            interactivity: fields
+          }
+        ]
+      }
+
+      CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
+        .addTo(CartoDbLib.map)
+        .done(function(layer) {
+          console.log(layer);
+          var sublayer = layer.getSubLayer(0);
+          sublayer.setInteraction(true);
+          // Modal pop-up on click.
           sublayer.on('featureClick', function(e, latlng, pos, data){
               var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
 
@@ -91,7 +128,6 @@ var CartoDbLib = {
               $('#modal-title').append(data.organization_name)
               $('#modal-main').append(modalText);
 
-// How to handle YES and NO fields?
               var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
               var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
               var insurance_count = 0
@@ -123,36 +159,8 @@ var CartoDbLib = {
               }
 
               $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
-
-              console.log(data);
           })
-
-
-
-// hours_of_operation, website, intake_number
-
-          // after layer is loaded, add the layer toggle control
-          L.control.layers(CartoDbLib.baseMaps, {"Zoning": layer}, { collapsed: false, autoZIndex: true }).addTo(CartoDbLib.map);
-
-          // CartoDbLib.map.on('zoomstart', function(e){
-          //   sublayer.hide();
-          // })
-          // google.maps.event.addListener(CartoDbLib.google._google, 'idle', function(e){
-          //   sublayer.show();
-          // })
-
-          // window.setTimeout(function(){
-          //   if($.address.parameter('id')){
-          //     CartoDbLib.getOneZone($.address.parameter('id'))
-          //   }
-          // }, 500)
-        }).error(function(e) {
-          //console.log('ERROR')
-          //console.log(e)
-        });
-      }
-
-    CartoDbLib.doSearch();
+        })
   },
 
   doSearch: function() {
@@ -163,7 +171,7 @@ var CartoDbLib = {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
         address = address + " " + CartoDbLib.locationScope;
 
-      geocoder.geocode( { 'address': address}, function(results, status) {
+      geocoder.geocode( { 'address': address }, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
@@ -174,13 +182,15 @@ var CartoDbLib = {
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);
 
-          var sql = new cartodb.SQL({user: 'datamade', format: 'geojson'});
-          // sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_Intersects( the_geom, ST_SetSRID(ST_POINT({{lng}}, {{lat}}) , 4326))', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
-          sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_DWithin( the_geom::geography, ST_SetSRID(ST_POINT({{lng}}, {{lat}}), 4326)::geography), 5000)', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
-          .done(function(data){
-            console.log(data);
-            // CartoDbLib.getOneZone(data.features[0].properties.cartodb_id, CartoDbLib.currentPinpoint)
-          }).error(function(e){console.log(e)});
+          CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, 100)";
+          CartoDbLib.renderMap();
+          // Comments below: for Geosearch with CartoDB layer.
+          // var sql = new cartodb.SQL({user: CartoDbLib.userName, format: 'geojson'});
+          // // sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_DWithin(ST_SetSRID(ST_POINT({{lng}}, {{lat}}), 4326)::geography, the_geom::geography, 5000)', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
+          // .done(function(data){
+          //   console.log(data);
+          //   // CartoDbLib.getOneZone(data.features[0].properties.cartodb_id, CartoDbLib.currentPinpoint)
+          // }).error(function(e){console.log(e)});
 
           // CartoDbLib.drawCircle(CartoDbLib.currentPinpoint);
         }

@@ -10,6 +10,7 @@ var CartoDbLib = {
   tableName: 'probationresourcesmap_mergeddata_resources',
   userName: 'clearstreets',
   geoSearch: '',
+  radius: '',
   initialize: function(){
 
     //reset filters
@@ -135,7 +136,7 @@ var CartoDbLib = {
   doSearch: function() {
     CartoDbLib.clearSearch();
     var address = $("#search_address").val();
-    var radius = $("#search-radius").val();
+    CartoDbLib.radius = $("#search-radius").val();
 
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
@@ -145,14 +146,24 @@ var CartoDbLib = {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
-          CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), 16)
+          console.log("#####");
+          console.log(CartoDbLib.radius);
+          var zoom = 17;
+          if (CartoDbLib.radius >= 8050) zoom = 12; // 5 miles
+          else if (CartoDbLib.radius >= 3220) zoom = 13; // 2 miles
+          else if (CartoDbLib.radius >= 1610) zoom = 14; // 1 mile
+          else if (CartoDbLib.radius >= 805) zoom = 15; // 1/2 mile
+          else if (CartoDbLib.radius >= 805) zoom = 16; // 1/4 mile
+          else zoom = 17;
+          console.log(zoom);
+          CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), zoom)
           CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
             iconUrl: '/img/blue-pushpin.png',
             iconSize: [32, 32],
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);
 
-          CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + radius + ")";
+          CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
           CartoDbLib.renderMap();
           // Comments below: for Geosearch with CartoDB layer.
           // var sql = new cartodb.SQL({user: CartoDbLib.userName, format: 'geojson'});
@@ -183,7 +194,7 @@ var CartoDbLib = {
     if (CartoDbLib.circle)
       CartoDbLib.map.removeLayer( CartoDbLib.circle );
 
-    CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
+    // CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
   },
 
   findMe: function() {

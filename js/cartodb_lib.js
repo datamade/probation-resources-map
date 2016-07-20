@@ -175,10 +175,11 @@ var CartoDbLib = {
           }))}).addTo(CartoDbLib.map);
 
           var sql = new cartodb.SQL({user: 'datamade', format: 'geojson'});
-          sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_Intersects( the_geom, ST_SetSRID(ST_POINT({{lng}}, {{lat}}) , 4326))', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
+          // sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_Intersects( the_geom, ST_SetSRID(ST_POINT({{lng}}, {{lat}}) , 4326))', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
+          sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_DWithin( the_geom::geography, ST_SetSRID(ST_POINT({{lng}}, {{lat}}), 4326)::geography), 5000)', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
           .done(function(data){
-            // console.log(data);
-            CartoDbLib.getOneZone(data.features[0].properties.cartodb_id, CartoDbLib.currentPinpoint)
+            console.log(data);
+            // CartoDbLib.getOneZone(data.features[0].properties.cartodb_id, CartoDbLib.currentPinpoint)
           }).error(function(e){console.log(e)});
 
           // CartoDbLib.drawCircle(CartoDbLib.currentPinpoint);

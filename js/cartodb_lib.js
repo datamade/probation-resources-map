@@ -53,11 +53,11 @@ var CartoDbLib = {
       CartoDbLib.info.addTo(CartoDbLib.map);
       // CartoDbLib.renderMap();
       // CartoDbLib.doSearch();
-      CartoDbLib.modalPop();
     }
   },
 
   renderMap: function() {
+      var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
       var whereClause = " WHERE the_geom is not null AND "
       if (CartoDbLib.geoSearch != "") {
         whereClause += CartoDbLib.geoSearch;
@@ -90,77 +90,48 @@ var CartoDbLib = {
             $('#mapCanvas div').css('cursor','inherit');
             CartoDbLib.info.clear();
           })
+          sublayer.on('featureClick', function(e, latlng, pos, data) {
+              CartoDbLib.modalPop(data);
+          })
         }).error(function(e) {
           //console.log('ERROR')
         });
-
   },
 
-  modalPop: function() {
-      var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
+  modalPop: function(data) {
+      var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
 
-      var layerOpts = {
-        user_name: CartoDbLib.userName,
-        type: 'cartodb',
-        cartodb_logo: false,
-        sublayers: [
-          {
-            sql: "SELECT * FROM " + CartoDbLib.tableName,
-            cartocss: $('#probation-maps-styles').html().trim(),
-            interactivity: fields
+      $('#modal-pop').modal();
+      $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
+      $('#modal-title').append(data.organization_name)
+      $('#modal-main').append(modalText);
+
+      var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
+      var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
+      var insurance_count = 0
+      var language_count = 0
+      // Find all instances of "yes."
+      for (prop in data) {
+        var value = data[prop];
+        if (String(value).toLowerCase() == "yes") {
+          if ($.inArray(String(prop), insurance) > -1) {
+            $("#insurance-subsection").append("<p>" + prop + "</p>");
+            insurance_count += 1;
           }
-        ]
+          if ($.inArray(String(prop), language) > -1) {
+            $("#language-subsection").append("<p>" + prop + "</p>");
+            language_count += 1;
+          }
+        }
       }
-
-      CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
-        .addTo(CartoDbLib.map)
-        .done(function(layer) {
-          console.log(layer);
-          var sublayer = layer.getSubLayer(0);
-          sublayer.setInteraction(true);
-          // Modal pop-up on click.
-          sublayer.on('featureClick', function(e, latlng, pos, data){
-              var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
-
-              $('#modal-pop').modal();
-              $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
-
-              $('#modal-title').append(data.organization_name)
-              $('#modal-main').append(modalText);
-
-              var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
-              var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
-              var insurance_count = 0
-              var language_count = 0
-
-              for (prop in data) {
-                var value = data[prop];
-                if (String(value).toLowerCase() == "yes") {
-
-                  if ($.inArray(String(prop), insurance) > -1) {
-                    $("#insurance-subsection").append("<p>" + prop + "</p>");
-                    insurance_count += 1;
-                  }
-
-                  if ($.inArray(String(prop), language) > -1) {
-                    $("#language-subsection").append("<p>" + prop + "</p>");
-                    language_count += 1;
-                  }
-
-                }
-              }
-
-              if (insurance_count > 0) {
-                $("#insurance-header").append("Insurance");
-              }
-
-              if (language_count > 0) {
-                $("#language-header").append("Language");
-              }
-
-              $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
-          })
-        })
+      // Add headers or not.
+      if (insurance_count > 0) {
+        $("#insurance-header").append("Insurance");
+      }
+      if (language_count > 0) {
+        $("#language-header").append("Language");
+      }
+      $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
   },
 
   doSearch: function() {

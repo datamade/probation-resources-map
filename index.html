@@ -6,12 +6,27 @@ layout: default
   <div class="col-md-4 form-group">
     <input class='form-control' id='search_address' placeholder='Enter an address or an intersection' type='text'>
   </div>
-  <div class="col-md-8">
+  <div class="col-md-2">
+    <p>
+      <label>
+      within
+        <select id='search-radius'>
+          <option value='400'>2 blocks</option>
+          <option value='805'>1/2 mile</option>
+          <option value='1610'>1 mile</option>
+          <option value='3220'>2 miles</option>
+          <option value='8050'>5 miles</option>
+        </select>
+      </label>
+    </p>
+  </div>
+
+  <div class="col-md-6">
     <ul class="nav navbar-nav">
       <li>Facility Type</li>
       <li>Payment Options</li>
       <li>Language</li>
-      <li><button class='btn btn-default btn-sm' id='reset'><i class='fa'></i>Search</button></li>
+      <li><button class='btn btn-default btn-sm' id="btnSearch"><i class='fa'></i>Search</button></li>
     </ul>
 </div>
 

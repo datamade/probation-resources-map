@@ -8,7 +8,9 @@ var CartoDbLib = {
   currentPinpoint: null,
   layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
   tableName: 'probationresourcesmap_mergeddata_resources',
-
+  userName: 'clearstreets',
+  geoSearch: '',
+  radius: '',
   initialize: function(){
 
     //reset filters
@@ -50,15 +52,23 @@ var CartoDbLib = {
       };
 
       CartoDbLib.info.addTo(CartoDbLib.map);
+      CartoDbLib.doSearch();
+    }
+  },
 
+  renderMap: function() {
       var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
+      var whereClause = " WHERE the_geom is not null AND "
+      if (CartoDbLib.geoSearch != "") {
+        whereClause += CartoDbLib.geoSearch;
+      }
       var layerOpts = {
-        user_name: 'clearstreets',
+        user_name: CartoDbLib.userName,
         type: 'cartodb',
         cartodb_logo: false,
         sublayers: [
           {
-            sql: "select * from " + CartoDbLib.tableName,
+            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause,
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }
@@ -68,118 +78,100 @@ var CartoDbLib = {
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
-          var sublayer = layer.getSubLayer(0);
-          sublayer.setInteraction(true);
-          sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
+          console.log(layer);
+          CartoDbLib.sublayer = layer.getSubLayer(0);
+          CartoDbLib.sublayer.setInteraction(true);
+          CartoDbLib.sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','pointer');
             CartoDbLib.info.update(data);
           })
-          sublayer.on('featureOut', function(e, latlng, pos, data, subLayerIndex) {
+          CartoDbLib.sublayer.on('featureOut', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','inherit');
             CartoDbLib.info.clear();
           })
-          // sublayer.on('featureClick', function(e, latlng, pos, data){
-          //   CartoDbLib.getOneZone(data['cartodb_id'], latlng);
-          // })
-          // Modal pop-up.
-          sublayer.on('featureClick', function(e, latlng, pos, data){
-              var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
-
-              $('#modal-pop').modal();
-              $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
-
-              $('#modal-title').append(data.organization_name)
-              $('#modal-main').append(modalText);
-
-// How to handle YES and NO fields?
-              var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
-              var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
-              var insurance_count = 0
-              var language_count = 0
-
-              for (prop in data) {
-                var value = data[prop];
-                if (String(value).toLowerCase() == "yes") {
-
-                  if ($.inArray(String(prop), insurance) > -1) {
-                    $("#insurance-subsection").append("<p>" + prop + "</p>");
-                    insurance_count += 1;
-                  }
-
-                  if ($.inArray(String(prop), language) > -1) {
-                    $("#language-subsection").append("<p>" + prop + "</p>");
-                    language_count += 1;
-                  }
-
-                }
-              }
-
-              if (insurance_count > 0) {
-                $("#insurance-header").append("Insurance");
-              }
-
-              if (language_count > 0) {
-                $("#language-header").append("Language");
-              }
-
-              $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
-
-              console.log(data);
+          CartoDbLib.sublayer.on('featureClick', function(e, latlng, pos, data) {
+              CartoDbLib.modalPop(data);
           })
-
-
-
-// hours_of_operation, website, intake_number
-
-          // after layer is loaded, add the layer toggle control
-          L.control.layers(CartoDbLib.baseMaps, {"Zoning": layer}, { collapsed: false, autoZIndex: true }).addTo(CartoDbLib.map);
-
-          // CartoDbLib.map.on('zoomstart', function(e){
-          //   sublayer.hide();
-          // })
-          // google.maps.event.addListener(CartoDbLib.google._google, 'idle', function(e){
-          //   sublayer.show();
-          // })
-
-          // window.setTimeout(function(){
-          //   if($.address.parameter('id')){
-          //     CartoDbLib.getOneZone($.address.parameter('id'))
-          //   }
-          // }, 500)
         }).error(function(e) {
           //console.log('ERROR')
-          //console.log(e)
         });
-      }
+  },
 
-    CartoDbLib.doSearch();
+  modalPop: function(data) {
+      var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
+
+      $('#modal-pop').modal();
+      $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
+      $('#modal-title').append(data.organization_name)
+      $('#modal-main').append(modalText);
+
+      var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
+      var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
+      var insurance_count = 0
+      var language_count = 0
+      // Find all instances of "yes."
+      for (prop in data) {
+        var value = data[prop];
+        if (String(value).toLowerCase() == "yes") {
+          if ($.inArray(String(prop), insurance) > -1) {
+            $("#insurance-subsection").append("<p>" + prop + "</p>");
+            insurance_count += 1;
+          }
+          if ($.inArray(String(prop), language) > -1) {
+            $("#language-subsection").append("<p>" + prop + "</p>");
+            language_count += 1;
+          }
+        }
+      }
+      // Add headers or not.
+      if (insurance_count > 0) {
+        $("#insurance-header").append("Insurance");
+      }
+      if (language_count > 0) {
+        $("#language-header").append("Language");
+      }
+      $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
   },
 
   doSearch: function() {
     CartoDbLib.clearSearch();
     var address = $("#search_address").val();
+    CartoDbLib.radius = $("#search-radius").val();
 
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
         address = address + " " + CartoDbLib.locationScope;
 
-      geocoder.geocode( { 'address': address}, function(results, status) {
+      geocoder.geocode( { 'address': address }, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
-          CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), 16)
+          console.log("#####");
+          console.log(CartoDbLib.radius);
+          var zoom = 17;
+          if (CartoDbLib.radius >= 8050) zoom = 12; // 5 miles
+          else if (CartoDbLib.radius >= 3220) zoom = 13; // 2 miles
+          else if (CartoDbLib.radius >= 1610) zoom = 14; // 1 mile
+          else if (CartoDbLib.radius >= 805) zoom = 15; // 1/2 mile
+          else if (CartoDbLib.radius >= 805) zoom = 16; // 1/4 mile
+          else zoom = 17;
+          console.log(zoom);
+          CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), zoom)
           CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
-            iconUrl: '/images/blue-pushpin.png',
+            iconUrl: '/img/blue-pushpin.png',
             iconSize: [32, 32],
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);
 
-          var sql = new cartodb.SQL({user: 'datamade', format: 'geojson'});
-          sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_Intersects( the_geom, ST_SetSRID(ST_POINT({{lng}}, {{lat}}) , 4326))', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
-          .done(function(data){
-            // console.log(data);
-            CartoDbLib.getOneZone(data.features[0].properties.cartodb_id, CartoDbLib.currentPinpoint)
-          }).error(function(e){console.log(e)});
+          CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+          CartoDbLib.renderMap();
+          // Comments below: for Geosearch with CartoDB layer.
+          // var sql = new cartodb.SQL({user: CartoDbLib.userName, format: 'geojson'});
+          // // sql.execute('select cartodb_id, the_geom from ' + CartoDbLib.tableName + ' where ST_DWithin(ST_SetSRID(ST_POINT({{lng}}, {{lat}}), 4326)::geography, the_geom::geography, 5000)', {lng:CartoDbLib.currentPinpoint[1], lat:CartoDbLib.currentPinpoint[0]})
+          // .done(function(data){
+          //   console.log(data);
+          //   // CartoDbLib.getOneZone(data.features[0].properties.cartodb_id, CartoDbLib.currentPinpoint)
+          // }).error(function(e){console.log(e)});
 
           // CartoDbLib.drawCircle(CartoDbLib.currentPinpoint);
         }
@@ -194,15 +186,15 @@ var CartoDbLib = {
   },
 
   clearSearch: function(){
-    if (CartoDbLib.lastClickedLayer) {
-      CartoDbLib.map.removeLayer(CartoDbLib.lastClickedLayer);
+    if (CartoDbLib.sublayer) {
+      CartoDbLib.sublayer.remove();
     }
     if (CartoDbLib.centerMark)
       CartoDbLib.map.removeLayer( CartoDbLib.centerMark );
     if (CartoDbLib.circle)
       CartoDbLib.map.removeLayer( CartoDbLib.circle );
 
-    CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
+    // CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
   },
 
   findMe: function() {

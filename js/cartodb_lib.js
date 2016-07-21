@@ -10,12 +10,11 @@ var CartoDbLib = {
   tableName: 'probationresourcesmap_mergeddata_resources',
   userName: 'clearstreets',
   geoSearch: '',
-  languageSearch: '',
-  insuranceSearch: '',
+  userSelection: '',
   radius: '',
   // Arrays? To create Select2 dropdowns, and to populate modal pop-ups.
-  insurance: ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"],
-  language: ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"],
+  // insurance: ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"],
+  // language: ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"],
 
   initialize: function(){
     //reset filters
@@ -66,8 +65,7 @@ var CartoDbLib = {
       var whereClause = " WHERE the_geom is not null AND "
       if (CartoDbLib.geoSearch != "") {
         whereClause += CartoDbLib.geoSearch;
-        whereClause += CartoDbLib.languageSearch;
-        whereClause += CartoDbLib.insuranceSearch;
+        whereClause += CartoDbLib.userSelection;
       }
       var layerOpts = {
         user_name: CartoDbLib.userName,
@@ -75,7 +73,7 @@ var CartoDbLib = {
         cartodb_logo: false,
         sublayers: [
           {
-            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause, //+ " AND asl_or_other_assistance_for_hearing_impaired LIKE 'yes'",
+            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause,
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }
@@ -119,11 +117,11 @@ var CartoDbLib = {
       for (prop in data) {
         var value = data[prop];
         if (String(value).toLowerCase() == "yes") {
-          if ($.inArray(String(prop), CartoDbLib.insurance) > -1) {
+          if ($.inArray(String(prop), insurance) > -1) {
             $("#insurance-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             insurance_count += 1;
           }
-          if ($.inArray(String(prop), CartoDbLib.language) > -1) {
+          if ($.inArray(String(prop), language) > -1) {
             $("#language-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
           }
@@ -172,20 +170,14 @@ var CartoDbLib = {
           // Devise SQL calls for geosearch and language search.
           CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
 
-          CartoDbLib.languageSearch = "";
-          CartoDbLib.insuranceSearch = "";
+          // Refactor this....
+          CartoDbLib.userSelection = '';
+          // Gets selected elements in dropdown (represented as an array of objects).
           var lang_selections = ($("#select-language").select2('data'))
           var insurance_selections = ($("#select-insurance").select2('data'))
 
-          for(var i = 0; i < lang_selections.length; i++) {
-              var obj = lang_selections[i];
-              CartoDbLib.languageSearch += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
-          }
-
-          for(var i = 0; i < insurance_selections.length; i++) {
-              var obj = insurance_selections[i];
-              CartoDbLib.insuranceSearch += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
-          }
+          CartoDbLib.makeSQL(lang_selections);
+          CartoDbLib.makeSQL(insurance_selections);
 
           CartoDbLib.renderMap();
           // Comments below: for Geosearch with CartoDB layer.
@@ -262,5 +254,13 @@ var CartoDbLib = {
 
   addUnderscore: function(text) {
     return text.replace(/\s/g, '_')
+  },
+
+  // Call this in doSearch, when creating SQL queries from user selection.
+  makeSQL: function(array) {
+    for(var i = 0; i < array.length; i++) {
+          var obj = array[i];
+          CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
+      }
   }
 }

@@ -1,3 +1,6 @@
+var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"];
+var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
+
 $(window).resize(function () {
   var h = $(window).height(),
     offsetTop = 200; // Calculate the top offset
@@ -41,9 +44,14 @@ $(function() {
 
   $('select').select2();
 
-  var language_data = [{ id: 0, text: 'spanish language emphasized' }, { id: 1, text: 'asl or other assistance for hearing impaired' }];
+  // var language_data = [{ id: 0, text: 'spanish language emphasized' }, { id: 1, text: 'asl or other assistance for hearing impaired' }];
 
-  var insurance_data = [{ id: 0, text: 'sliding fee scale' }, { id: 1, text: 'private health insurance' }, { id: 2, text: 'military insurance' }, { id: 3, text: 'medicare' }, { id: 4, text: 'medicaid' }];
+  // var insurance_data = [{ id: 0, text: 'sliding fee scale' }, { id: 1, text: 'private health insurance' }, { id: 2, text: 'military insurance' }, { id: 3, text: 'medicare' }, { id: 4, text: 'medicaid' }];
+
+  var language_data = makeSelectData(language);
+  console.log(language_data)
+  var insurance_data = makeSelectData(insurance);
+  console.log(insurance_data)
 
   $(".js-example-data-array-language").select2({
     data: language_data
@@ -54,3 +62,11 @@ $(function() {
   });
 
 });
+
+function makeSelectData(array) {
+  data_arr = []
+  for(var i = 0; i < array.length; i++) {
+    data_arr.push({ id: 0, text: array[i] })
+  }
+  return data_arr
+};

@@ -82,6 +82,8 @@ var CartoDbLib = {
         ]
       }
 
+      console.log(layerOpts.sublayers[0].sql)
+
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
@@ -177,12 +179,12 @@ var CartoDbLib = {
 
           for(var i = 0; i < lang_selections.length; i++) {
               var obj = lang_selections[i];
-              CartoDbLib.languageSearch += " AND LOWER(" + obj.text + ") LIKE 'yes'"
+              CartoDbLib.languageSearch += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
           }
 
           for(var i = 0; i < insurance_selections.length; i++) {
               var obj = insurance_selections[i];
-              CartoDbLib.insuranceSearch += " AND LOWER(" + obj.text + ") LIKE 'yes'"
+              CartoDbLib.insuranceSearch += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
           }
 
           CartoDbLib.renderMap();
@@ -256,5 +258,9 @@ var CartoDbLib = {
   removeUnderscore: function(text) {
     var spacedText = text.replace(/_/g, ' ')
     return spacedText.charAt(0).toUpperCase() + spacedText.slice(1);
+  },
+
+  addUnderscore: function(text) {
+    return text.replace(/\s/g, '_')
   }
 }

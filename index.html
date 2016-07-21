@@ -23,7 +23,10 @@ layout: default
 
   <div class="col-md-6">
     <ul class="nav navbar-nav">
-      <li>Facility Type</li>
+      <li><select class="js-example-basic-multiple" multiple="multiple">
+        <option value="AL">Alabama</option>
+        <option value="WY">Wyoming</option>
+      </select></li>
       <li>Payment Options</li>
       <li>Language</li>
       <li><button class='btn btn-default btn-sm' id="btnSearch"><i class='fa'></i>Search</button></li>
@@ -83,3 +86,8 @@ layout: default
 <script type="text/javascript" src="/js/cartodb_lib.js"></script>
 <script type="text/javascript" src="/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/js/map.js"></script>
+<script type="text/javascript">$(".js-example-basic-multiple").select2();</script>
+
+<script type="text/javascript">
+  $('select').select2();
+</script>

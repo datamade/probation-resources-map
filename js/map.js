@@ -44,19 +44,12 @@ $(function() {
 
   $('select').select2();
 
-  // var language_data = [{ id: 0, text: 'spanish language emphasized' }, { id: 1, text: 'asl or other assistance for hearing impaired' }];
-
-  // var insurance_data = [{ id: 0, text: 'sliding fee scale' }, { id: 1, text: 'private health insurance' }, { id: 2, text: 'military insurance' }, { id: 3, text: 'medicare' }, { id: 4, text: 'medicaid' }];
-
   var language_data = makeSelectData(language);
-  console.log(language_data)
   var insurance_data = makeSelectData(insurance);
-  console.log(insurance_data)
 
   $(".js-example-data-array-language").select2({
     data: language_data
   });
-
   $(".js-example-data-array-insurance").select2({
     data: insurance_data
   });

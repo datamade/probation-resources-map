@@ -1,3 +1,6 @@
+var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"];
+var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
+
 $(window).resize(function () {
   var h = $(window).height(),
     offsetTop = 200; // Calculate the top offset
@@ -38,4 +41,25 @@ $(function() {
           return false;
       }
   });
+
+  $('select').select2();
+
+  var language_data = makeSelectData(language);
+  var insurance_data = makeSelectData(insurance);
+
+  $(".js-example-data-array-language").select2({
+    data: language_data
+  });
+  $(".js-example-data-array-insurance").select2({
+    data: insurance_data
+  });
+
 });
+
+function makeSelectData(array) {
+  data_arr = []
+  for(var i = 0; i < array.length; i++) {
+    data_arr.push({ id: 0, text: CartoDbLib.removeUnderscore(array[i]) })
+  }
+  return data_arr
+};

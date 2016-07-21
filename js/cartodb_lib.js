@@ -82,8 +82,6 @@ var CartoDbLib = {
         ]
       }
 
-      console.log(layerOpts.sublayers[0].sql);
-
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
@@ -120,11 +118,11 @@ var CartoDbLib = {
         var value = data[prop];
         if (String(value).toLowerCase() == "yes") {
           if ($.inArray(String(prop), CartoDbLib.insurance) > -1) {
-            $("#insurance-subsection").append("<p>" + prop + "</p>");
+            $("#insurance-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             insurance_count += 1;
           }
           if ($.inArray(String(prop), CartoDbLib.language) > -1) {
-            $("#language-subsection").append("<p>" + prop + "</p>");
+            $("#language-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
           }
         }
@@ -179,16 +177,13 @@ var CartoDbLib = {
 
           for(var i = 0; i < lang_selections.length; i++) {
               var obj = lang_selections[i];
-              console.log(obj.text);
               CartoDbLib.languageSearch += " AND LOWER(" + obj.text + ") LIKE 'yes'"
           }
 
           for(var i = 0; i < insurance_selections.length; i++) {
               var obj = insurance_selections[i];
-              console.log(obj.text);
               CartoDbLib.insuranceSearch += " AND LOWER(" + obj.text + ") LIKE 'yes'"
           }
-
 
           CartoDbLib.renderMap();
           // Comments below: for Geosearch with CartoDB layer.
@@ -256,5 +251,10 @@ var CartoDbLib = {
   convertToPlainString: function(text) {
     if (text == undefined) return '';
     return decodeURIComponent(text);
+  },
+
+  removeUnderscore: function(text) {
+    var spacedText = text.replace(/_/g, ' ')
+    return spacedText.charAt(0).toUpperCase() + spacedText.slice(1);
   }
 }

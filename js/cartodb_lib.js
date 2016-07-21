@@ -10,9 +10,14 @@ var CartoDbLib = {
   tableName: 'probationresourcesmap_mergeddata_resources',
   userName: 'clearstreets',
   geoSearch: '',
+  languageSearch: '',
+  insuranceSearch: '',
   radius: '',
-  initialize: function(){
+  // Arrays? To create Select2 dropdowns, and to populate modal pop-ups.
+  insurance: ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"],
+  language: ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"],
 
+  initialize: function(){
     //reset filters
     $("#search_address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
 
@@ -61,6 +66,8 @@ var CartoDbLib = {
       var whereClause = " WHERE the_geom is not null AND "
       if (CartoDbLib.geoSearch != "") {
         whereClause += CartoDbLib.geoSearch;
+        whereClause += CartoDbLib.languageSearch;
+        whereClause += CartoDbLib.insuranceSearch;
       }
       var layerOpts = {
         user_name: CartoDbLib.userName,
@@ -68,17 +75,18 @@ var CartoDbLib = {
         cartodb_logo: false,
         sublayers: [
           {
-            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause,
+            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause, //+ " AND asl_or_other_assistance_for_hearing_impaired LIKE 'yes'",
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }
         ]
       }
 
+      console.log(layerOpts.sublayers[0].sql);
+
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
-          console.log(layer);
           CartoDbLib.sublayer = layer.getSubLayer(0);
           CartoDbLib.sublayer.setInteraction(true);
           CartoDbLib.sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
@@ -105,19 +113,17 @@ var CartoDbLib = {
       $('#modal-title').append(data.organization_name)
       $('#modal-main').append(modalText);
 
-      var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"]
-      var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"]
       var insurance_count = 0
       var language_count = 0
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
         if (String(value).toLowerCase() == "yes") {
-          if ($.inArray(String(prop), insurance) > -1) {
+          if ($.inArray(String(prop), CartoDbLib.insurance) > -1) {
             $("#insurance-subsection").append("<p>" + prop + "</p>");
             insurance_count += 1;
           }
-          if ($.inArray(String(prop), language) > -1) {
+          if ($.inArray(String(prop), CartoDbLib.language) > -1) {
             $("#language-subsection").append("<p>" + prop + "</p>");
             language_count += 1;
           }
@@ -125,7 +131,7 @@ var CartoDbLib = {
       }
       // Add headers or not.
       if (insurance_count > 0) {
-        $("#insurance-header").append("Insurance");
+        $("#insurance-header").append("Payment Options");
       }
       if (language_count > 0) {
         $("#language-header").append("Language");
@@ -135,6 +141,7 @@ var CartoDbLib = {
 
   doSearch: function() {
     CartoDbLib.clearSearch();
+
     var address = $("#search_address").val();
     CartoDbLib.radius = $("#search-radius").val();
 
@@ -146,8 +153,7 @@ var CartoDbLib = {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
-          console.log("#####");
-          console.log(CartoDbLib.radius);
+
           var zoom = 17;
           if (CartoDbLib.radius >= 8050) zoom = 12; // 5 miles
           else if (CartoDbLib.radius >= 3220) zoom = 13; // 2 miles
@@ -155,7 +161,7 @@ var CartoDbLib = {
           else if (CartoDbLib.radius >= 805) zoom = 15; // 1/2 mile
           else if (CartoDbLib.radius >= 805) zoom = 16; // 1/4 mile
           else zoom = 17;
-          console.log(zoom);
+
           CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), zoom)
           CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
             iconUrl: '/img/blue-pushpin.png',
@@ -163,7 +169,27 @@ var CartoDbLib = {
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);
 
+          // Devise SQL calls for geosearch and language search.
           CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+
+          CartoDbLib.languageSearch = "";
+          CartoDbLib.insuranceSearch = "";
+          var lang_selections = ($("#select-language").select2('data'))
+          var insurance_selections = ($("#select-insurance").select2('data'))
+
+          for(var i = 0; i < lang_selections.length; i++) {
+              var obj = lang_selections[i];
+              console.log(obj.text);
+              CartoDbLib.languageSearch += " AND LOWER(" + obj.text + ") LIKE 'yes'"
+          }
+
+          for(var i = 0; i < insurance_selections.length; i++) {
+              var obj = insurance_selections[i];
+              console.log(obj.text);
+              CartoDbLib.insuranceSearch += " AND LOWER(" + obj.text + ") LIKE 'yes'"
+          }
+
+
           CartoDbLib.renderMap();
           // Comments below: for Geosearch with CartoDB layer.
           // var sql = new cartodb.SQL({user: CartoDbLib.userName, format: 'geojson'});

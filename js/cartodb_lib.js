@@ -12,9 +12,6 @@ var CartoDbLib = {
   geoSearch: '',
   userSelection: '',
   radius: '',
-  // Arrays? To create Select2 dropdowns, and to populate modal pop-ups.
-  // insurance: ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"],
-  // language: ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"],
 
   initialize: function(){
     //reset filters
@@ -170,7 +167,6 @@ var CartoDbLib = {
           // Devise SQL calls for geosearch and language search.
           CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
 
-          // Refactor this....
           CartoDbLib.userSelection = '';
           // Gets selected elements in dropdown (represented as an array of objects).
           var lang_selections = ($("#select-language").select2('data'))
@@ -248,8 +244,7 @@ var CartoDbLib = {
   },
 
   removeUnderscore: function(text) {
-    var spacedText = text.replace(/_/g, ' ')
-    return spacedText.charAt(0).toUpperCase() + spacedText.slice(1);
+    return text.replace(/_/g, ' ')
   },
 
   addUnderscore: function(text) {

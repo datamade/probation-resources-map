@@ -66,7 +66,7 @@ $(function() {
 function makeSelectData(array) {
   data_arr = []
   for(var i = 0; i < array.length; i++) {
-    data_arr.push({ id: 0, text: array[i] })
+    data_arr.push({ id: 0, text: CartoDbLib.removeUnderscore(array[i]) })
   }
   return data_arr
 };

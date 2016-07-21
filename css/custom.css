@@ -40,6 +40,25 @@ label { font-weight: normal;}
   max-width: none;
 }
 
+.form-control {
+  height: 36px;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.select2-container {
+  width: 26em !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+  height: 28px;
+  margin-top: 10px;
+}
+
+.btn-sm {
+  margin: 10px 0;
+}
+
 .zone-box {
   height: 15px;
   width: 15px;

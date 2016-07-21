@@ -3,7 +3,7 @@ var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insu
 
 $(window).resize(function () {
   var h = $(window).height(),
-    offsetTop = 200; // Calculate the top offset
+    offsetTop = 110; // Calculate the top offset
 
   $('#mapCanvas').css('height', (h - offsetTop));
 }).resize();
@@ -48,9 +48,12 @@ $(function() {
   var insurance_data = makeSelectData(insurance);
 
   $(".js-example-data-array-language").select2({
+    placeholder: "Language preferences",
     data: language_data
   });
+
   $(".js-example-data-array-insurance").select2({
+    placeholder: "Payment preferences",
     data: insurance_data
   });
 

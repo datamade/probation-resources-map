@@ -28,10 +28,6 @@ label { font-weight: normal;}
   line-height:60px;
 }
 
-.navbar-nav > li > a {
-  padding-top: 28px;
-}
-
 .well {
   padding:10px 15px;
 }

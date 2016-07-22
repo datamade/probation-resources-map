@@ -21,6 +21,10 @@ $(function() {
     CartoDbLib.doSearch();
   });
 
+  $('#btnListSearch').click(function() {
+    CartoDbLib.doListSearch();
+  });
+
   $('#findMe').click(function(){
     CartoDbLib.findMe();
     return false;

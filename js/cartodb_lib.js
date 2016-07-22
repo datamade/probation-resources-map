@@ -10,6 +10,7 @@ var CartoDbLib = {
   tableName: 'probationresourcesmap_mergeddata_resources',
   userName: 'clearstreets',
   geoSearch: '',
+  whereClause: '',
   userSelection: '',
   radius: '',
 
@@ -59,10 +60,10 @@ var CartoDbLib = {
 
   renderMap: function() {
       var fields = "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid"
-      var whereClause = " WHERE the_geom is not null AND "
+      CartoDbLib.whereClause = " WHERE the_geom is not null AND "
       if (CartoDbLib.geoSearch != "") {
-        whereClause += CartoDbLib.geoSearch;
-        whereClause += CartoDbLib.userSelection;
+        CartoDbLib.whereClause += CartoDbLib.geoSearch;
+        CartoDbLib.whereClause += CartoDbLib.userSelection;
       }
       var layerOpts = {
         user_name: CartoDbLib.userName,
@@ -70,7 +71,7 @@ var CartoDbLib = {
         cartodb_logo: false,
         sublayers: [
           {
-            sql: "SELECT * FROM " + CartoDbLib.tableName + whereClause,
+            sql: "SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause,
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: fields
           }

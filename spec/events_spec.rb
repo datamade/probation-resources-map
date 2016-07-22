@@ -1,5 +1,5 @@
 describe "events", type: :feature, js: true do
-  describe "push search button" do
+  describe "click search button" do
 
     it 'adds a pushpin' do
       visit '/'

@@ -257,5 +257,8 @@ var CartoDbLib = {
           var obj = array[i];
           CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
       }
-  }
+  },
+
+  // For displaying list.
+
 }

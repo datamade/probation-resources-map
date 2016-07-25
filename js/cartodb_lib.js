@@ -74,12 +74,12 @@ var CartoDbLib = {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
 
+          CartoDbLib.createSQL();
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
           CartoDbLib.addCircle();
-          CartoDbLib.createSQL();
-          CartoDbLib.renderMap();
           CartoDbLib.renderList();
+          CartoDbLib.renderMap();
         }
         else {
           alert("We could not find your address: " + status);

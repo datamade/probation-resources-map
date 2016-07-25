@@ -18,7 +18,16 @@ $(function() {
   });
 
   $('#btnSearch').click(function(){
-    CartoDbLib.doSearch();
+    if ($('#mapCanvas').is(":visible")){
+      CartoDbLib.doSearch();
+    }
+    else {
+        // $('#mapCanvas').show();
+        CartoDbLib.doSearch();
+        // setTimeout(function() {
+        //   $('#mapCanvas').hide();
+        // }, 1000);
+    }
   });
 
   $('#btnViewMode').click(function(){
@@ -29,23 +38,26 @@ $(function() {
     }
     else {
       $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
-      // CartoDbLib.doSearch();
-      // $( "#mapCanvas" ).show();
-      $( "#mapCanvas" ).show( "fast", function() {
+        // $( "#mapCanvas" ).show( "fast", function() {
+        //   setTimeout(function() {CartoDbLib.map.invalidateSize()}, 2000);
+        // });
+
+        // $( "#mapCanvas" ).show( "fast", function() {
+        //   CartoDbLib.map.invalidateSize();
+        // });
+
+        // setTimeout(function() {
+        //   $('#listCanvas').hide();
+        //   $('#mapCanvas').show();
+        //   CartoDbLib.map.invalidateSize();
+        // }, 500);
 
         $('#listCanvas').hide();
-        CartoDbLib.doSearch();
-        CartoDbLib.setZoom();
-        CartoDbLib.map.invalidateSize();
-
-      });
-
-      // setTimeout(function() {CartoDbLib.map.invalidateSize()}, 400);
-      // $("#mapCanvas").show();
+        $('#mapCanvas').show();
+        // CartoDbLib.doSearch();
+        // CartoDbLib.map.invalidateSize();
     }
   });
-
-
 
   $('#findMe').click(function(){
     CartoDbLib.findMe();

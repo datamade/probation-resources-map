@@ -82,6 +82,13 @@ var CartoDbLib = {
             iconAnchor: [10, 32]
           }))}).addTo(CartoDbLib.map);
 
+          CartoDbLib.radiusCircle = new L.circle(CartoDbLib.currentPinpoint, CartoDbLib.radius, {
+            fillColor:'#1d5492',
+            fillOpacity:'0.2',
+            stroke: false,
+            clickable: false
+          }).addTo(CartoDbLib.map);
+
           CartoDbLib.createSQL();
           CartoDbLib.renderMap();
           CartoDbLib.renderList();
@@ -213,8 +220,8 @@ var CartoDbLib = {
     }
     if (CartoDbLib.centerMark)
       CartoDbLib.map.removeLayer( CartoDbLib.centerMark );
-    if (CartoDbLib.circle)
-      CartoDbLib.map.removeLayer( CartoDbLib.circle );
+    if (CartoDbLib.radiusCircle)
+      CartoDbLib.map.removeLayer( CartoDbLib.radiusCircle );
   },
 
   findMe: function() {

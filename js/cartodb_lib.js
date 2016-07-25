@@ -296,13 +296,13 @@ var CartoDbLib = {
   },
 
   setZoom: function() {
-    var zoom = 17;
+    var zoom = '';
     if (CartoDbLib.radius >= 8050) zoom = 12; // 5 miles
     else if (CartoDbLib.radius >= 3220) zoom = 13; // 2 miles
     else if (CartoDbLib.radius >= 1610) zoom = 14; // 1 mile
     else if (CartoDbLib.radius >= 805) zoom = 15; // 1/2 mile
-    else if (CartoDbLib.radius >= 805) zoom = 16; // 1/4 mile
-    else zoom = 17;
+    else if (CartoDbLib.radius >= 400) zoom = 16; // 1/4 mile
+    else zoom = 16;
 
     CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), zoom)
   }

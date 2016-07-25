@@ -30,6 +30,9 @@ layout: default
     <div>
       <button class='btn btn-default btn-sm' id="btnSearch"><i class='fa'></i>Search</button>
     </div>
+    <div>
+      <button class='btn btn-default btn-sm' id="btnListSearch"><i class='fa'></i>Make List</button>
+    </div>
   </div>
 
 
@@ -37,7 +40,30 @@ layout: default
     <div id='mapCanvas'></div>
   </div>
 
+
+  <div class='col-md-8'>
+    <div>
+
+      <h2>Probation Resources Map</h2>
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>Facility</th>
+            <th>Address</th>
+            <th>Hours</th>
+            <th><i class='fa fa-phone'></i> Contact</th>
+          </tr>
+        </thead>
+        <tbody id='results-list'></tbody>
+      </table>
+
+    </div>
+  </div>
+
+
 </div>
+
+
 
 <!-- Modal -->
 <div class="modal fade" id="modal-pop" tabindex="-1" role="dialog">
@@ -86,5 +112,8 @@ layout: default
 <script type="text/javascript" src="/js/cartodb_lib.js"></script>
 <script type="text/javascript" src="/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/js/map.js"></script>
+<script type="text/javascript" src="node_modules/mustache/mustache.js" ></script>
+
+
 
 

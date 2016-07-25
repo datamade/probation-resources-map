@@ -9,8 +9,8 @@ $(window).resize(function () {
 }).resize();
 
 $(function() {
-
   CartoDbLib.initialize();
+
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search_address'));
 
   $(':checkbox').click(function(){
@@ -18,6 +18,14 @@ $(function() {
   });
 
   $('#btnSearch').click(function(){
+    $('#mapCanvas').removeClass('hidden');
+    $('#results-list').addClass('hidden');
+    CartoDbLib.doSearch();
+  });
+
+  $('#btnListSearch').click(function(){
+    $('#mapCanvas').addClass('hidden');
+    $('#results-list').removeClass('hidden');
     CartoDbLib.doSearch();
   });
 

@@ -97,8 +97,6 @@ var CartoDbLib = {
   },
 
   renderMap: function() {
-      $("#mapCanvas").show();
-
       var layerOpts = {
         user_name: CartoDbLib.userName,
         type: 'cartodb',

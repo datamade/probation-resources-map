@@ -18,16 +18,34 @@ $(function() {
   });
 
   $('#btnSearch').click(function(){
-    $('#mapCanvas').removeClass('hidden');
-    $('#results-list').addClass('hidden');
     CartoDbLib.doSearch();
   });
 
-  $('#btnListSearch').click(function(){
-    $('#mapCanvas').addClass('hidden');
-    $('#results-list').removeClass('hidden');
-    CartoDbLib.doSearch();
+  $('#btnViewMode').click(function(){
+    if ($('#mapCanvas').is(":visible")){
+      $('#btnViewMode').html("<i class='fa fa-map-marker'></i> Map view");
+      $('#listCanvas').show();
+      $('#mapCanvas').hide();
+    }
+    else {
+      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
+      // CartoDbLib.doSearch();
+      // $( "#mapCanvas" ).show();
+      $( "#mapCanvas" ).show( "fast", function() {
+
+        $('#listCanvas').hide();
+        CartoDbLib.doSearch();
+        CartoDbLib.setZoom();
+        CartoDbLib.map.invalidateSize();
+
+      });
+
+      // setTimeout(function() {CartoDbLib.map.invalidateSize()}, 400);
+      // $("#mapCanvas").show();
+    }
   });
+
+
 
   $('#findMe').click(function(){
     CartoDbLib.findMe();
@@ -74,3 +92,6 @@ function makeSelectData(array) {
   }
   return data_arr
 };
+
+
+

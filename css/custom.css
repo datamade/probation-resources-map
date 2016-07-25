@@ -52,11 +52,11 @@ label { font-weight: normal;}
 
 .select2-container--default .select2-selection--multiple {
   height: 28px;
-  margin-top: 10px;
+  margin: 5px 0;
 }
 
-.btn-sm {
-  margin: 10px 0;
+.btn {
+  margin-bottom: 10px;
 }
 
 .zone-box {
@@ -164,4 +164,5 @@ label { font-weight: normal;}
 th, td {
   padding: 8px;
 }
+
 

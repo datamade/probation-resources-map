@@ -153,12 +153,20 @@ label { font-weight: normal;}
   text-align: center;
 }
 
+.list-table {
+  width: 100%;
+}
+
 .list-table thead {
   border-bottom: 3px solid #ddd;
 }
 
 .list-table tbody > tr {
   border-bottom: 1px solid #ddd;
+}
+
+.no-results {
+  padding-top: 15px;
 }
 
 th, td {

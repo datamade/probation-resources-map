@@ -140,28 +140,33 @@ var CartoDbLib = {
     results.empty();
     sql.execute("SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
-      var obj_array = listData.rows;
-        for (idx in obj_array) {
-          if (obj_array[idx].organization_name != "") {
-            elements["facility"] = obj_array[idx].organization_name;
-          }
-          if (obj_array[idx].full_address != "") {
-            elements["address"] = obj_array[idx].full_address;
-          }
-          if (obj_array[idx].hours_of_operation != "") {
-            elements["hours"] = obj_array[idx].hours_of_operation;
-          }
-          if (obj_array[idx].intake_number != "") {
-            elements["phone"] = obj_array[idx].intake_number;
-          }
-          if (obj_array[idx].website != "") {
-            elements["website"] = obj_array[idx].website;
-          }
+        var obj_array = listData.rows;
+        if (listData.rows.length == 0) {
+          results.append("<p class='no-results'>No results. Please broaden your search.</p>");
+        }
+        else {
+          for (idx in obj_array) {
+            if (obj_array[idx].organization_name != "") {
+              elements["facility"] = obj_array[idx].organization_name;
+            }
+            if (obj_array[idx].full_address != "") {
+              elements["address"] = obj_array[idx].full_address;
+            }
+            if (obj_array[idx].hours_of_operation != "") {
+              elements["hours"] = obj_array[idx].hours_of_operation;
+            }
+            if (obj_array[idx].intake_number != "") {
+              elements["phone"] = obj_array[idx].intake_number;
+            }
+            if (obj_array[idx].website != "") {
+              elements["website"] = obj_array[idx].website;
+            }
 
-          var output = Mustache.render("<tr><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
+            var output = Mustache.render("<tr><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
 
-          results.append(output);
-      }
+            results.append(output);
+          }
+        }
     })
     .error(function(errors) {
       console.log("errors:" + errors);

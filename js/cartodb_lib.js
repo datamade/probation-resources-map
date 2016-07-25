@@ -75,20 +75,8 @@ var CartoDbLib = {
           $.address.parameter('address', encodeURIComponent(address));
 
           CartoDbLib.setZoom();
-
-          CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
-            iconUrl: '/img/blue-pushpin.png',
-            iconSize: [32, 32],
-            iconAnchor: [10, 32]
-          }))}).addTo(CartoDbLib.map);
-
-          CartoDbLib.radiusCircle = new L.circle(CartoDbLib.currentPinpoint, CartoDbLib.radius, {
-            fillColor:'#1d5492',
-            fillOpacity:'0.2',
-            stroke: false,
-            clickable: false
-          }).addTo(CartoDbLib.map);
-
+          CartoDbLib.addIcon();
+          CartoDbLib.addCircle();
           CartoDbLib.createSQL();
           CartoDbLib.renderMap();
           CartoDbLib.renderList();
@@ -305,6 +293,27 @@ var CartoDbLib = {
     else zoom = 16;
 
     CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), zoom)
+  },
+
+  addIcon: function() {
+    CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
+            iconUrl: '/img/blue-pushpin.png',
+            iconSize: [32, 32],
+            iconAnchor: [10, 32]
+    }))});
+
+    CartoDbLib.centerMark.addTo(CartoDbLib.map);
+  },
+
+  addCircle: function() {
+    CartoDbLib.radiusCircle = new L.circle(CartoDbLib.currentPinpoint, CartoDbLib.radius, {
+        fillColor:'#1d5492',
+        fillOpacity:'0.2',
+        stroke: false,
+        clickable: false
+    });
+
+    CartoDbLib.radiusCircle.addTo(CartoDbLib.map);
   }
 
 }

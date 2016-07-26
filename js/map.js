@@ -105,9 +105,16 @@ $(function() {
   $("#dropdown-results").on('click', '.saved-search', function() {
     var address = CartoDbLib.removeWhiteSpace($(this).text());
     var url = CartoDbLib.returnSavedResults(address);
+    $.address.value(url);
     console.log("http://127.0.0.1:5000/#" + url);
-    window.location.href = "http://127.0.0.1:5000/#" + url;
+    // window.location.href = "http://127.0.0.1:5000/#" + url;
+    // return false;
     // window.location.href = "http://www.google.com";
+  });
+
+  $.address.externalChange(function(event) {
+    console.log("thissssss");
+    CartoDbLib.initialize();
   });
 
 });
@@ -119,6 +126,7 @@ function makeSelectData(array) {
   }
   return data_arr
 };
+
 
 
 

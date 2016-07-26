@@ -368,7 +368,6 @@ var CartoDbLib = {
         jsonArray.push(storedArray)
       }
     }
-
     return jsonArray;
   },
 

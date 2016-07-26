@@ -18,15 +18,47 @@ $(function() {
   });
 
   $('#btnSearch').click(function(){
-    $('#mapCanvas').removeClass('hidden');
-    $('#results-list').addClass('hidden');
-    CartoDbLib.doSearch();
+    // Temporary fix for map load issue: set show map as default.
+    if ($('#mapCanvas').is(":visible")){
+      CartoDbLib.doSearch();
+    }
+    else {
+      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
+      $('#mapCanvas').show();
+      $('#listCanvas').hide();
+      CartoDbLib.doSearch();
+    }
   });
 
-  $('#btnListSearch').click(function(){
-    $('#mapCanvas').addClass('hidden');
-    $('#results-list').removeClass('hidden');
-    CartoDbLib.doSearch();
+  $('#btnViewMode').click(function(){
+    if ($('#mapCanvas').is(":visible")){
+      $('#btnViewMode').html("<i class='fa fa-map-marker'></i> Map view");
+      $('#listCanvas').show();
+      $('#mapCanvas').hide();
+    }
+    else {
+      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
+      $('#listCanvas').hide();
+      $('#mapCanvas').show();
+      // Below: attempts to fix map load issue.
+
+      // (1)
+      // $( "#mapCanvas" ).show( "fast", function() {
+      //   setTimeout(function() {CartoDbLib.map.invalidateSize()}, 2000);
+      // });
+
+      // (2)
+      // $( "#mapCanvas" ).show( "fast", function() {
+      //   CartoDbLib.map.invalidateSize();
+      // });
+
+      // (3)
+      // setTimeout(function() {
+      //   $('#listCanvas').hide();
+      //   $('#mapCanvas').show();
+      //   CartoDbLib.map.invalidateSize();
+      // }, 500);
+    }
   });
 
   $('#findMe').click(function(){
@@ -74,3 +106,6 @@ function makeSelectData(array) {
   }
   return data_arr
 };
+
+
+

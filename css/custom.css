@@ -52,11 +52,11 @@ label { font-weight: normal;}
 
 .select2-container--default .select2-selection--multiple {
   height: 28px;
-  margin-top: 10px;
+  margin: 5px 0;
 }
 
-.btn-sm {
-  margin: 10px 0;
+.btn {
+  margin-bottom: 10px;
 }
 
 .zone-box {
@@ -153,6 +153,10 @@ label { font-weight: normal;}
   text-align: center;
 }
 
+.list-table {
+  width: 100%;
+}
+
 .list-table thead {
   border-bottom: 3px solid #ddd;
 }
@@ -161,7 +165,12 @@ label { font-weight: normal;}
   border-bottom: 1px solid #ddd;
 }
 
+.no-results {
+  padding-top: 15px;
+}
+
 th, td {
   padding: 8px;
 }
+
 

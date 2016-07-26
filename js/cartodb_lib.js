@@ -74,17 +74,12 @@ var CartoDbLib = {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
 
-          CartoDbLib.setZoom();
-
-          CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
-            iconUrl: '/img/blue-pushpin.png',
-            iconSize: [32, 32],
-            iconAnchor: [10, 32]
-          }))}).addTo(CartoDbLib.map);
-
           CartoDbLib.createSQL();
-          CartoDbLib.renderMap();
+          CartoDbLib.setZoom();
+          CartoDbLib.addIcon();
+          CartoDbLib.addCircle();
           CartoDbLib.renderList();
+          CartoDbLib.renderMap();
         }
         else {
           alert("We could not find your address: " + status);
@@ -97,8 +92,6 @@ var CartoDbLib = {
   },
 
   renderMap: function() {
-      $("#mapCanvas").show();
-
       var layerOpts = {
         user_name: CartoDbLib.userName,
         type: 'cartodb',
@@ -147,28 +140,33 @@ var CartoDbLib = {
     results.empty();
     sql.execute("SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
-      var obj_array = listData.rows;
-        for (idx in obj_array) {
-          if (obj_array[idx].organization_name != "") {
-            elements["facility"] = obj_array[idx].organization_name;
-          }
-          if (obj_array[idx].full_address != "") {
-            elements["address"] = obj_array[idx].full_address;
-          }
-          if (obj_array[idx].hours_of_operation != "") {
-            elements["hours"] = obj_array[idx].hours_of_operation;
-          }
-          if (obj_array[idx].intake_number != "") {
-            elements["phone"] = obj_array[idx].intake_number;
-          }
-          if (obj_array[idx].website != "") {
-            elements["website"] = obj_array[idx].website;
-          }
+        var obj_array = listData.rows;
+        if (listData.rows.length == 0) {
+          results.append("<p class='no-results'>No results. Please broaden your search.</p>");
+        }
+        else {
+          for (idx in obj_array) {
+            if (obj_array[idx].organization_name != "") {
+              elements["facility"] = obj_array[idx].organization_name;
+            }
+            if (obj_array[idx].full_address != "") {
+              elements["address"] = obj_array[idx].full_address;
+            }
+            if (obj_array[idx].hours_of_operation != "") {
+              elements["hours"] = obj_array[idx].hours_of_operation;
+            }
+            if (obj_array[idx].intake_number != "") {
+              elements["phone"] = obj_array[idx].intake_number;
+            }
+            if (obj_array[idx].website != "") {
+              elements["website"] = obj_array[idx].website;
+            }
 
-          var output = Mustache.render("<tr><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
+            var output = Mustache.render("<tr><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
 
-          results.append(output);
-      }
+            results.append(output);
+          }
+        }
     })
     .error(function(errors) {
       console.log("errors:" + errors);
@@ -215,8 +213,8 @@ var CartoDbLib = {
     }
     if (CartoDbLib.centerMark)
       CartoDbLib.map.removeLayer( CartoDbLib.centerMark );
-    if (CartoDbLib.circle)
-      CartoDbLib.map.removeLayer( CartoDbLib.circle );
+    if (CartoDbLib.radiusCircle)
+      CartoDbLib.map.removeLayer( CartoDbLib.radiusCircle );
   },
 
   findMe: function() {
@@ -291,15 +289,36 @@ var CartoDbLib = {
   },
 
   setZoom: function() {
-    var zoom = 17;
+    var zoom = '';
     if (CartoDbLib.radius >= 8050) zoom = 12; // 5 miles
     else if (CartoDbLib.radius >= 3220) zoom = 13; // 2 miles
     else if (CartoDbLib.radius >= 1610) zoom = 14; // 1 mile
     else if (CartoDbLib.radius >= 805) zoom = 15; // 1/2 mile
-    else if (CartoDbLib.radius >= 805) zoom = 16; // 1/4 mile
-    else zoom = 17;
+    else if (CartoDbLib.radius >= 400) zoom = 16; // 1/4 mile
+    else zoom = 16;
 
     CartoDbLib.map.setView(new L.LatLng( CartoDbLib.currentPinpoint[0], CartoDbLib.currentPinpoint[1] ), zoom)
+  },
+
+  addIcon: function() {
+    CartoDbLib.centerMark = new L.Marker(CartoDbLib.currentPinpoint, { icon: (new L.Icon({
+            iconUrl: '/img/blue-pushpin.png',
+            iconSize: [32, 32],
+            iconAnchor: [10, 32]
+    }))});
+
+    CartoDbLib.centerMark.addTo(CartoDbLib.map);
+  },
+
+  addCircle: function() {
+    CartoDbLib.radiusCircle = new L.circle(CartoDbLib.currentPinpoint, CartoDbLib.radius, {
+        fillColor:'#1d5492',
+        fillOpacity:'0.2',
+        stroke: false,
+        clickable: false
+    });
+
+    CartoDbLib.radiusCircle.addTo(CartoDbLib.map);
   }
 
 }

@@ -97,6 +97,18 @@ $(function() {
     data: insurance_data
   });
 
+  $("#btnSave").on('click', function() {
+    CartoDbLib.addCookieValues();
+    CartoDbLib.renderSavedResults();
+  });
+
+  $("#dropdown-results").on('click', '.saved-search', function() {
+    var address = $(this).text();
+    $("#search_address").val(address);
+    $("#search-radius").val(8050);
+    $("#btnSearch").trigger("click");
+  });
+
 });
 
 function makeSelectData(array) {
@@ -106,6 +118,10 @@ function makeSelectData(array) {
   }
   return data_arr
 };
+
+
+
+
 
 
 

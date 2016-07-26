@@ -13,6 +13,10 @@ var CartoDbLib = {
   whereClause: '',
   userSelection: '',
   radius: '',
+  address: '',
+  cookieArray: '',
+  savedSearchResults: [],
+  savedSearchCounter: 0,
   fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
@@ -56,12 +60,13 @@ var CartoDbLib = {
 
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.doSearch();
+      CartoDbLib.renderSavedResults();
+      console.log(document.cookie);
     }
   },
 
   doSearch: function() {
     CartoDbLib.clearSearch();
-
     var address = $("#search_address").val();
     CartoDbLib.radius = $("#search-radius").val();
 
@@ -74,12 +79,14 @@ var CartoDbLib = {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
 
+          CartoDbLib.address = address;
           CartoDbLib.createSQL();
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
           CartoDbLib.addCircle();
           CartoDbLib.renderList();
           CartoDbLib.renderMap();
+
         }
         else {
           alert("We could not find your address: " + status);
@@ -319,6 +326,33 @@ var CartoDbLib = {
     });
 
     CartoDbLib.radiusCircle.addTo(CartoDbLib.map);
+  },
+
+  addCookieValues: function() {
+    CartoDbLib.cookieArray = document.cookie.split(';');
+    var resultsCount = "results" + CartoDbLib.cookieArray.length
+    var arr = new Array(CartoDbLib.address, CartoDbLib.radius)
+
+    $.cookie(resultsCount, JSON.stringify(arr));
+  },
+
+  renderSavedResults: function() {
+    $(".saved-searches").empty();
+    $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
+
+    for (var idx = 0; idx < CartoDbLib.cookieArray.length; idx++) {
+      var resultsID = CartoDbLib.cookieArray[idx].split("=")[0];
+      resultsID = CartoDbLib.removeWhiteSpace(resultsID);
+      if (CartoDbLib.cookieArray[idx].match("results")) {
+        var storedArray = JSON.parse($.cookie(resultsID));
+        $('.saved-searches').append('<li><a class="saved-search" href="#"> ' + storedArray[0] + '</a></li>');
+      }
+    }
+  },
+
+  removeWhiteSpace: function(word) {
+    while(word.charAt(0) === ' ')
+        word = word.substr(1);
   }
 
 }

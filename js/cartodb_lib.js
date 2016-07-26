@@ -336,34 +336,40 @@ var CartoDbLib = {
   },
 
   renderSavedResults: function() {
-    var cookieArray = document.cookie.split(';');
     $(".saved-searches").empty();
     $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
 
-    for (var idx = 0; idx < cookieArray.length; idx++) {
-      var resultsID = cookieArray[idx].split("=")[0];
-      resultsID = CartoDbLib.removeWhiteSpace(resultsID);
-      if (cookieArray[idx].match("results")) {
-        var storedArray = JSON.parse($.cookie(resultsID));
-        $('.saved-searches').append('<li><a class="saved-search" href="#"> ' + storedArray[0] + '</a></li>');
-      }
-    }
+    var arr = CartoDbLib.makeJSONArray();
 
+    for (var idx = 0; idx < arr.length; idx++) {
+      $('.saved-searches').append('<li><a class="saved-search" href="#"> ' + arr[idx][0] + '</a></li>');
+    }
   },
 
   returnSavedResults: function(address) {
+    var arr = CartoDbLib.makeJSONArray();
+
+    for (var idx = 0; idx < arr.length; idx++) {
+      if (arr[idx][0] == address) {
+        return arr[idx][1];
+      }
+    }
+  },
+
+  makeJSONArray: function() {
     var cookieArray = document.cookie.split(';');
+    var jsonArray = new Array;
 
     for (var idx = 0; idx < cookieArray.length; idx++) {
       var resultsID = cookieArray[idx].split("=")[0];
       resultsID = CartoDbLib.removeWhiteSpace(resultsID);
       if (cookieArray[idx].match("results")) {
-        var storedArray = JSON.parse($.cookie(resultsID));
-          if (storedArray[0] == address) {
-            return storedArray[1];
-          }
+        storedArray = JSON.parse($.cookie(resultsID));
+        jsonArray.push(storedArray)
       }
     }
+
+    return jsonArray;
   },
 
   removeWhiteSpace: function(word) {

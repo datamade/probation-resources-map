@@ -13,10 +13,9 @@ var CartoDbLib = {
   whereClause: '',
   userSelection: '',
   radius: '',
-  address: '',
-  cookieArray: '',
-  savedSearchResults: [],
-  savedSearchCounter: 0,
+  // address: '',
+  // savedSearchResults: [],
+  // savedSearchCounter: 0,
   fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
@@ -61,7 +60,6 @@ var CartoDbLib = {
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.doSearch();
       CartoDbLib.renderSavedResults();
-      console.log(document.cookie);
     }
   },
 
@@ -329,23 +327,41 @@ var CartoDbLib = {
   },
 
   addCookieValues: function() {
-    CartoDbLib.cookieArray = document.cookie.split(';');
-    var resultsCount = "results" + CartoDbLib.cookieArray.length
-    var arr = new Array(CartoDbLib.address, CartoDbLib.radius)
+    var cookieArray = document.cookie.split(';');
+    var resultsCount = "results" + cookieArray.length
+    var path = $.address.value();
+    var arr = new Array(CartoDbLib.address, path)
 
     $.cookie(resultsCount, JSON.stringify(arr));
   },
 
   renderSavedResults: function() {
+    var cookieArray = document.cookie.split(';');
     $(".saved-searches").empty();
     $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
 
-    for (var idx = 0; idx < CartoDbLib.cookieArray.length; idx++) {
-      var resultsID = CartoDbLib.cookieArray[idx].split("=")[0];
+    for (var idx = 0; idx < cookieArray.length; idx++) {
+      var resultsID = cookieArray[idx].split("=")[0];
       resultsID = CartoDbLib.removeWhiteSpace(resultsID);
-      if (CartoDbLib.cookieArray[idx].match("results")) {
+      if (cookieArray[idx].match("results")) {
         var storedArray = JSON.parse($.cookie(resultsID));
         $('.saved-searches').append('<li><a class="saved-search" href="#"> ' + storedArray[0] + '</a></li>');
+      }
+    }
+
+  },
+
+  returnSavedResults: function(address) {
+    var cookieArray = document.cookie.split(';');
+
+    for (var idx = 0; idx < cookieArray.length; idx++) {
+      var resultsID = cookieArray[idx].split("=")[0];
+      resultsID = CartoDbLib.removeWhiteSpace(resultsID);
+      if (cookieArray[idx].match("results")) {
+        var storedArray = JSON.parse($.cookie(resultsID));
+          if (storedArray[0] == address) {
+            return storedArray[1];
+          }
       }
     }
   },
@@ -353,6 +369,7 @@ var CartoDbLib = {
   removeWhiteSpace: function(word) {
     while(word.charAt(0) === ' ')
         word = word.substr(1);
+    return word;
   }
 
 }

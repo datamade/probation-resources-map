@@ -103,10 +103,11 @@ $(function() {
   });
 
   $("#dropdown-results").on('click', '.saved-search', function() {
-    var address = $(this).text();
-    $("#search_address").val(address);
-    $("#search-radius").val(8050);
-    $("#btnSearch").trigger("click");
+    var address = CartoDbLib.removeWhiteSpace($(this).text());
+    var url = CartoDbLib.returnSavedResults(address);
+    console.log("http://127.0.0.1:5000/#" + url);
+    window.location.href = "http://127.0.0.1:5000/#" + url;
+    // window.location.href = "http://www.google.com";
   });
 
 });

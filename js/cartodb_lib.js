@@ -22,7 +22,6 @@ var CartoDbLib = {
     $("#search_address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
 
     geocoder = new google.maps.Geocoder();
-
     // initiate leaflet map
     if (!CartoDbLib.map) {
       CartoDbLib.map = new L.Map('mapCanvas', {

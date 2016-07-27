@@ -1,14 +1,34 @@
-describe "events", type: :feature, js: true do
-  describe "click search button" do
+require 'support/search_helper.rb'
 
+describe "events", type: :feature, js: true do
+  include SearchHelper
+
+  describe "click search button" do
     it 'adds a pushpin' do
-      visit '/'
-      expect(page).to have_selector('#search_address')
-      fill_in 'search_address', :with => '1035 North Clark Street, Chicago, IL, United States'
-      find("#btnSearch", match: :first).click
+      do_search
       # binding.pry # test will pause here
       expect(page).to have_xpath('//img[@src="/img/blue-pushpin.png"]')
     end
 
+    it 'updates the results' do
+      do_search
+      expect(find('.results-count').text).to eq('Results: 1')
+    end
   end
+
+  describe "click mode view button" do
+    it 'shows a list' do
+      do_search
+      find('#btnViewMode', match: :first).click
+      expect(page).to have_selector('#listCanvas', visible: true)
+    end
+
+    it 'shows a map' do
+      do_search
+      find('#btnViewMode', match: :first).click
+      find('#btnViewMode', match: :first).click
+      expect(page).to have_selector('#mapCanvas', visible: true)
+    end
+  end
+
 end

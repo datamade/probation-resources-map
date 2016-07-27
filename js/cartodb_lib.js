@@ -76,10 +76,8 @@ var CartoDbLib = {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
           $.address.parameter('radius', CartoDbLib.radius);
-
           CartoDbLib.address = address;
           CartoDbLib.createSQL();
-
           $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
 
           CartoDbLib.setZoom();
@@ -189,7 +187,7 @@ var CartoDbLib = {
       .done(function(data) {
         CartoDbLib.resultsCount = data.rows[0]["count"];
         $(".results-count").empty();
-        $(".results-count").append("Results: " +CartoDbLib.resultsCount);
+        $(".results-count").append("Results: " + CartoDbLib.resultsCount);
       });
   },
 

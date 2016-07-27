@@ -11,7 +11,7 @@ $(window).resize(function () {
 $(function() {
   CartoDbLib.initialize();
 
-  var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search_address'));
+  var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
 
   $(':checkbox').click(function(){
     CartoDbLib.doSearch();
@@ -74,7 +74,7 @@ $(function() {
     return false;
   });
 
-  $("#search_address").keydown(function(e){
+  $("#search-address").keydown(function(e){
       var key =  e.keyCode ? e.keyCode : e.which;
       if(key == 13) {
           $('#btnSearch').click();

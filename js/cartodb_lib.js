@@ -11,7 +11,7 @@ var CartoDbLib = {
   userName: 'clearstreets',
   geoSearch: '',
   whereClause: '',
-  lang_selections: '',
+  langSelections: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
@@ -19,7 +19,7 @@ var CartoDbLib = {
 
   initialize: function(){
     //reset filters
-    $("#search_address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
+    $("#search-address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
 
     geocoder = new google.maps.Geocoder();
     // initiate leaflet map
@@ -64,7 +64,7 @@ var CartoDbLib = {
 
   doSearch: function() {
     CartoDbLib.clearSearch();
-    var address = $("#search_address").val();
+    var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
 
     if (address != "") {
@@ -80,8 +80,7 @@ var CartoDbLib = {
           CartoDbLib.address = address;
           CartoDbLib.createSQL();
 
-          console.log(CartoDbLib.lang_selections)
-          $.address.parameter('lang', encodeURIComponent(CartoDbLib.lang_selections));
+          $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
 
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
@@ -269,7 +268,7 @@ var CartoDbLib = {
     geocoder.geocode({'latLng': latLngPoint}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[1]) {
-          $('#search_address').val(results[1].formatted_address);
+          $('#search-address').val(results[1].formatted_address);
           $('.hint').focus();
           CartoDbLib.doSearch();
         }
@@ -316,7 +315,7 @@ var CartoDbLib = {
     var insuranceSelections = ($("#select-insurance").select2('data'))
 
     var langResults = CartoDbLib.userSelectSQL(langSelections);
-    CartoDbLib.lang_selections = langResults;
+    CartoDbLib.langSelections = langResults;
 
     CartoDbLib.userSelectSQL(insuranceSelections);
 

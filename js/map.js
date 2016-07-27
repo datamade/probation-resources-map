@@ -61,11 +61,6 @@ $(function() {
     }
   });
 
-  $('#findMe').click(function(){
-    CartoDbLib.findMe();
-    return false;
-  });
-
   $('#reset').click(function(){
     $.address.parameter('address','');
     $.address.parameter('radius','');
@@ -108,7 +103,8 @@ $(function() {
     // $.address.value(url);
     console.log("http://127.0.0.1:5000/#" + url);
     window.location.href = "http://127.0.0.1:5000/#" + url;
-    // return false;
+    CartoDbLib.doSearch();
+    return false;
     // window.location.href = "http://www.google.com";
   });
 

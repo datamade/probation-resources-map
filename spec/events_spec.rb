@@ -14,6 +14,11 @@ describe "events", type: :feature, js: true do
       do_search
       expect(find('.results-count').text).to eq('Results: 1')
     end
+
+    it 'updates the info div' do
+      do_search
+      expect(find('.info').text).to eq('Hover over an area')
+    end
   end
 
   describe "click mode view button" do

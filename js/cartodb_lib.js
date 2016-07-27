@@ -77,11 +77,13 @@ var CartoDbLib = {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
           $.address.parameter('radius', CartoDbLib.radius);
-          console.log(CartoDbLib.lang_selections)
-          $.address.parameter('lang', CartoDbLib.lang_selections);
 
           CartoDbLib.address = address;
           CartoDbLib.createSQL();
+
+          console.log(CartoDbLib.lang_selections)
+          $.address.parameter('lang', encodeURIComponent(CartoDbLib.lang_selections));
+
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
           CartoDbLib.addCircle();
@@ -294,10 +296,15 @@ var CartoDbLib = {
 
   // Call this in createSearch, when creating SQL queries from user selection.
   userSelectSQL: function(array) {
+    var results = '';
+
     for(var i = 0; i < array.length; i++) {
           var obj = array[i];
           CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
+           results += (obj.text + " ")
       }
+
+    return results
   },
 
   createSQL: function() {
@@ -309,7 +316,9 @@ var CartoDbLib = {
     var langSelections = ($("#select-language").select2('data'))
     var insuranceSelections = ($("#select-insurance").select2('data'))
 
-    CartoDbLib.userSelectSQL(langSelections);
+    var langResults = CartoDbLib.userSelectSQL(langSelections);
+    CartoDbLib.lang_selections = langResults;
+
     CartoDbLib.userSelectSQL(insuranceSelections);
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND "

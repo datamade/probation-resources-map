@@ -13,9 +13,7 @@ var CartoDbLib = {
   whereClause: '',
   userSelection: '',
   radius: '',
-  // address: '',
-  // savedSearchResults: [],
-  // savedSearchCounter: 0,
+  resultsCount: 0,
   fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
@@ -57,6 +55,7 @@ var CartoDbLib = {
         this._div.innerHTML = '';
       };
 
+      CartoDbLib.makeResultsDiv();
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.doSearch();
       CartoDbLib.renderSavedResults();
@@ -84,6 +83,7 @@ var CartoDbLib = {
           CartoDbLib.addCircle();
           CartoDbLib.renderList();
           CartoDbLib.renderMap();
+          CartoDbLib.getResults();
 
         }
         else {
@@ -176,6 +176,30 @@ var CartoDbLib = {
     .error(function(errors) {
       console.log("errors:" + errors);
     });
+  },
+
+  getResults: function() {
+    var sql = new cartodb.SQL({ user: CartoDbLib.userName });
+
+    sql.execute("SELECT count(*) FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
+      .done(function(data) {
+        CartoDbLib.resultsCount = data.rows[0]["count"];
+        console.log(CartoDbLib.resultsCount);
+        $(".results-count").empty();
+        $(".results-count").append(CartoDbLib.resultsCount);
+      });
+  },
+
+  makeResultsDiv: function() {
+    var results = L.control({position: 'topright'});
+
+    results.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'results-count');
+      div.innerHTML = "Results: " + CartoDbLib.resultsCount
+      return div;
+    };
+
+    results.addTo(CartoDbLib.map);
   },
 
   modalPop: function(data) {

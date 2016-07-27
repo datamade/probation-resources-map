@@ -11,6 +11,7 @@ var CartoDbLib = {
   userName: 'clearstreets',
   geoSearch: '',
   whereClause: '',
+  lang_selections: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
@@ -75,6 +76,9 @@ var CartoDbLib = {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
+          $.address.parameter('radius', CartoDbLib.radius);
+          console.log(CartoDbLib.lang_selections)
+          $.address.parameter('lang', CartoDbLib.lang_selections);
 
           CartoDbLib.address = address;
           CartoDbLib.createSQL();
@@ -302,11 +306,11 @@ var CartoDbLib = {
 
     CartoDbLib.userSelection = '';
     // Gets selected elements in dropdown (represented as an array of objects).
-    var lang_selections = ($("#select-language").select2('data'))
-    var insurance_selections = ($("#select-insurance").select2('data'))
+    var langSelections = ($("#select-language").select2('data'))
+    var insuranceSelections = ($("#select-insurance").select2('data'))
 
-    CartoDbLib.userSelectSQL(lang_selections);
-    CartoDbLib.userSelectSQL(insurance_selections);
+    CartoDbLib.userSelectSQL(langSelections);
+    CartoDbLib.userSelectSQL(insuranceSelections);
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND "
 
@@ -350,9 +354,11 @@ var CartoDbLib = {
   },
 
   addCookieValues: function() {
+    console.log(document.cookie)
     var cookieArray = document.cookie.split(';');
     var resultsCount = "results" + cookieArray.length
     var path = $.address.value();
+    console.log(path)
     var arr = new Array(CartoDbLib.address, path)
 
     $.cookie(resultsCount, JSON.stringify(arr));

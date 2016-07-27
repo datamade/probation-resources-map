@@ -184,9 +184,8 @@ var CartoDbLib = {
     sql.execute("SELECT count(*) FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(data) {
         CartoDbLib.resultsCount = data.rows[0]["count"];
-        console.log(CartoDbLib.resultsCount);
         $(".results-count").empty();
-        $(".results-count").append(CartoDbLib.resultsCount);
+        $(".results-count").append("Results: " +CartoDbLib.resultsCount);
       });
   },
 

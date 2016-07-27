@@ -11,6 +11,7 @@ var CartoDbLib = {
   userName: 'clearstreets',
   geoSearch: '',
   whereClause: '',
+  langSelections: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
@@ -18,10 +19,9 @@ var CartoDbLib = {
 
   initialize: function(){
     //reset filters
-    $("#search_address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
+    $("#search-address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
 
     geocoder = new google.maps.Geocoder();
-
     // initiate leaflet map
     if (!CartoDbLib.map) {
       CartoDbLib.map = new L.Map('mapCanvas', {
@@ -64,7 +64,7 @@ var CartoDbLib = {
 
   doSearch: function() {
     CartoDbLib.clearSearch();
-    var address = $("#search_address").val();
+    var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
 
     if (address != "") {
@@ -75,9 +75,11 @@ var CartoDbLib = {
         if (status == google.maps.GeocoderStatus.OK) {
           CartoDbLib.currentPinpoint = [results[0].geometry.location.lat(), results[0].geometry.location.lng()];
           $.address.parameter('address', encodeURIComponent(address));
-
+          $.address.parameter('radius', CartoDbLib.radius);
           CartoDbLib.address = address;
           CartoDbLib.createSQL();
+          $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
+
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
           CartoDbLib.addCircle();
@@ -185,7 +187,7 @@ var CartoDbLib = {
       .done(function(data) {
         CartoDbLib.resultsCount = data.rows[0]["count"];
         $(".results-count").empty();
-        $(".results-count").append("Results: " +CartoDbLib.resultsCount);
+        $(".results-count").append("Results: " + CartoDbLib.resultsCount);
       });
   },
 
@@ -264,7 +266,7 @@ var CartoDbLib = {
     geocoder.geocode({'latLng': latLngPoint}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[1]) {
-          $('#search_address').val(results[1].formatted_address);
+          $('#search-address').val(results[1].formatted_address);
           $('.hint').focus();
           CartoDbLib.doSearch();
         }
@@ -290,10 +292,15 @@ var CartoDbLib = {
 
   // Call this in createSearch, when creating SQL queries from user selection.
   userSelectSQL: function(array) {
+    var results = '';
+
     for(var i = 0; i < array.length; i++) {
           var obj = array[i];
           CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
+           results += (obj.text + " ")
       }
+
+    return results
   },
 
   createSQL: function() {
@@ -302,11 +309,13 @@ var CartoDbLib = {
 
     CartoDbLib.userSelection = '';
     // Gets selected elements in dropdown (represented as an array of objects).
-    var lang_selections = ($("#select-language").select2('data'))
-    var insurance_selections = ($("#select-insurance").select2('data'))
+    var langSelections = ($("#select-language").select2('data'))
+    var insuranceSelections = ($("#select-insurance").select2('data'))
 
-    CartoDbLib.userSelectSQL(lang_selections);
-    CartoDbLib.userSelectSQL(insurance_selections);
+    var langResults = CartoDbLib.userSelectSQL(langSelections);
+    CartoDbLib.langSelections = langResults;
+
+    CartoDbLib.userSelectSQL(insuranceSelections);
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND "
 
@@ -350,9 +359,11 @@ var CartoDbLib = {
   },
 
   addCookieValues: function() {
+    console.log(document.cookie)
     var cookieArray = document.cookie.split(';');
     var resultsCount = "results" + cookieArray.length
     var path = $.address.value();
+    console.log(path)
     var arr = new Array(CartoDbLib.address, path)
 
     $.cookie(resultsCount, JSON.stringify(arr));

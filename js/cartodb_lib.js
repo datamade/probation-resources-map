@@ -47,12 +47,12 @@ var CartoDbLib = {
           this._div.innerHTML = props.full_address;
         }
         else {
-          this._div.innerHTML = 'Hover over an area';
+          this._div.innerHTML = 'Hover over a location';
         }
       };
 
       CartoDbLib.info.clear = function(){
-        this._div.innerHTML = '';
+        this._div.innerHTML = 'Hover over a location';
       };
 
       CartoDbLib.makeResultsDiv();

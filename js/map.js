@@ -103,7 +103,7 @@ $(function() {
     // $.address.value(url);
     console.log("http://127.0.0.1:5000/#" + url);
     window.location.href = "http://127.0.0.1:5000/#" + url;
-    CartoDbLib.doSearch();
+    // CartoDbLib.doSearch();
     return false;
     // window.location.href = "http://www.google.com";
   });

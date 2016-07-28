@@ -373,6 +373,7 @@ var CartoDbLib = {
     var cookieArray = document.cookie.split(';');
     var resultsCount = "results" + cookieArray.length
     var path = $.address.value();
+    // Do not use array!
     var arr = new Array(CartoDbLib.address, CartoDbLib.radius, CartoDbLib.langSelections, CartoDbLib.typeSelections, CartoDbLib.insuranceSelections, path)
 
     $.cookie(resultsCount, JSON.stringify(arr));

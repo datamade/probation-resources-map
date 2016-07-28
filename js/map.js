@@ -1,5 +1,7 @@
-var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"];
-var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
+var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
+var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
+var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 $(window).resize(function () {
   var h = $(window).height(),
@@ -79,12 +81,24 @@ $(function() {
 
   $('select').select2();
 
-  var language_data = makeSelectData(language);
-  var insurance_data = makeSelectData(insurance);
+  var age_data = makeSelectData(ageOptions);
+  var language_data = makeSelectData(languageOptions);
+  var facility_type_data = makeSelectData(facilityTypeOptions);
+  var insurance_data = makeSelectData(insuranceOptions);
+
+  $(".js-example-data-array-age").select2({
+    placeholder: "Age group",
+    data: age_data
+  });
 
   $(".js-example-data-array-language").select2({
     placeholder: "Language preferences",
     data: language_data
+  });
+
+  $(".js-example-data-array-type").select2({
+    placeholder: "Facility type",
+    data: facility_type_data
   });
 
   $(".js-example-data-array-insurance").select2({
@@ -99,13 +113,17 @@ $(function() {
 
   $("#dropdown-results").on('click', '.saved-search', function() {
     var address = CartoDbLib.removeWhiteSpace($(this).text());
-    var url = CartoDbLib.returnSavedResults(address);
-    // $.address.value(url);
-    console.log("http://127.0.0.1:5000/#" + url);
-    window.location.href = "http://127.0.0.1:5000/#" + url;
-    CartoDbLib.doSearch();
-    return false;
+
+    // var url = CartoDbLib.returnSavedResults(address);
+    // // $.address.value(url);
+    // console.log("http://127.0.0.1:5000/#" + url);
+    // window.location.href = "http://127.0.0.1:5000/#" + url;
+    // // CartoDbLib.doSearch();
+    // return false;
     // window.location.href = "http://www.google.com";
+
+    CartoDbLib.returnSavedResults(address);
+    CartoDbLib.doSearch();
   });
 
   // $.address.externalChange(function(event) {
@@ -118,8 +136,9 @@ $(function() {
 function makeSelectData(array) {
   data_arr = []
   for(var i = 0; i < array.length; i++) {
-    data_arr.push({ id: 0, text: CartoDbLib.removeUnderscore(array[i]) })
+    data_arr.push({ id: i, text: CartoDbLib.removeUnderscore(array[i]) })
   }
+
   return data_arr
 };
 

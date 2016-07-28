@@ -17,7 +17,7 @@ describe "events", type: :feature, js: true do
 
     it 'updates the info div' do
       do_search
-      expect(find('.info').text).to eq('Hover over an area')
+      expect(find('.info').text).to eq('Hover over a location')
     end
   end
 
@@ -33,6 +33,23 @@ describe "events", type: :feature, js: true do
       find('#btnViewMode', match: :first).click
       find('#btnViewMode', match: :first).click
       expect(page).to have_selector('#mapCanvas', visible: true)
+    end
+  end
+
+  describe "click save search button" do
+    it "add a list item to dropdown menu" do
+      visit '/'
+      expect(page).to have_selector('#dropdown-results')
+      find(".dropdown-toggle", match: :first).click
+      searches = Array.new
+      searches = find('.saved-searches').all('li')
+      original_list = searches.length
+      do_search
+      find("#btnSave", match: :first).click
+      find(".dropdown-toggle", match: :first).click
+      searches_redux = Array.new
+      searches_redux = find('.saved-searches').all('li')
+      expect(searches_redux.length - original_list).to eq(1)
     end
   end
 

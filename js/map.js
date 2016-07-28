@@ -1,5 +1,6 @@
-var language = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
+var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
+var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"]
+var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 $(window).resize(function () {
   var h = $(window).height(),
@@ -79,12 +80,18 @@ $(function() {
 
   $('select').select2();
 
-  var language_data = makeSelectData(language);
-  var insurance_data = makeSelectData(insurance);
+  var language_data = makeSelectData(languageOptions);
+  var facility_type_data = makeSelectData(facilityTypeOptions);
+  var insurance_data = makeSelectData(insuranceOptions);
 
   $(".js-example-data-array-language").select2({
     placeholder: "Language preferences",
     data: language_data
+  });
+
+  $(".js-example-data-array-type").select2({
+    placeholder: "Facility type",
+    data: facility_type_data
   });
 
   $(".js-example-data-array-insurance").select2({
@@ -126,7 +133,7 @@ function makeSelectData(array) {
   for(var i = 0; i < array.length; i++) {
     data_arr.push({ id: i, text: CartoDbLib.removeUnderscore(array[i]) })
   }
-  console.log(data_arr)
+
   return data_arr
 };
 

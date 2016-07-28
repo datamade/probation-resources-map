@@ -12,10 +12,12 @@ var CartoDbLib = {
   geoSearch: '',
   whereClause: '',
   langSelections: '',
+  typeSelections: '',
+  insuranceSelections: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish, asl_or_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
+  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
     //reset filters
@@ -66,12 +68,6 @@ var CartoDbLib = {
     CartoDbLib.clearSearch();
     var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
-    // CartoDbLib.langSelections =
-
-    console.log("logging for doSearch")
-    console.log(CartoDbLib.address)
-    console.log(CartoDbLib.radius)
-    console.log(CartoDbLib.langSelections)
 
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
@@ -83,8 +79,11 @@ var CartoDbLib = {
           $.address.parameter('address', encodeURIComponent(address));
           $.address.parameter('radius', CartoDbLib.radius);
           CartoDbLib.address = address;
+          // Must calll create SQL before setting language parameter.
           CartoDbLib.createSQL();
           $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
+          $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+          $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
 
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
@@ -223,11 +222,11 @@ var CartoDbLib = {
       for (prop in data) {
         var value = data[prop];
         if (String(value).toLowerCase() == "yes") {
-          if ($.inArray(String(prop), insurance) > -1) {
+          if ($.inArray(String(prop), insuranceOptions) > -1) {
             $("#insurance-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             insurance_count += 1;
           }
-          if ($.inArray(String(prop), language) > -1) {
+          if ($.inArray(String(prop), languageOptions) > -1) {
             $("#language-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
           }
@@ -303,7 +302,7 @@ var CartoDbLib = {
     for(var i = 0; i < array.length; i++) {
           var obj = array[i];
           CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
-           results += (obj.text + " ")
+           results += (obj.text + ", ")
       }
 
     return results
@@ -315,13 +314,19 @@ var CartoDbLib = {
 
     CartoDbLib.userSelection = '';
     // Gets selected elements in dropdown (represented as an array of objects).
-    var langSelections = ($("#select-language").select2('data'))
-    var insuranceSelections = ($("#select-insurance").select2('data'))
+    var langUserSelections = ($("#select-language").select2('data'))
+    var typeUserSelections = ($("#select-type").select2('data'))
+    var insuranceUserSelections = ($("#select-insurance").select2('data'))
 
-    var langResults = CartoDbLib.userSelectSQL(langSelections);
+    // Set results equal to varaible – to be used when creating cookies.
+    var langResults = CartoDbLib.userSelectSQL(langUserSelections);
     CartoDbLib.langSelections = langResults;
 
-    CartoDbLib.userSelectSQL(insuranceSelections);
+    var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
+    CartoDbLib.typeSelections = facilityTypeResults;
+
+    var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
+    CartoDbLib.insuranceSelections = insuranceResults;
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND "
 
@@ -365,13 +370,13 @@ var CartoDbLib = {
   },
 
   addCookieValues: function() {
-    console.log(document.cookie)
     var cookieArray = document.cookie.split(';');
     var resultsCount = "results" + cookieArray.length
     var path = $.address.value();
-    var arr = new Array(CartoDbLib.address, CartoDbLib.radius, CartoDbLib.langSelections, path)
+    var arr = new Array(CartoDbLib.address, CartoDbLib.radius, CartoDbLib.langSelections, CartoDbLib.typeSelections, CartoDbLib.insuranceSelections, path)
 
     $.cookie(resultsCount, JSON.stringify(arr));
+    console.log(document.cookie)
   },
 
   renderSavedResults: function() {
@@ -390,23 +395,18 @@ var CartoDbLib = {
 
     for (var idx = 0; idx < arr.length; idx++) {
       if (arr[idx][0] == matchAddress) {
-        console.log("logging for savedresults")
-        console.log(arr[idx][0] + "and" + arr[idx][1] + "and" + arr[idx][2])
+        // Assign values in JSON array to selectors.
         $("#search-address").val(arr[idx][0]);
         $("#search-radius").val(arr[idx][1]);
-
         // How to get val for selected languages without too much code?
-        var selectLang = arr[idx][2]
-        console.log(selectLang)
-        var i = language.indexOf(selectLang);
-        console.log(i);
-        $('#select-language').val([0, 1]).trigger("change");
+        var langArr = CartoDbLib.makeSelectionArray(arr[idx][2], languageOptions);
+        $('#select-language').val(langArr).trigger("change");
 
+        var typeArr = CartoDbLib.makeSelectionArray(arr[idx][3], facilityTypeOptions);
+        $('#select-type').val(typeArr).trigger("change");
 
-        var langSelections = ($("#select-language").select2('data'))
-        var langResults = CartoDbLib.userSelectSQL(langSelections);
-        CartoDbLib.langSelections = langResults;
-        console.log(CartoDbLib.langSelections)
+        var insureArr = CartoDbLib.makeSelectionArray(arr[idx][4], insuranceOptions);
+        $('#select-insurance').val(insureArr).trigger("change");
       }
     }
 
@@ -425,6 +425,22 @@ var CartoDbLib = {
       }
     }
     return jsonArray;
+  },
+
+// Takes a string from returnSavedResults iteration, and takes an array from the array variables in map.js.
+  makeSelectionArray: function(string, selectionArray){
+    var selectLangArr = string.split(",")
+    selectLangArr.pop();
+
+    var indexArray = new Array
+
+    for (var el = 0; el < selectLangArr.length; el++) {
+      var value = CartoDbLib.removeWhiteSpace(selectLangArr[el])
+      value = CartoDbLib.addUnderscore(value)
+      indexArray.push(selectionArray.indexOf(value));
+    }
+
+    return indexArray
   },
 
   removeWhiteSpace: function(word) {

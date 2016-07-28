@@ -1,5 +1,6 @@
+var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"]
+var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 $(window).resize(function () {
@@ -80,9 +81,15 @@ $(function() {
 
   $('select').select2();
 
+  var age_data = makeSelectData(ageOptions);
   var language_data = makeSelectData(languageOptions);
   var facility_type_data = makeSelectData(facilityTypeOptions);
   var insurance_data = makeSelectData(insuranceOptions);
+
+  $(".js-example-data-array-age").select2({
+    placeholder: "Age group",
+    data: age_data
+  });
 
   $(".js-example-data-array-language").select2({
     placeholder: "Language preferences",
@@ -107,8 +114,6 @@ $(function() {
   $("#dropdown-results").on('click', '.saved-search', function() {
     var address = CartoDbLib.removeWhiteSpace($(this).text());
 
-    // $(".js-example-data-array-language").val("spanish language emphasized").trigger("change");
-    // var langSelections = ($("#select-language").select2('data'));
     // var url = CartoDbLib.returnSavedResults(address);
     // // $.address.value(url);
     // console.log("http://127.0.0.1:5000/#" + url);

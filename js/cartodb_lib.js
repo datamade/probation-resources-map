@@ -15,7 +15,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish_language_emphasized, asl_or_other_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
+  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, spanish, asl_or_assistance_for_hearing_impaired, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
     //reset filters
@@ -66,6 +66,12 @@ var CartoDbLib = {
     CartoDbLib.clearSearch();
     var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
+    // CartoDbLib.langSelections =
+
+    console.log("logging for doSearch")
+    console.log(CartoDbLib.address)
+    console.log(CartoDbLib.radius)
+    console.log(CartoDbLib.langSelections)
 
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
@@ -363,8 +369,7 @@ var CartoDbLib = {
     var cookieArray = document.cookie.split(';');
     var resultsCount = "results" + cookieArray.length
     var path = $.address.value();
-    console.log(path)
-    var arr = new Array(CartoDbLib.address, path)
+    var arr = new Array(CartoDbLib.address, CartoDbLib.radius, CartoDbLib.langSelections, path)
 
     $.cookie(resultsCount, JSON.stringify(arr));
   },
@@ -380,14 +385,31 @@ var CartoDbLib = {
     }
   },
 
-  returnSavedResults: function(address) {
+  returnSavedResults: function(matchAddress) {
     var arr = CartoDbLib.makeJSONArray();
 
     for (var idx = 0; idx < arr.length; idx++) {
-      if (arr[idx][0] == address) {
-        return arr[idx][1];
+      if (arr[idx][0] == matchAddress) {
+        console.log("logging for savedresults")
+        console.log(arr[idx][0] + "and" + arr[idx][1] + "and" + arr[idx][2])
+        $("#search-address").val(arr[idx][0]);
+        $("#search-radius").val(arr[idx][1]);
+
+        // How to get val for selected languages without too much code?
+        var selectLang = arr[idx][2]
+        console.log(selectLang)
+        var i = language.indexOf(selectLang);
+        console.log(i);
+        $('#select-language').val([0, 1]).trigger("change");
+
+
+        var langSelections = ($("#select-language").select2('data'))
+        var langResults = CartoDbLib.userSelectSQL(langSelections);
+        CartoDbLib.langSelections = langResults;
+        console.log(CartoDbLib.langSelections)
       }
     }
+
   },
 
   makeJSONArray: function() {

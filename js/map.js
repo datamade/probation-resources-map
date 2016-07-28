@@ -1,4 +1,4 @@
-var language = ["spanish_language_emphasized", "asl_or_other_assistance_for_hearing_impaired"];
+var language = ["spanish", "asl_or_assistance_for_hearing_impaired"];
 var insurance = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 $(window).resize(function () {
@@ -99,13 +99,19 @@ $(function() {
 
   $("#dropdown-results").on('click', '.saved-search', function() {
     var address = CartoDbLib.removeWhiteSpace($(this).text());
-    var url = CartoDbLib.returnSavedResults(address);
-    // $.address.value(url);
-    console.log("http://127.0.0.1:5000/#" + url);
-    window.location.href = "http://127.0.0.1:5000/#" + url;
-    // CartoDbLib.doSearch();
-    return false;
+
+    // $(".js-example-data-array-language").val("spanish language emphasized").trigger("change");
+    // var langSelections = ($("#select-language").select2('data'));
+    // var url = CartoDbLib.returnSavedResults(address);
+    // // $.address.value(url);
+    // console.log("http://127.0.0.1:5000/#" + url);
+    // window.location.href = "http://127.0.0.1:5000/#" + url;
+    // // CartoDbLib.doSearch();
+    // return false;
     // window.location.href = "http://www.google.com";
+
+    CartoDbLib.returnSavedResults(address);
+    CartoDbLib.doSearch();
   });
 
   // $.address.externalChange(function(event) {
@@ -118,8 +124,9 @@ $(function() {
 function makeSelectData(array) {
   data_arr = []
   for(var i = 0; i < array.length; i++) {
-    data_arr.push({ id: 0, text: CartoDbLib.removeUnderscore(array[i]) })
+    data_arr.push({ id: i, text: CartoDbLib.removeUnderscore(array[i]) })
   }
+  console.log(data_arr)
   return data_arr
 };
 

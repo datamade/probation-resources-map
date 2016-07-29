@@ -48,8 +48,5 @@ jQuery(function () {
 		if (href.match(/^mailto:/i)) {
 			_trackClickEventWithGA("Emails", "Click", href);
 		}
-
-		// Add analytics for deleting cookies?
-
 	});
 });

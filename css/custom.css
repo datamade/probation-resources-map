@@ -180,6 +180,14 @@ label { font-weight: normal;}
   padding-top: 15px;
 }
 
+#saved-facilities-list {
+  list-style: none;
+}
+
+.facility-list li.divider {
+  border-bottom: 1px solid #ddd;
+}
+
 th, td {
   padding: 8px;
 }

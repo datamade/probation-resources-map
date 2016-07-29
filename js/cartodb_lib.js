@@ -180,7 +180,7 @@ var CartoDbLib = {
               elements["website"] = obj_array[idx].website;
             }
 
-            var output = Mustache.render("<tr><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
+            var output = Mustache.render("<tr><td><i class='fa fa-bookmark' aria-hidden='true'></i></td><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
 
             results.append(output);
           }

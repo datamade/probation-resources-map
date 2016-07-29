@@ -136,6 +136,15 @@ $(function() {
     $(this).parent().remove();
   });
 
+  $(".list-table").on('click', '.fa-bookmark', function() {
+    var tr = ($(this).parent().parent());
+    $(tr).find('td').each (function() {
+      template = "<li>" + $(this).text() + "</li>"
+      $("#saved-facilities-list").append(template);
+    });
+    $("#saved-facilities-list").append("<li class='divider'></li>");
+  });
+
 });
 
 function makeSelectData(array) {

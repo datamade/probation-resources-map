@@ -38,6 +38,9 @@ layout: default
     <div>
       <button class='btn btn-default btn-sm' id="btnSave"><i class='fa'></i>Save Results</button>
     </div>
+      <button class='btn btn-default btn-sm' id="btnFavorite"><i class='fa'></i>Show Saved Facilities</button>
+    <div>
+    </div>
   </div>
 
   <div class='col-md-8'>
@@ -51,6 +54,7 @@ layout: default
       <table class="list-table">
         <thead>
           <tr>
+            <th></th>
             <th>Facility</th>
             <th>Address</th>
             <th>Hours</th>
@@ -59,6 +63,11 @@ layout: default
         </thead>
         <tbody id='results-list'></tbody>
       </table>
+    </div>
+
+    <div id="saved-facilities">
+      <h2>Saved Facilities</h2>
+      <ul class="facility-list" id="saved-facilities-list"></ul>
     </div>
   </div>
 

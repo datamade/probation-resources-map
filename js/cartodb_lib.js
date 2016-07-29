@@ -80,7 +80,7 @@ var CartoDbLib = {
           $.address.parameter('address', encodeURIComponent(address));
           $.address.parameter('radius', CartoDbLib.radius);
           CartoDbLib.address = address;
-          // Must calll create SQL before setting language parameter.
+          // Must call create SQL before setting language parameter.
           CartoDbLib.createSQL();
           $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
           $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));

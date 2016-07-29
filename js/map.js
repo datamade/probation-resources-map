@@ -130,7 +130,7 @@ $(function() {
   //   CartoDbLib.initialize();
   // });
 
-  $("#dropdown-results").on('click', '#remove-icon', function() {
+  $("#dropdown-results").on('click', '.remove-icon', function() {
     var path = ($(this).siblings().children().text());
     CartoDbLib.deleteSavedResult(path);
     $(this).parent().remove();

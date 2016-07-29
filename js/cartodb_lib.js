@@ -416,7 +416,7 @@ var CartoDbLib = {
 
     if (objArray != null) {
       for (var idx = 0; idx < objArray.length; idx++) {
-        $('.saved-searches').append('<li><a href="#" id="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + objArray[idx].address + '<span class="hidden">' + objArray[idx].path + '</span></a></li>');
+        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + objArray[idx].address + '<span class="hidden">' + objArray[idx].path + '</span></a></li>');
       }
     }
   },

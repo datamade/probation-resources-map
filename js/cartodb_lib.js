@@ -18,7 +18,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_64, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
+  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
     //reset filters
@@ -122,8 +122,11 @@ var CartoDbLib = {
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
+          console.log(layer)
           CartoDbLib.sublayer = layer.getSubLayer(0);
+          console.log(CartoDbLib.sublayer)
           CartoDbLib.sublayer.setInteraction(true);
+          console.log('here we are')
           CartoDbLib.sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','pointer');
             CartoDbLib.info.update(data);
@@ -135,8 +138,12 @@ var CartoDbLib = {
           CartoDbLib.sublayer.on('featureClick', function(e, latlng, pos, data) {
               CartoDbLib.modalPop(data);
           })
-        }).error(function(e) {
-          //console.log('ERROR')
+          CartoDbLib.sublayer.on('error', function(err) {
+            console.log('error: ' + err);
+          })
+        }).on('error', function(e) {
+          console.log('ERROR')
+          console.log(e)
         });
   },
 
@@ -152,7 +159,7 @@ var CartoDbLib = {
     };
 
     results.empty();
-    sql.execute("SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
+    sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
         var obj_array = listData.rows;
         if (listData.rows.length == 0) {

@@ -122,11 +122,8 @@ var CartoDbLib = {
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
-          console.log(layer)
           CartoDbLib.sublayer = layer.getSubLayer(0);
-          console.log(CartoDbLib.sublayer)
           CartoDbLib.sublayer.setInteraction(true);
-          console.log('here we are')
           CartoDbLib.sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','pointer');
             CartoDbLib.info.update(data);
@@ -388,10 +385,14 @@ var CartoDbLib = {
   },
 
   addCookieValues: function() {
-    var cookieArray = document.cookie.split(';');
-    var resultsCount = "results" + cookieArray.length
-    var path = $.address.value();
+    var objArr = new Array
 
+    if ($.cookie("probationResources") != null) {
+      storedObject = JSON.parse($.cookie("probationResources"));
+      objArr.push(storedObject)
+    }
+
+    var path = $.address.value();
     var parameters = {
       "address": CartoDbLib.address,
       "radius": CartoDbLib.radius,
@@ -402,62 +403,47 @@ var CartoDbLib = {
       "path": path
     }
 
-    $.cookie(resultsCount, JSON.stringify(parameters));
-
+    objArr.push(parameters)
+    flatArray = [].concat.apply([], objArr)
+    $.cookie("probationResources", JSON.stringify(flatArray));
   },
 
   renderSavedResults: function() {
     $(".saved-searches").empty();
     $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
 
-    var arr = CartoDbLib.makeJSONArray();
+    var objArray = JSON.parse($.cookie("probationResources"));
 
-    for (var idx = 0; idx < arr.length; idx++) {
-      $('.saved-searches').append('<li><a class="saved-search" href="#"> ' + arr[idx].address + '</a></li>');
+    if (objArray != null) {
+      for (var idx = 0; idx < objArray.length; idx++) {
+        $('.saved-searches').append('<li><a href="#" id="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + objArray[idx].address + '<span class="hidden">' + objArray[idx].path + '</span></a></li>');
+      }
     }
   },
 
-  returnSavedResults: function(matchAddress) {
-    var arr = CartoDbLib.makeJSONArray();
+  returnSavedResults: function(path) {
+    var objArray = JSON.parse($.cookie("probationResources"));
 
-    for (var idx = 0; idx < arr.length; idx++) {
-      if (arr[idx].address == matchAddress) {
-        // Assign values in JSON array to selectors.
-        $("#search-address").val(arr[idx].address);
-        $("#search-radius").val(arr[idx].radius);
+    for (var idx = 0; idx < objArray.length; idx++) {
+      if (objArray[idx].path == path ) {
+        $("#search-address").val(objArray[idx].address);
+        $("#search-radius").val(objArray[idx].radius);
 
-        var ageArr = CartoDbLib.makeSelectionArray(arr[idx].age, ageOptions);
+        var ageArr = CartoDbLib.makeSelectionArray(objArray[idx].age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");
 
-        var langArr = CartoDbLib.makeSelectionArray(arr[idx].language, languageOptions);
+        var langArr = CartoDbLib.makeSelectionArray(objArray[idx].language, languageOptions);
         $('#select-language').val(langArr).trigger("change");
 
-        var typeArr = CartoDbLib.makeSelectionArray(arr[idx].type, facilityTypeOptions);
+        var typeArr = CartoDbLib.makeSelectionArray(objArray[idx].type, facilityTypeOptions);
         $('#select-type').val(typeArr).trigger("change");
 
-        var insureArr = CartoDbLib.makeSelectionArray(arr[idx].insurance, insuranceOptions);
+        var insureArr = CartoDbLib.makeSelectionArray(objArray[idx].insurance, insuranceOptions);
         $('#select-insurance').val(insureArr).trigger("change");
       }
     }
 
   },
-
-  makeJSONArray: function() {
-    var cookieArray = document.cookie.split(';');
-    var jsonArray = new Array;
-
-    for (var idx = 0; idx < cookieArray.length; idx++) {
-      var resultsID = cookieArray[idx].split("=")[0];
-      resultsID = CartoDbLib.removeWhiteSpace(resultsID);
-      if (cookieArray[idx].match("results")) {
-        storedObject = JSON.parse($.cookie(resultsID));
-        jsonArray.push(storedObject)
-      }
-    }
-    // Returns an array of objects with saved parameters.
-    return jsonArray;
-  },
-
 // Resets select2 selectors to match CartoDb field names. Takes a string from returnSavedResults iteration, and takes an array from the array variables in map.js.
   makeSelectionArray: function(string, selectionArray){
     var newArr = string.split(",")
@@ -472,6 +458,18 @@ var CartoDbLib = {
     }
 
     return indexArray
+  },
+
+  deleteSavedResult: function(path) {
+    var objArray = JSON.parse($.cookie("probationResources"));
+
+    for (var idx = 0; idx < objArray.length; idx++) {
+      if (objArray[idx].path == path ) {
+        objArray.splice(idx, 1);
+      }
+    }
+
+    $.cookie("probationResources", JSON.stringify(objArray));
   },
 
   removeWhiteSpace: function(word) {

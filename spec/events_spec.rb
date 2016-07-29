@@ -53,4 +53,18 @@ describe "events", type: :feature, js: true do
     end
   end
 
+  describe "click remove icon" do
+    it "deletes a list item from the dropdown menu" do
+      visit '/'
+      do_search
+      find("#btnSave", match: :first).click
+      find(".dropdown-toggle", match: :first).click
+      searches_redux = Array.new
+      searches_redux = find('.saved-searches').all('li')
+      original_list = searches_redux.length
+      find(".dropdown-toggle", match: :first).click
+      find("#dropdown-results", match: :first).click
+    end
+  end
+
 end

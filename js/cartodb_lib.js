@@ -498,13 +498,22 @@ var CartoDbLib = {
     if (objArray != null) {
       for (var idx = 0; idx < objArray.length; idx++) {
         // TODO: Clean up with good CSS.
-        $('#facilities-div').append("<p>" + objArray[idx].name + "</p>" + "<p>" + objArray[idx].address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr>");
+        $('#facilities-div').append("<div><p>" + objArray[idx].name + "</p>" + "<p>" + objArray[idx].address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr></div>");
       }
     }
   },
 
-  deleteSavedFacility: function() {
+  deleteSavedFacility: function(address) {
+    var objArray = JSON.parse($.cookie("facility"));
 
+    for (var idx = 0; idx < objArray.length; idx++) {
+      if (objArray[idx].address == address ) {
+        objArray.splice(idx, 1);
+      }
+    }
+
+    $.cookie("facility", JSON.stringify(objArray));
+    console.log(document.cookie)
   },
 
   removeWhiteSpace: function(word) {

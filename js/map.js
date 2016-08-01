@@ -125,11 +125,6 @@ $(function() {
     CartoDbLib.doSearch();
   });
 
-  // $.address.externalChange(function(event) {
-  //   console.log("thissssss");
-  //   CartoDbLib.initialize();
-  // });
-
   $("#dropdown-results").on('click', '.remove-icon', function() {
     var path = ($(this).siblings().children().text());
     CartoDbLib.deleteSavedResult(path);

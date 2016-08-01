@@ -180,7 +180,7 @@ var CartoDbLib = {
               elements["website"] = obj_array[idx].website;
             }
 
-            var output = Mustache.render("<tr><td><i class='fa fa-bookmark' aria-hidden='true'></i></td><td>{{facility}}</td><td>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
+            var output = Mustache.render("<tr><td><i class='fa fa-bookmark' aria-hidden='true'></i></td><td class='facility-name'>{{facility}}</td><td class='facility-address'>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
 
             results.append(output);
           }
@@ -310,10 +310,10 @@ var CartoDbLib = {
     var results = '';
 
     for(var i = 0; i < array.length; i++) {
-          var obj = array[i];
-          CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
-           results += (obj.text + ", ")
-      }
+      var obj = array[i];
+      CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
+      results += (obj.text + ", ")
+    }
 
     return results
   },
@@ -470,6 +470,41 @@ var CartoDbLib = {
     }
 
     $.cookie("probationResources", JSON.stringify(objArray));
+  },
+
+  addFacilityCookie: function(name, address) {
+    var objArr = new Array
+
+    if ($.cookie("facility") != null) {
+      storedObject = JSON.parse($.cookie("facility"));
+      objArr.push(storedObject)
+    }
+
+    var parameters = {
+      "name": name,
+      "address": address
+    }
+
+    objArr.push(parameters)
+    flatArray = [].concat.apply([], objArr)
+    $.cookie("facility", JSON.stringify(flatArray));
+  },
+
+  renderSavedFacilities: function() {
+    $("#facilities-div").empty();
+
+    var objArray = JSON.parse($.cookie("facility"));
+    // TODO: What if there are duplicate facilities?
+    if (objArray != null) {
+      for (var idx = 0; idx < objArray.length; idx++) {
+        // TODO: Clean up with good CSS.
+        $('#facilities-div').append("<p>" + objArray[idx].name + "</p>" + "<p>" + objArray[idx].address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr>");
+      }
+    }
+  },
+
+  deleteSavedFacility: function() {
+
   },
 
   removeWhiteSpace: function(word) {

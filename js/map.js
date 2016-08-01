@@ -137,12 +137,10 @@ $(function() {
   });
 
   $(".list-table").on('click', '.fa-bookmark', function() {
-    var tr = ($(this).parent().parent());
-    $(tr).find('td').each (function() {
-      template = "<li>" + $(this).text() + "</li>"
-      $("#saved-facilities-list").append(template);
-    });
-    $("#saved-facilities-list").append("<li class='divider'></li>");
+    var tr = ($(this).parents().eq(1));
+    var name = tr.find("td.facility-name").text();
+    var address = tr.find("td.facility-address").text();
+    CartoDbLib.addFacilityCookie(name, address);
   });
 
 });

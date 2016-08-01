@@ -125,15 +125,17 @@ $(function() {
     CartoDbLib.doSearch();
   });
 
-  // $.address.externalChange(function(event) {
-  //   console.log("thissssss");
-  //   CartoDbLib.initialize();
-  // });
-
   $("#dropdown-results").on('click', '.remove-icon', function() {
     var path = ($(this).siblings().children().text());
     CartoDbLib.deleteSavedResult(path);
     $(this).parent().remove();
+  });
+
+  $(".list-table").on('click', '.fa-bookmark', function() {
+    var tr = ($(this).parents().eq(1));
+    var name = tr.find("td.facility-name").text();
+    var address = tr.find("td.facility-address").text();
+    CartoDbLib.addFacilityCookie(name, address);
   });
 
 });

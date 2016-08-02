@@ -164,6 +164,7 @@ var CartoDbLib = {
     }
 
     results.empty();
+
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
         var obj_array = listData.rows;
@@ -172,46 +173,66 @@ var CartoDbLib = {
         }
         else {
           for (idx in obj_array) {
-            if (obj_array[idx].organization_name != "") {
-              elements["facility"] = obj_array[idx].organization_name;
-            }
-            if (obj_array[idx].full_address != "") {
-              elements["address"] = obj_array[idx].full_address;
-            }
-            if (obj_array[idx].hours_of_operation != "") {
-              elements["hours"] = obj_array[idx].hours_of_operation;
-            }
-            if (obj_array[idx].intake_number != "") {
-              elements["phone"] = obj_array[idx].intake_number;
-            }
-            if (obj_array[idx].website != "") {
-              if (obj_array[idx].website.match(/^http/)) {
-                elements["website"] = obj_array[idx].website;
+            var attributeArr = new Array;
+
+            attributeArr.push(obj_array[idx].organization_name, obj_array[idx].full_address, obj_array[idx].hours_of_operation, obj_array[idx].intake_number, obj_array[idx].website)
+
+            if (CartoDbLib.deleteBlankResults(attributeArr) < 5) {
+
+              if (obj_array[idx].organization_name != "") {
+                elements["facility"] = obj_array[idx].organization_name;
+              }
+              // Check for white space. && obj_array[idx].full_address.length > 10
+              if (obj_array[idx].full_address != "") {
+                elements["address"] = obj_array[idx].full_address;
+              }
+              if (obj_array[idx].hours_of_operation != "") {
+                elements["hours"] = obj_array[idx].hours_of_operation;
+              }
+              if (obj_array[idx].intake_number != "") {
+                elements["phone"] = obj_array[idx].intake_number;
+              }
+              if (obj_array[idx].website != "") {
+                if (obj_array[idx].website.match(/^http/)) {
+                  elements["website"] = obj_array[idx].website;
+                }
+                else {
+                  elements["website"] = "http://" + obj_array[idx].website;
+                }
+              }
+
+              var icon = ''
+              // Check if facility is in 'location' cookie.
+              if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
+                icon = "<i class='fa fa-check-circle' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
               }
               else {
-                elements["website"] = "http://" + obj_array[idx].website;
+                icon = "<i class='fa fa-bookmark' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
               }
-            }
 
-            var icon = ''
-            // Check if facility is in 'location' cookie.
-            if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
-              icon = "<i class='fa fa-check-circle' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
-            }
-            else {
-              icon = "<i class='fa fa-bookmark' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
-            }
+              var output = Mustache.render("<tr><td>" + icon + "</td><td class='facility-name'>{{facility}}</td><td class='facility-address'>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:&nbsp</strong><a href='{{website}}' target='_blank'>{{website}}</a></td></tr>", elements);
 
-            var output = Mustache.render("<tr><td>" + icon + "</td><td class='facility-name'>{{facility}}</td><td class='facility-address'>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:&nbsp</strong><a href='{{website}}' target='_blank'>{{website}}</a></td></tr>", elements);
-
-            results.append(output);
-            $('.fa-bookmark').tooltip();
+              results.append(output);
+              $('.fa-bookmark').tooltip();
+            }
           }
         }
     })
     .error(function(errors) {
       console.log("errors:" + errors);
     });
+  },
+
+  deleteBlankResults: function(array) {
+    var counter = 0;
+    // Count number of instances of whitespace.
+    $.each(array, function (index, value) {
+      cleanText = value.trim();
+      if (cleanText.length == 0) {
+        counter++;
+      }
+    });
+    return counter
   },
 
   getResults: function() {

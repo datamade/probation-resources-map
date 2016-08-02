@@ -104,6 +104,8 @@ $(function() {
     var tr = ($(this).parents().eq(1));
     var name = tr.find("td.facility-name").text();
     var address = tr.find("td.facility-address").text();
+    $(this).addClass('fa-check-circle');
+    $(this).removeClass('fa-bookmark');
     CartoDbLib.addFacilityCookie(name, address);
   });
 

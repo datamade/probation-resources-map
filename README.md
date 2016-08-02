@@ -27,6 +27,17 @@ Built in collaboration with the Cook County Adult Probation Department (CCAPD) a
 * [jQuery Address](http://www.asual.com/jquery/address)
 * [Bootstrap](http://getbootstrap.com)
 
+## Run Tests
+
+This site includes a basic test framework built with Rspec and Capybara to drive the browser through acceptance tests. Run these tests frequently.
+
+<pre>
+  $ bundle install
+  $ rspec spec/
+</pre>
+
+Some tests include <pre>binding.pry</pre>. In such cases type "exit" in the terminal to continue.
+
 ## Team
 
 * [Derek Eder](mailto:derek.eder+git@gmail.com)

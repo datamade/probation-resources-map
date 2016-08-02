@@ -9,11 +9,11 @@ describe "page", type: :feature, js: true do
     end
 
     it "has an About" do
-      expect(find('#navbar ul li:nth-child(2)').text).to eq('About')
+      expect(find('#navbar ul li:nth-child(3)').text).to eq('About')
     end
 
     it "has a Contribute" do
-      expect(find('#navbar ul li:nth-child(3)').text).to eq('Contribute')
+      expect(find('#navbar ul li:nth-child(4)').text).to eq('Contribute')
     end
   end
 

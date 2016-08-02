@@ -61,7 +61,8 @@ var CartoDbLib = {
 
       CartoDbLib.makeResultsDiv();
       CartoDbLib.info.addTo(CartoDbLib.map);
-      CartoDbLib.doSearch();
+      CartoDbLib.renderMap();
+      CartoDbLib.renderList();
       CartoDbLib.renderSavedResults();
       CartoDbLib.updateSavedCounter();
     }
@@ -92,8 +93,8 @@ var CartoDbLib = {
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
           CartoDbLib.addCircle();
-          CartoDbLib.renderList();
           CartoDbLib.renderMap();
+          CartoDbLib.renderList();
           CartoDbLib.getResults();
 
         }
@@ -156,6 +157,10 @@ var CartoDbLib = {
       phone: '',
       website: ''
     };
+
+    if (CartoDbLib.whereClause == ' WHERE the_geom is not null AND ') {
+      CartoDbLib.whereClause = '';
+    }
 
     results.empty();
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)

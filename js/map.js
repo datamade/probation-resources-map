@@ -15,6 +15,9 @@ $(function() {
 
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
 
+  $('#btnReset').tooltip();
+  $('#btnViewMode').tooltip();
+
   $(':checkbox').click(function(){
     CartoDbLib.doSearch();
   });
@@ -34,12 +37,12 @@ $(function() {
 
   $('#btnViewMode').click(function(){
     if ($('#mapCanvas').is(":visible")){
-      $('#btnViewMode').html("<i class='fa fa-map-marker'></i> Map view");
+      $('#btnViewMode').html("<i class='fa fa-map-marker'></i>");
       $('#listCanvas').show();
       $('#mapCanvas').hide();
     }
     else {
-      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
+      $('#btnViewMode').html("<i class='fa fa-list'></i>");
       $('#listCanvas').hide();
       $('#mapCanvas').show();
     }

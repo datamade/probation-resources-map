@@ -1,15 +1,19 @@
 body {
-  font-family:Chicago,Verdana,sans-serif;
-  font-size:14px;
+  font-family: Chicago, Verdana,sans-serif;
+  font-size: 14px;
 }
 
-h1,h2,h3{line-height:inherit;}
+h1,h2,h3 { line-height:inherit; }
 
 h5 {margin-top: 0px ; margin-bottom: 2px;}
 
 a { color: #D9534F; }
 
 label { font-weight: normal;}
+
+th, td {
+  padding: 8px;
+}
 
 .nav-pills > li.active > a { color: #D9534F; background-color: #FFF; }
 
@@ -60,7 +64,8 @@ label { font-weight: normal;}
 }
 
 .btn {
-  margin-bottom: 10px;
+  margin: 0.4em;
+  margin-left: 0;
 }
 
 .zone-box {
@@ -188,8 +193,14 @@ label { font-weight: normal;}
   border-bottom: 1px solid #ddd;
 }
 
-th, td {
-  padding: 8px;
-}
 
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #7C7F83;
+}
+.tooltip-inner {
+  color: #ffffff;
+  background: #7C7F83;
+  border: solid 1px #7C7F83;
+  font-family: Chicago, Verdana, sans-serif;
+}
 

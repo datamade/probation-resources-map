@@ -1,15 +1,19 @@
 body {
-  font-family:Chicago,Verdana,sans-serif;
-  font-size:14px;
+  font-family: Chicago, Verdana,sans-serif;
+  font-size: 14px;
 }
 
-h1,h2,h3{line-height:inherit;}
+h1,h2,h3 { line-height:inherit; }
 
 h5 {margin-top: 0px ; margin-bottom: 2px;}
 
 a { color: #D9534F; }
 
 label { font-weight: normal;}
+
+th, td {
+  padding: 8px;
+}
 
 .nav-pills > li.active > a { color: #D9534F; background-color: #FFF; }
 
@@ -60,7 +64,8 @@ label { font-weight: normal;}
 }
 
 .btn {
-  margin-bottom: 10px;
+  margin: 0.3em;
+  margin-left: 0;
 }
 
 .zone-box {
@@ -136,6 +141,7 @@ label { font-weight: normal;}
 .leaflet-google-layer{
     z-index: 0 !important;
 }
+
 .leaflet-map-pane{
     z-index: 100;
 }
@@ -147,10 +153,21 @@ label { font-weight: normal;}
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
+
 .info h4 {
     margin: 0 0 5px;
     color: #777;
 }
+
+.info ul {
+  display: block;
+  list-style: none;
+  -webkit-margin-before: 0.3em;
+  -webkit-margin-after: 0.3em;
+  -webkit-margin-start: 0.3em;
+  -webkit-margin-end: 0.3em;
+  -webkit-padding-start: 0.3em;
+  }
 
 .results-count {
     padding: 6px 8px;
@@ -180,16 +197,22 @@ label { font-weight: normal;}
   padding-top: 15px;
 }
 
-#saved-facilities-list {
-  list-style: none;
-}
-
 .facility-list li.divider {
   border-bottom: 1px solid #ddd;
 }
 
-th, td {
-  padding: 8px;
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #7C7F83;
 }
 
+.tooltip.top .tooltip-arrow {
+  border-top-color: #7C7F83;
+}
+
+.tooltip-inner {
+  color: #ffffff;
+  background: #7C7F83;
+  border: solid 1px #7C7F83;
+  font-family: Chicago, Verdana, sans-serif;
+}
 

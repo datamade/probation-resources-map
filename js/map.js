@@ -15,6 +15,9 @@ $(function() {
 
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
 
+  $('#btnReset').tooltip();
+  $('#btnViewMode').tooltip();
+
   $(':checkbox').click(function(){
     CartoDbLib.doSearch();
   });
@@ -34,41 +37,15 @@ $(function() {
 
   $('#btnViewMode').click(function(){
     if ($('#mapCanvas').is(":visible")){
-      $('#btnViewMode').html("<i class='fa fa-map-marker'></i> Map view");
+      $('#btnViewMode').html("<i class='fa fa-map-marker'></i>");
       $('#listCanvas').show();
       $('#mapCanvas').hide();
     }
     else {
-      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
+      $('#btnViewMode').html("<i class='fa fa-list'></i>");
       $('#listCanvas').hide();
       $('#mapCanvas').show();
-      // Below: attempts to fix map load issue.
-
-      // (1)
-      // $( "#mapCanvas" ).show( "fast", function() {
-      //   setTimeout(function() {CartoDbLib.map.invalidateSize()}, 2000);
-      // });
-
-      // (2)
-      // $( "#mapCanvas" ).show( "fast", function() {
-      //   CartoDbLib.map.invalidateSize();
-      // });
-
-      // (3)
-      // setTimeout(function() {
-      //   $('#listCanvas').hide();
-      //   $('#mapCanvas').show();
-      //   CartoDbLib.map.invalidateSize();
-      // }, 500);
     }
-  });
-
-  $('#reset').click(function(){
-    $.address.parameter('address','');
-    $.address.parameter('radius','');
-    $.address.parameter('id','');
-    CartoDbLib.initialize();
-    return false;
   });
 
   $("#search-address").keydown(function(e){
@@ -86,22 +63,22 @@ $(function() {
   var facility_type_data = makeSelectData(facilityTypeOptions);
   var insurance_data = makeSelectData(insuranceOptions);
 
-  $(".js-example-data-array-age").select2({
+  $(".data-array-age").select2({
     placeholder: "Age group",
     data: age_data
   });
 
-  $(".js-example-data-array-language").select2({
+  $(".data-array-language").select2({
     placeholder: "Language preferences",
     data: language_data
   });
 
-  $(".js-example-data-array-type").select2({
+  $(".data-array-type").select2({
     placeholder: "Facility type",
     data: facility_type_data
   });
 
-  $(".js-example-data-array-insurance").select2({
+  $(".data-array-insurance").select2({
     placeholder: "Payment preferences",
     data: insurance_data
   });
@@ -113,14 +90,6 @@ $(function() {
 
   $("#dropdown-results").on('click', '.saved-search', function() {
     var path = $(this).children().text();
-
-    // // $.address.value(url);
-    // console.log("http://127.0.0.1:5000/#" + url);
-    // window.location.href = "http://127.0.0.1:5000/#" + url;
-    // // CartoDbLib.doSearch();
-    // return false;
-    // window.location.href = "http://www.google.com";
-
     CartoDbLib.returnSavedResults(path);
     CartoDbLib.doSearch();
   });
@@ -135,6 +104,8 @@ $(function() {
     var tr = ($(this).parents().eq(1));
     var name = tr.find("td.facility-name").text();
     var address = tr.find("td.facility-address").text();
+    $(this).addClass('fa-check-circle');
+    $(this).removeClass('fa-bookmark');
     CartoDbLib.addFacilityCookie(name, address);
   });
 
@@ -148,11 +119,6 @@ function makeSelectData(array) {
 
   return data_arr
 };
-
-
-
-
-
 
 
 

@@ -68,22 +68,22 @@ $(function() {
   var facility_type_data = makeSelectData(facilityTypeOptions);
   var insurance_data = makeSelectData(insuranceOptions);
 
-  $(".js-example-data-array-age").select2({
+  $(".data-array-age").select2({
     placeholder: "Age group",
     data: age_data
   });
 
-  $(".js-example-data-array-language").select2({
+  $(".data-array-language").select2({
     placeholder: "Language preferences",
     data: language_data
   });
 
-  $(".js-example-data-array-type").select2({
+  $(".data-array-type").select2({
     placeholder: "Facility type",
     data: facility_type_data
   });
 
-  $(".js-example-data-array-insurance").select2({
+  $(".data-array-insurance").select2({
     placeholder: "Payment preferences",
     data: insurance_data
   });
@@ -95,7 +95,6 @@ $(function() {
 
   $("#dropdown-results").on('click', '.saved-search', function() {
     var path = $(this).children().text();
-
     CartoDbLib.returnSavedResults(path);
     CartoDbLib.doSearch();
   });

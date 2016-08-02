@@ -309,11 +309,18 @@ var CartoDbLib = {
   userSelectSQL: function(array) {
     var results = '';
 
-    for(var i = 0; i < array.length; i++) {
-      var obj = array[i];
+    $.each( array, function(index, obj) {
+      console.log("running userSelectSQL")
+      console.log(obj)
       CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
       results += (obj.text + ", ")
-    }
+    })
+
+    // for(var i = 0; i < array.length; i++) {
+    //   var obj = array[i];
+    //   CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
+    //   results += (obj.text + ", ")
+    // }
 
     return results
   },

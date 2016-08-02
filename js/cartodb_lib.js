@@ -18,7 +18,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "cartodb_id, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
+  fields: "cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
     //reset filters
@@ -47,7 +47,8 @@ var CartoDbLib = {
       // method that we will use to update the control based on feature properties passed
       CartoDbLib.info.update = function (props) {
         if (props) {
-          this._div.innerHTML = props.full_address;
+          // this._div.innerHTML = props.full_address;
+          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + props.street_address + "</li></ul>";
         }
         else {
           this._div.innerHTML = 'Hover over a location';
@@ -62,7 +63,7 @@ var CartoDbLib = {
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.doSearch();
       CartoDbLib.renderSavedResults();
-      CartoDbLib.renderSavedFacilities();
+      CartoDbLib.updateSavedCounter();
     }
   },
 
@@ -181,9 +182,10 @@ var CartoDbLib = {
               elements["website"] = obj_array[idx].website;
             }
 
-            var output = Mustache.render("<tr><td><i class='fa fa-bookmark' aria-hidden='true'></i></td><td class='facility-name'>{{facility}}</td><td class='facility-address'>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
+            var output = Mustache.render("<tr><td><i class='fa fa-bookmark' aria-hidden='true' data-toggle='tooltip' title='Save location'></i></td><td class='facility-name'>{{facility}}</td><td class='facility-address'>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:</strong> {{website}}</td></tr>", elements);
 
             results.append(output);
+            $('.fa-bookmark').tooltip();
           }
         }
     })
@@ -295,7 +297,15 @@ var CartoDbLib = {
   },
 
   removeUnderscore: function(text) {
-    return text.replace(/_/g, ' ')
+    // Find ASL. Capitalize first three letters.
+    if (text.match(/^asl/)) {
+      var capitalText = "ASL or assistance for hearing impaired"
+    }
+    else {
+      var capitalText = text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    return capitalText.replace(/_/g, ' ')
   },
 
   addUnderscore: function(text) {
@@ -303,7 +313,7 @@ var CartoDbLib = {
     if (newText[0].match(/^[1-9]\d*/)) {
       newText = "_" + newText
     }
-    return newText
+    return newText.toLowerCase();
   },
 
   // Call this in createSearch, when creating SQL queries from user selection.
@@ -409,12 +419,16 @@ var CartoDbLib = {
   },
 
   renderSavedResults: function() {
-    $(".saved-searches").empty();
+    $('.saved-searches').empty();
     $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
 
     var objArray = JSON.parse($.cookie("probationResources"));
 
-    if (objArray != null) {
+    if (objArray == null || objArray.length == 0) {
+      $('#saved-searches-nav').hide();
+    }
+    else {
+      $('#saved-searches-nav').show();
       $.each(objArray, function( index, obj ) {
         $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + obj.address + '<span class="hidden">' + obj.path + '</span></a></li>');
       });
@@ -470,13 +484,14 @@ var CartoDbLib = {
     }
 
     $.cookie("probationResources", JSON.stringify(objArray));
+    CartoDbLib.renderSavedResults();
   },
 
   addFacilityCookie: function(name, address) {
     var objArr = new Array
 
-    if ($.cookie("facility") != null) {
-      storedObject = JSON.parse($.cookie("facility"));
+    if ($.cookie("location") != null) {
+      storedObject = JSON.parse($.cookie("location"));
       objArr.push(storedObject)
     }
 
@@ -487,35 +502,26 @@ var CartoDbLib = {
 
     objArr.push(parameters)
     flatArray = [].concat.apply([], objArr)
-    $.cookie("facility", JSON.stringify(flatArray));
+    $.cookie("location", JSON.stringify(flatArray));
+    CartoDbLib.updateSavedCounter();
   },
 
   renderSavedFacilities: function() {
     $("#locations-div").empty();
 
-    var objArray = JSON.parse($.cookie("facility"));
+    var objArray = JSON.parse($.cookie("location"));
     // TODO: What if there are duplicate facilities?
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr></div>");
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-location' href='#'>Remove From List</a></p><hr></div>");
       });
-    }
-
-// TODO: Extract this into a separate function. Update the nav bar everytime the cookie changes.
-    var objArray = JSON.parse($.cookie("facility"));
-
-    if (objArray.length == 1) {
-      $("#saved-locations").append(objArray.length + " Location Saved")
-    }
-    else {
-      $("#saved-locations").append(objArray.length + " Locations Saved")
     }
 
   },
 
   deleteSavedFacility: function(address) {
-    var objArray = JSON.parse($.cookie("facility"));
+    var objArray = JSON.parse($.cookie("location"));
 
     for (var idx = 0; idx < objArray.length; idx++) {
       if (objArray[idx].address == address ) {
@@ -523,7 +529,26 @@ var CartoDbLib = {
       }
     }
 
-    $.cookie("facility", JSON.stringify(objArray));
+    $.cookie("location", JSON.stringify(objArray));
+    CartoDbLib.updateSavedCounter();
+  },
+
+  updateSavedCounter: function() {
+    $("#saved-locations").empty();
+    $("#no-locations").empty();
+
+    var objArray = JSON.parse($.cookie("location"));
+    if (objArray == null || objArray.length == 0) {
+      $("#saved-locations").hide();
+      $("#no-locations").append("No saved locations. Return <a href='/'>home</a> to search for more results.")
+    }
+    else if (objArray.length == 1) {
+      $("#saved-locations").show();
+      $("#saved-locations").append(objArray.length + " Location Saved")
+    }
+    else {
+      $("#saved-locations").append(objArray.length + " Locations Saved")
+    }
   },
 
   removeWhiteSpace: function(word) {

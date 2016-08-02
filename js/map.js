@@ -45,14 +45,6 @@ $(function() {
     }
   });
 
-  $('#reset').click(function(){
-    $.address.parameter('address','');
-    $.address.parameter('radius','');
-    $.address.parameter('id','');
-    CartoDbLib.initialize();
-    return false;
-  });
-
   $("#search-address").keydown(function(e){
       var key =  e.keyCode ? e.keyCode : e.which;
       if(key == 13) {

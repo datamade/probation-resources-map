@@ -62,6 +62,7 @@ var CartoDbLib = {
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.doSearch();
       CartoDbLib.renderSavedResults();
+      CartoDbLib.renderSavedFacilities();
     }
   },
 
@@ -490,15 +491,25 @@ var CartoDbLib = {
   },
 
   renderSavedFacilities: function() {
-    $("#facilities-div").empty();
+    $("#locations-div").empty();
 
     var objArray = JSON.parse($.cookie("facility"));
     // TODO: What if there are duplicate facilities?
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#facilities-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr></div>");
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr></div>");
       });
+    }
+
+// TODO: Extract this into a separate function. Update the nav bar everytime the cookie changes.
+    var objArray = JSON.parse($.cookie("facility"));
+
+    if (objArray.length == 1) {
+      $("#saved-locations").append(objArray.length + " Location Saved")
+    }
+    else {
+      $("#saved-locations").append(objArray.length + " Locations Saved")
     }
 
   },

@@ -125,8 +125,3 @@ function makeSelectData(array) {
 
 
 
-
-
-
-
-

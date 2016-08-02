@@ -310,17 +310,9 @@ var CartoDbLib = {
     var results = '';
 
     $.each( array, function(index, obj) {
-      console.log("running userSelectSQL")
-      console.log(obj)
       CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
       results += (obj.text + ", ")
     })
-
-    // for(var i = 0; i < array.length; i++) {
-    //   var obj = array[i];
-    //   CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
-    //   results += (obj.text + ", ")
-    // }
 
     return results
   },
@@ -422,33 +414,33 @@ var CartoDbLib = {
     var objArray = JSON.parse($.cookie("probationResources"));
 
     if (objArray != null) {
-      for (var idx = 0; idx < objArray.length; idx++) {
-        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + objArray[idx].address + '<span class="hidden">' + objArray[idx].path + '</span></a></li>');
-      }
+      $.each(objArray, function( index, obj ) {
+        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + obj.address + '<span class="hidden">' + obj.path + '</span></a></li>');
+      });
     }
   },
 
   returnSavedResults: function(path) {
     var objArray = JSON.parse($.cookie("probationResources"));
 
-    for (var idx = 0; idx < objArray.length; idx++) {
-      if (objArray[idx].path == path ) {
-        $("#search-address").val(objArray[idx].address);
-        $("#search-radius").val(objArray[idx].radius);
+    $.each(objArray, function( index, obj ) {
+      if (obj.path == path ) {
+        $("#search-address").val(obj.address);
+        $("#search-radius").val(obj.radius);
 
-        var ageArr = CartoDbLib.makeSelectionArray(objArray[idx].age, ageOptions);
+        var ageArr = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");
 
-        var langArr = CartoDbLib.makeSelectionArray(objArray[idx].language, languageOptions);
+        var langArr = CartoDbLib.makeSelectionArray(obj.language, languageOptions);
         $('#select-language').val(langArr).trigger("change");
 
-        var typeArr = CartoDbLib.makeSelectionArray(objArray[idx].type, facilityTypeOptions);
+        var typeArr = CartoDbLib.makeSelectionArray(obj.type, facilityTypeOptions);
         $('#select-type').val(typeArr).trigger("change");
 
-        var insureArr = CartoDbLib.makeSelectionArray(objArray[idx].insurance, insuranceOptions);
+        var insureArr = CartoDbLib.makeSelectionArray(obj.insurance, insuranceOptions);
         $('#select-insurance').val(insureArr).trigger("change");
       }
-    }
+    });
 
   },
 // Resets select2 selectors to match CartoDb field names. Takes a string from returnSavedResults iteration, and takes an array from the array variables in map.js.
@@ -458,11 +450,11 @@ var CartoDbLib = {
 
     var indexArray = new Array
 
-    for (var el = 0; el < newArr.length; el++) {
-      var value = CartoDbLib.removeWhiteSpace(newArr[el])
-      value = CartoDbLib.addUnderscore(value)
+    $.each( newArr, function( index, el ) {
+      var value = CartoDbLib.removeWhiteSpace(el);
+      value = CartoDbLib.addUnderscore(value);
       indexArray.push(selectionArray.indexOf(value));
-    }
+    });
 
     return indexArray
   },
@@ -503,11 +495,12 @@ var CartoDbLib = {
     var objArray = JSON.parse($.cookie("facility"));
     // TODO: What if there are duplicate facilities?
     if (objArray != null) {
-      for (var idx = 0; idx < objArray.length; idx++) {
+      $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#facilities-div').append("<div><p>" + objArray[idx].name + "</p>" + "<p>" + objArray[idx].address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr></div>");
-      }
+        $('#facilities-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-facility' href='#'>Remove From List</a></p><hr></div>");
+      });
     }
+
   },
 
   deleteSavedFacility: function(address) {
@@ -520,7 +513,6 @@ var CartoDbLib = {
     }
 
     $.cookie("facility", JSON.stringify(objArray));
-    console.log(document.cookie)
   },
 
   removeWhiteSpace: function(word) {

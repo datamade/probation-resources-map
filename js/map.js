@@ -42,24 +42,6 @@ $(function() {
       $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
       $('#listCanvas').hide();
       $('#mapCanvas').show();
-      // Below: attempts to fix map load issue.
-
-      // (1)
-      // $( "#mapCanvas" ).show( "fast", function() {
-      //   setTimeout(function() {CartoDbLib.map.invalidateSize()}, 2000);
-      // });
-
-      // (2)
-      // $( "#mapCanvas" ).show( "fast", function() {
-      //   CartoDbLib.map.invalidateSize();
-      // });
-
-      // (3)
-      // setTimeout(function() {
-      //   $('#listCanvas').hide();
-      //   $('#mapCanvas').show();
-      //   CartoDbLib.map.invalidateSize();
-      // }, 500);
     }
   });
 
@@ -113,13 +95,6 @@ $(function() {
 
   $("#dropdown-results").on('click', '.saved-search', function() {
     var path = $(this).children().text();
-
-    // // $.address.value(url);
-    // console.log("http://127.0.0.1:5000/#" + url);
-    // window.location.href = "http://127.0.0.1:5000/#" + url;
-    // // CartoDbLib.doSearch();
-    // return false;
-    // window.location.href = "http://www.google.com";
 
     CartoDbLib.returnSavedResults(path);
     CartoDbLib.doSearch();

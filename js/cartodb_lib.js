@@ -174,30 +174,34 @@ var CartoDbLib = {
         else {
           for (idx in obj_array) {
             var attributeArr = new Array;
+            var facilityName = obj_array[idx].organization_name;
+            var facilityAddress = obj_array[idx].full_address;
+            var facilityHours = obj_array[idx].hours_of_operation;
+            var facilityNumber = obj_array[idx].intake_number;
+            var facilityWebsite = obj_array[idx].website;
 
-            attributeArr.push(obj_array[idx].organization_name, obj_array[idx].full_address, obj_array[idx].hours_of_operation, obj_array[idx].intake_number, obj_array[idx].website)
+            attributeArr.push(facilityName, facilityAddress, facilityHours, facilityNumber, facilityWebsite)
 
             if (CartoDbLib.deleteBlankResults(attributeArr) < 5) {
 
-              if (obj_array[idx].organization_name != "") {
-                elements["facility"] = obj_array[idx].organization_name;
+              if (facilityName != "") {
+                elements["facility"] = facilityName;
               }
-              // Check for white space. && obj_array[idx].full_address.length > 10
-              if (obj_array[idx].full_address != "") {
-                elements["address"] = obj_array[idx].full_address;
+              if (facilityAddress != "") {
+                elements["address"] = facilityAddress;
               }
-              if (obj_array[idx].hours_of_operation != "") {
-                elements["hours"] = obj_array[idx].hours_of_operation;
+              if (facilityHours != "") {
+                elements["hours"] = facilityHours;
               }
-              if (obj_array[idx].intake_number != "") {
-                elements["phone"] = obj_array[idx].intake_number;
+              if (facilityNumber != "") {
+                elements["phone"] = facilityNumber;
               }
-              if (obj_array[idx].website != "") {
-                if (obj_array[idx].website.match(/^http/)) {
-                  elements["website"] = obj_array[idx].website;
+              if (facilityWebsite != "") {
+                if (facilityWebsite.match(/^http/)) {
+                  elements["website"] = facilityWebsite;
                 }
                 else {
-                  elements["website"] = "http://" + obj_array[idx].website;
+                  elements["website"] = "http://" + facilityWebsite;
                 }
               }
 

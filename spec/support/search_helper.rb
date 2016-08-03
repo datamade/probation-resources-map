@@ -1,8 +1,8 @@
 module SearchHelper
-  def do_search
+  def do_search(address)
     visit '/'
     expect(page).to have_selector('#btnViewMode')
-    fill_in 'search-address', :with => '441 North Milwaukee Avenue, Chicago, IL, United States'
+    fill_in 'search-address', :with => address
     find("#btnSearch", match: :first).click
   end
 end

@@ -29,14 +29,14 @@ Built in collaboration with the Cook County Adult Probation Department (CCAPD) a
 
 ## Run Tests
 
-This site includes a basic test framework built with Rspec and Capybara to drive the browser through acceptance tests. Run these tests frequently.
+This site includes a basic test framework built with Rspec and Capybara, which drive the browser to perform acceptance tests.
 
 <pre>
   $ bundle install
   $ rspec spec/
 </pre>
 
-Some tests include <pre>binding.pry</pre>. In such cases type "exit" in the terminal to continue.
+Some tests include **binding.pry**. In such cases the test pauses, after which you may type "exit" in the terminal to continue.
 
 ## Team
 

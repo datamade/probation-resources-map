@@ -1,7 +1,6 @@
 body {
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
 }
 
 h1,h2,h3 { line-height:inherit; }
@@ -19,7 +18,10 @@ label { font-weight: normal;}
 
 th, td { padding: 8px; }
 
-p { font-size: 18px; }
+p {
+  font-size: 18px;
+  line-height: 1.6;
+}
 
 .navbar {
   margin-bottom: 10px;
@@ -89,6 +91,10 @@ p { font-size: 18px; }
 
 .select2-container--default .select2-selection--multiple {
   margin: 5px 0;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  margin-top: 2%;
 }
 
 .btn {

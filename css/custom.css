@@ -1,7 +1,7 @@
 body {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 h1,h2,h3 { line-height:inherit; }
@@ -18,6 +18,8 @@ a:hover {
 label { font-weight: normal;}
 
 th, td { padding: 8px; }
+
+p { font-size: 18px; }
 
 .navbar {
   margin-bottom: 10px;

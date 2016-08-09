@@ -48,7 +48,7 @@ var CartoDbLib = {
       CartoDbLib.info.update = function (props) {
         if (props) {
           // this._div.innerHTML = props.full_address;
-          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + props.street_address + "</li></ul>";
+          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + props.full_address + "</li></ul>";
         }
         else {
           this._div.innerHTML = 'Hover over a location';

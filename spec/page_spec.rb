@@ -5,7 +5,7 @@ describe "page", type: :feature, js: true do
 
     it "has a page title" do
       # binding.pry # test will pause here
-      expect(find('.navbar-brand').text).to eq('Probation Resources Map')
+      expect(find('.navbar-brand').text).to eq('Probation Resources')
     end
 
     it "has an About" do

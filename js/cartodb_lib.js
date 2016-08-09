@@ -599,8 +599,6 @@ var CartoDbLib = {
     $("#no-locations").empty();
 
     var objArray = JSON.parse($.cookie("location"));
-    console.log("updating saved counter...")
-    console.log(objArray)
 
     if (objArray == null || objArray.length == 0) {
       $("#saved-locations").hide();

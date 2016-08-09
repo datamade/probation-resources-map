@@ -528,15 +528,12 @@ var CartoDbLib = {
       }
     }
 
-    $.cookie("probationResources", JSON.stringify(objArray));
+    $.cookie("probationResources", JSON.stringify(objArray), { path: '/' });
     CartoDbLib.renderSavedResults();
   },
 
   addFacilityCookie: function(name, address) {
     var objArr = new Array
-    // if(CartoDbLib.checkCookieDuplicate(name) == false) {
-    //   return;
-    // }
 
     if ($.cookie("location") != null) {
       storedObject = JSON.parse($.cookie("location"));
@@ -550,7 +547,7 @@ var CartoDbLib = {
 
     objArr.push(parameters)
     flatArray = [].concat.apply([], objArr)
-    $.cookie("location", JSON.stringify(flatArray));
+    $.cookie("location", JSON.stringify(flatArray), { path: '/' });
     CartoDbLib.updateSavedCounter();
   },
 
@@ -559,11 +556,14 @@ var CartoDbLib = {
     var objArray = JSON.parse($.cookie("location"));
     var returnVal = true;
 
-    $.each(objArray, function( index, obj ) {
-      if (obj.name == name) {
-        returnVal = false;
-      }
-    });
+    if (objArray != null) {
+      $.each(objArray, function( index, obj ) {
+        if (obj.name == name) {
+          returnVal = false;
+        }
+      });
+    }
+
     return returnVal;
   },
 
@@ -571,7 +571,7 @@ var CartoDbLib = {
     $("#locations-div").empty();
 
     var objArray = JSON.parse($.cookie("location"));
-    // TODO: What if there are duplicate facilities?
+
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
@@ -590,7 +590,7 @@ var CartoDbLib = {
       }
     }
 
-    $.cookie("location", JSON.stringify(objArray));
+    $.cookie("location", JSON.stringify(objArray), { path: '/' });
     CartoDbLib.updateSavedCounter();
   },
 
@@ -599,9 +599,13 @@ var CartoDbLib = {
     $("#no-locations").empty();
 
     var objArray = JSON.parse($.cookie("location"));
+    console.log("updating saved counter...")
+    console.log(objArray)
+
     if (objArray == null || objArray.length == 0) {
       $("#saved-locations").hide();
       $("#no-locations").append("No saved locations. Return <a href='/'>home</a> to search for more results.")
+      document.cookie = 'location=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
     else if (objArray.length == 1) {
       $("#saved-locations").show();
@@ -610,6 +614,7 @@ var CartoDbLib = {
     else {
       $("#saved-locations").append(objArray.length + " Locations Saved")
     }
+
   },
 
   removeWhiteSpace: function(word) {

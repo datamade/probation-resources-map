@@ -57,23 +57,21 @@ describe "events", type: :feature, js: true do
     end
   end
 
-  describe "click remove icon" do
-    it "deletes a list item from the dropdown menu" do
+  describe "click reset" do
+    it "resets the page" do
       visit '/'
       do_search(address)
-      find("#btnSave", match: :first).click
-      find(".dropdown-toggle", match: :first).click
-      searches = Array.new
-      searches = find('.saved-searches').all('li')
-      original_list = searches.length
-      # TODO: Fix test.
-      find(".dropdown-toggle", match: :first).click
-      first('#dropdown-results > li').click
-      do_search(address)
-      searches_redux = Array.new
-      searches_redux = find('.saved-searches').all('li')
-      expect(searches_redux.length - original_list).to eq(1)
+      find("#btnReset", match: :first).click
+      uri = URI.parse(current_url)
+      expect("#{uri.path}?#{uri.query}").to eq("/?")
     end
+  end
+
+  describe "save facility" do
+    it "adds an element to nav bar" do
+
+    end
+
   end
 
 end

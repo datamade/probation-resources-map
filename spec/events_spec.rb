@@ -69,9 +69,15 @@ describe "events", type: :feature, js: true do
 
   describe "save facility" do
     it "adds an element to nav bar" do
-
+      do_search(address)
+      find('#btnViewMode', match: :first).click
+      find(".fa-bookmark", match: :first).click
+      expect(page).to have_selector("#saved-locations", visible: true)
     end
 
+    # it "changes the icon to a circle" do
+
+    # end
   end
 
 end

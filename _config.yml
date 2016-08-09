@@ -2,8 +2,8 @@ port:  5000
 markdown: kramdown
 name: Probation Resources Map
 title: Probation Resources Map
-url: https://probation-map.datamade.us
+url: https://probationresources.datamade.us
 description: ""
 encoding: utf-8
 timezone: America/Chicago
-permalink: pretty
+

@@ -28,7 +28,7 @@ $(function() {
       CartoDbLib.doSearch();
     }
     else {
-      $('#btnViewMode').html("<i class='fa fa-list'></i> List view");
+      $('#btnViewMode').html("<i class='fa fa-list'></i>");
       $('#mapCanvas').show();
       $('#listCanvas').hide();
       CartoDbLib.doSearch();

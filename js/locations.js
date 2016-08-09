@@ -9,6 +9,7 @@ $(function() {
     CartoDbLib.deleteSavedFacility(address);
     div.remove();
   });
+
 });
 
 

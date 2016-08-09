@@ -1,19 +1,23 @@
 body {
-  font-family: 'Muli', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 h1,h2,h3 { line-height:inherit; }
 
-h5 {margin-top: 0px ; margin-bottom: 2px;}
+h5 { margin-top: 0px ; margin-bottom: 2px; }
 
-a { color: #D9534F; }
+a { color: #FF3A41; }
+
+a:hover {
+  text-decoration: none;
+  color: #5187BB;
+}
 
 label { font-weight: normal;}
 
-th, td {
-  padding: 8px;
-}
+th, td { padding: 8px; }
 
 .navbar {
   margin-bottom: 10px;
@@ -21,14 +25,18 @@ th, td {
 }
 
 .navbar-inverse {
-  background-color: #01295F;
-  border-color: #01295F;
-  font-family: 'Montserrat', sans-serif;
+  background-color: #0A5193;
+  border-color: #0A5193;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
   color: #FFFFFF;
   border: 0px;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  font-size: 18px;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:focus, .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:visited {
@@ -41,11 +49,9 @@ th, td {
   color: #FFFFFF;
 }
 
-.navbar .brand {
-  padding: 10px 0 7px 15px;
-}
+.navbar .brand { padding: 10px 0 7px 15px; }
 
-.navbar-brand { font-size: 28px; }
+.navbar-brand { font-size: 34px; }
 
 .navbar .navbar-text {
   margin-bottom: 0;
@@ -88,12 +94,6 @@ th, td {
   margin-left: 0;
 }
 
-.btn-default {
-  color: #ffffff;
-  background-color: #474949;
-  border-color: #474949;
-}
-
 .btn-search {
   color: #ffffff;
   background-color: #FF3A41;
@@ -102,8 +102,6 @@ th, td {
 
 .btn-reset {
   color: #ffffff;
-  /*background-color: #FFD166;
-  border-color: #FFD166;*/
   background-color: #5187BB;
   border-color: #5187BB;
 
@@ -186,8 +184,7 @@ th, td {
 }
 
 .info {
-  font-family: 'Muli', sans-serif;
-  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
   padding: 6px 8px;
   background: #ffffff;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -210,8 +207,7 @@ th, td {
   }
 
 .results-count {
-  font-family: 'Muli', sans-serif;
-  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
   padding: 6px 8px;
   background: #ffffff;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -254,6 +250,6 @@ th, td {
   color: #ffffff;
   background: #7C7F83;
   border: solid 1px #7C7F83;
-  font-family: Chicago, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 

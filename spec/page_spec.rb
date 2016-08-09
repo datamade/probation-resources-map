@@ -12,8 +12,8 @@ describe "page", type: :feature, js: true do
       expect(find('#navbar ul li:nth-child(3)').text).to eq('About')
     end
 
-    it "has a Contribute" do
-      expect(find('#navbar ul li:nth-child(4)').text).to eq('Contribute')
+    it "has an Add a location" do
+      expect(find('#navbar ul li:nth-child(4)').text).to eq('Add a location')
     end
   end
 

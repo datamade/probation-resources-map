@@ -279,25 +279,22 @@ p {
   word-wrap: break-word;
 }
 
-.modal-bottom {
-  margin-top: 2em;
-}
+.modal-bottom { margin-top: 2em; }
 
-.modal-directions {
-  font-weight: 700;
-}
+.modal-directions { font-weight: 700; }
 
 .share {
   float: right;
+  margin-top: 0.4em;
 }
 
 #post-shortlink {
-  width: 32em;
+  width: 24em;
 }
 
 #copy-button {
-  margin: 0 6px 0 0;
-  padding: 6px 12px;
+  margin: 0 .5em 0 0;
+  padding: .35em 1em;
 }
 
 .fa-times-circle {

@@ -278,7 +278,7 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
-      var contact = "<p><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
+      var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
 
       if (data.website.match(/^http/)) {

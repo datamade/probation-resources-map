@@ -109,6 +109,10 @@ $(function() {
     CartoDbLib.addFacilityCookie(name, address);
   });
 
+  $(".close-btn").on('click', function() {
+    $.address.parameter('modal_id', null)
+  });
+
 });
 
 function makeSelectData(array) {
@@ -119,6 +123,11 @@ function makeSelectData(array) {
 
   return data_arr
 };
+
+(function(){
+    new Clipboard('#copy-button');
+})();
+
 
 
 

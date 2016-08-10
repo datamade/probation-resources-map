@@ -261,3 +261,45 @@ p {
   font-family: 'Poppins', sans-serif;
 }
 
+/* Style for modals */
+.modal-header {
+  background-color: #72A5D6;
+  color: #FFF;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#modal-main > p {
+  margin-bottom: 2px;
+  word-wrap: break-word;
+}
+
+.modal-p {
+  margin-bottom: 2px;
+  word-wrap: break-word;
+}
+
+.modal-bottom {
+  margin-top: 2em;
+}
+
+.modal-directions {
+  font-weight: 700;
+}
+
+.share {
+  float: right;
+}
+
+#post-shortlink {
+  width: 32em;
+}
+
+#copy-button {
+  margin: 0 6px 0 0;
+  padding: 6px 12px;
+}
+
+.fa-times-circle {
+  margin-top: .15em;
+}

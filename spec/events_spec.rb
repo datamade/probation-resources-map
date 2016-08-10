@@ -38,11 +38,15 @@ describe "events", type: :feature, js: true do
   end
 
   describe "click save search button" do
-    it "adds a list item to dropdown menu" do
-      visit '/'
+    it "adds an item to nav bar" do
       do_search(address)
       find("#btnSave", match: :first).click
-      expect(page).to have_selector('#dropdown-results')
+      expect(page).to have_selector('#dropdown-results', visible: true)
+    end
+
+    it "adds a list item to dropdown menu" do
+      do_search(address)
+      find("#btnSave", match: :first).click
       find(".dropdown-toggle", match: :first).click
       searches = Array.new
       searches = find('.saved-searches').all('li')
@@ -59,7 +63,6 @@ describe "events", type: :feature, js: true do
 
   describe "click reset" do
     it "resets the page" do
-      visit '/'
       do_search(address)
       find("#btnReset", match: :first).click
       uri = URI.parse(current_url)
@@ -75,9 +78,12 @@ describe "events", type: :feature, js: true do
       expect(page).to have_selector("#saved-locations", visible: true)
     end
 
-    # it "changes the icon to a circle" do
-
-    # end
+    it "changes the icon to a circle" do
+      do_search(address)
+      find('#btnViewMode', match: :first).click
+      find(".fa-bookmark", match: :first).click
+      expect(page).to have_selector(".fa-check-circle", visible: true)
+    end
   end
 
 end

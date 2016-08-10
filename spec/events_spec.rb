@@ -86,4 +86,10 @@ describe "events", type: :feature, js: true do
     end
   end
 
+  describe "click on map content" do
+    it "creates a modal pop-up" do
+      # find("#mapCanvas").click_at(50, 50)
+    end
+  end
+
 end

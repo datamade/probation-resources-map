@@ -109,6 +109,16 @@ $(function() {
     CartoDbLib.addFacilityCookie(name, address);
   });
 
+  $(".btn-save-bookmark").on('click', function() {
+    var address = $("#modal-address").text();
+    var name = $("#modal-title").text();
+    CartoDbLib.addFacilityCookie(name, address);
+  });
+
+  $(".close-btn").on('click', function() {
+    $.address.parameter('modal_id', null)
+  });
+
 });
 
 function makeSelectData(array) {
@@ -119,6 +129,11 @@ function makeSelectData(array) {
 
   return data_arr
 };
+
+(function(){
+    new Clipboard('#copy-button');
+})();
+
 
 
 

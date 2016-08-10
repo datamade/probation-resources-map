@@ -18,11 +18,26 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
+  fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
 
   initialize: function(){
     //reset filters
     $("#search-address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
+    $("#search-radius").val(CartoDbLib.convertToPlainString($.address.parameter('radius')));
+    $("#select-age").val(CartoDbLib.convertToPlainString($.address.parameter('age')));
+    $("#select-language").val(CartoDbLib.convertToPlainString($.address.parameter('lang')));
+    $("#select-type").val(CartoDbLib.convertToPlainString($.address.parameter('type')));
+    $("#select-insurance").val(CartoDbLib.convertToPlainString($.address.parameter('insure')));
+
+    var num = $.address.parameter('modal_id');
+
+    if (typeof num !== 'undefined') {
+      var sql = new cartodb.SQL({ user: CartoDbLib.userName });
+      sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + " WHERE id = " + num)
+      .done(function(data) {
+        CartoDbLib.modalPop(data.rows[0]);
+      });
+    }
 
     geocoder = new google.maps.Geocoder();
     // initiate leaflet map
@@ -263,12 +278,26 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
-      var modalText = "<p>" + data.full_address + "</p>" + "<p>" + data.hours_of_operation + "</p>" + "<p>" + data.intake_number + "</p>" + "<p><a href='" + data.website + "' target='_blank'>" + data.website + "</a></p>"
+      var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
+      var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
+
+      if (data.website.match(/^http/)) {
+        var Url =  data.website;
+      }
+      else {
+        var Url = "http://" + data.website;
+      }
+
+      var website = "<p><a href='" + Url + "' target='_blank'>" + Url + "</a></p>"
 
       $('#modal-pop').modal();
       $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
-      $('#modal-title').append(data.organization_name)
-      $('#modal-main').append(modalText);
+      $('#modal-title').append(data.organization_name);
+      $('#modal-main').append(contact);
+      if (data.hours_of_operation != "") {
+        $('#modal-main').append(hours);
+      }
+      $('#modal-main').append(website);
 
       var insurance_count = 0
       var language_count = 0
@@ -277,11 +306,11 @@ var CartoDbLib = {
         var value = data[prop];
         if (String(value).toLowerCase().match(/yes/) != null) {
           if ($.inArray(String(prop), insuranceOptions) > -1) {
-            $("#insurance-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+            $("#insurance-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             insurance_count += 1;
           }
           if ($.inArray(String(prop), languageOptions) > -1) {
-            $("#language-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+            $("#language-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
           }
         }
@@ -293,7 +322,9 @@ var CartoDbLib = {
       if (language_count > 0) {
         $("#language-header").append("Language");
       }
-      $('#modal-main').append('<p><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">Get Directions</a></p>')
+
+      $.address.parameter('modal_id', data.id);
+      $("#post-shortlink").val(location.href);
   },
 
   clearSearch: function(){

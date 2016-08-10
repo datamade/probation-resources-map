@@ -65,29 +65,62 @@ layout: default
 
 
 <!-- Modal -->
-<div class="modal fade" id="modal-pop" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
+<div class="modal fade bd-example-modal-lg" id="modal-pop" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times-circle" aria-hidden="true"></i></span></button>
         <h4 class="modal-title" id="modal-title"></h4>
       </div>
       <div class="modal-body">
-        <div id="modal-main"></div>
-        <div>
-          <h4 id="insurance-header"></h4>
-          <div id="insurance-subsection"></div>
-          <h4 id="language-header"></h4>
-          <div id="language-subsection"></div>
+        <div class="container-fluid bd-example-row">
+          <div class="row">
+            <div class="col-md-12" id="modal-main"></div>
+          </div>
+          <div class="row modal-bottom">
+            <div class="col-md-4" id="insurance-section">
+              <h4 id="insurance-header"></h4>
+              <div id="insurance-subsection"></div>
+            </div>
+            <div class="col-md-4">
+              <h4 id="language-header"></h4>
+              <div id="language-subsection"></div>
+            </div>
+            <div class="col-md-4">
+              <h4 id="age-header"></h4>
+              <div id="age-subsection"></div>
+            </div>
+          </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <div class="container-fluid bd-example-row">
+          <div class="row">
+            <div class="col-md-8">
+
+              <div class="input-group">
+                <!-- Target -->
+                <div class="share">
+                  <input id="post-shortlink" type="text" class="form-control">
+                </div>
+                <!-- Trigger -->
+                <div class="share">
+                  <button type="button" class="btn btn-reset" id="copy-button" data-clipboard-target="#post-shortlink">Copy and share!</button>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-4">
+              <button type="button" class="btn btn-reset btn-save-bookmark"><i class='fa fa-bookmark' aria-hidden='true'></i> Save location</button>
+            <div>
+          </div>
+        </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
 
 <style id="probation-maps-styles">
   #probationresourcesmap_mergeddata_resources{

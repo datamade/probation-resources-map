@@ -275,7 +275,7 @@ var CartoDbLib = {
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
-        if (String(value).toLowerCase() == "yes") {
+        if (String(value).toLowerCase().match(/yes/) != null) {
           if ($.inArray(String(prop), insuranceOptions) > -1) {
             $("#insurance-subsection").append("<p>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             insurance_count += 1;
@@ -366,7 +366,7 @@ var CartoDbLib = {
     var results = '';
 
     $.each( array, function(index, obj) {
-      CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE 'yes'"
+      CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE '%yes%'"
       results += (obj.text + ", ")
     })
 

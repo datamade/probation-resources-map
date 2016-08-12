@@ -86,7 +86,7 @@ p {
 }
 
 .select2-container {
-  width: 24em !important;
+  width: 22.5em !important;
 }
 
 .select2-container--default .select2-selection--multiple {
@@ -300,3 +300,5 @@ p {
 .fa-times-circle {
   margin-top: .15em;
 }
+
+

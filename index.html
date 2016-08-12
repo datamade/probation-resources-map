@@ -9,21 +9,19 @@ layout: default
       <input class='form-control' id='search-address' placeholder='Enter an address or an intersection' type='text'>
     </div>
     <div>Within:</div>
-    <div class="">
-      <div>
-        <label>
-          <select id='search-radius'>
-            <option value='400'>2 blocks</option>
-            <option value='805'>1/2 mile</option>
-            <option value='1610'>1 mile</option>
-            <option value='3220'>2 miles</option>
-            <option value='8050'>5 miles</option>
-          </select>
-        </label>
-      </div>
+    <div>
+      <label>
+        <select id='search-radius'>
+          <option value='400'>2 blocks</option>
+          <option value='805'>1/2 mile</option>
+          <option value='1610'>1 mile</option>
+          <option value='3220'>2 miles</option>
+          <option value='8050'>5 miles</option>
+        </select>
+      </label>
     </div>
 
-    <div class="">
+    <div>
       <select class="data-array-age" id="select-age" multiple="multiple"></select>
       <select class="data-array-language" id="select-language" multiple="multiple"></select>
       <select class="data-array-type" id="select-type" multiple="multiple"></select>
@@ -40,13 +38,9 @@ layout: default
 
   <div class='col-md-8'>
     <div id='mapCanvas' style="display: block"></div>
-  </div>
-
-  <div class='col-md-8'>
-    <!-- <div id="listCanvas" class="hidden"> -->
     <div id="listCanvas" style="display: none">
       <h2>Probation Resources</h2>
-      <table class="list-table">
+      <table class="table table-list-liew">
         <thead>
           <tr>
             <th></th>
@@ -59,8 +53,10 @@ layout: default
         <tbody id='results-list'></tbody>
       </table>
     </div>
+  </div>
 
 </div>
+
 
 
 
@@ -137,6 +133,22 @@ layout: default
 </style>
 
 <script type="text/javascript" src="/js/map.js"></script>
+
+<!-- Add DataTable JS files -->
+<script>
+//     $('.table-list-liew').dataTable( {
+//         "aaSorting": [ [0,'desc'] ],
+//         "aoColumns": [
+//             null,
+//             null,
+//             null,
+//             null
+//         ],
+//         "paging": false,
+//         "searching": false,
+//         "info": false
+//     } );
+// </script>
 
 
 

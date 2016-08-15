@@ -296,7 +296,7 @@ p {
 .modal-directions { font-weight: 700; }
 
 #post-shortlink {
-  width: 190px;
+  width: 240px;
   border-radius: 5px;
   margin-right: 0.5em;
   margin-bottom: 1em;
@@ -305,7 +305,9 @@ p {
 
 #copy-button {
   margin: 0 .5em 0 0;
+  margin-bottom: 0.5em;
   padding: .35em .7em;
+
 }
 
 .fa-times-circle {

@@ -286,15 +286,22 @@ var CartoDbLib = {
   modalPop: function(data) {
       var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
+      var url = ''
+      var urlName = ''
 
-      if (data.website.match(/^http/)) {
-        var Url =  data.website;
-      }
-      else {
-        var Url = "http://" + data.website;
+      if (data.website != "") {
+        if (data.website.match(/^http/)) {
+          url =  data.website;
+          urlName = "<i class='fa fa-reply' aria-hidden='true'></i> Website"
+
+        }
+        else {
+          url = "http://" + data.website;
+          urlName = "<i class='fa fa-reply' aria-hidden='true'></i> Website"
+        }
       }
 
-      var website = "<p><a href='" + Url + "' target='_blank'>" + Url + "</a></p>"
+      var website = "<p><a href='" + url + "' target='_blank'>" + urlName + "</a></p>"
 
       $('#modal-pop').modal();
       $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
@@ -323,10 +330,10 @@ var CartoDbLib = {
       }
       // Add headers or not.
       if (insurance_count > 0) {
-        $("#insurance-header").append("Payment Options");
+        $("#insurance-header").append("PAYMENT OPTIONS");
       }
       if (language_count > 0) {
-        $("#language-header").append("Language");
+        $("#language-header").append("LANGUAGE");
       }
 
       $.address.parameter('modal_id', data.id);

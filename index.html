@@ -67,10 +67,11 @@ layout: default
         <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times-circle" aria-hidden="true"></i></span></button>
         <h4 class="modal-title" id="modal-title"></h4>
       </div>
+
       <div class="modal-body">
         <div class="container-fluid bd-example-row">
           <div class="row">
-            <div class="col-md-12" id="modal-main"></div>
+            <div class="col-md-9" id="modal-main"></div>
           </div>
           <div class="row modal-bottom">
             <div class="col-md-4" id="insurance-section">
@@ -87,31 +88,26 @@ layout: default
             </div>
           </div>
         </div>
-
       </div>
-      <div class="modal-footer">
+
+
+      <div class="modal-body modal-body-bottom">
         <div class="container-fluid bd-example-row">
           <div class="row">
-            <div class="col-md-8">
-
+            <div class="col-md-12">
               <div class="input-group">
-                <!-- Target -->
-                <div class="share">
-                  <input id="post-shortlink" type="text" class="form-control">
-                </div>
-                <!-- Trigger -->
-                <div class="share">
-                  <button type="button" class="btn btn-reset" id="copy-button" data-clipboard-target="#post-shortlink">Copy and share!</button>
-                </div>
+                <button type="button" class="btn btn-change" id="copy-button" data-clipboard-target="#post-shortlink" data-tooltip="true" title="Copy to clipboard"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                <input id="post-shortlink" type="text" class="form-control">
               </div>
-
+              <div><button type="button" class="btn btn-reset btn-save-bookmark"><i class="fa fa-star-o" aria-hidden="true"></i> Save location</button></div>
             </div>
-            <div class="col-md-4">
-              <button type="button" class="btn btn-reset btn-save-bookmark"><i class="fa fa-star-o" aria-hidden="true"></i> Save location</button>
-            <div>
           </div>
         </div>
       </div>
+
+
+
+
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

@@ -86,7 +86,7 @@ p {
 }
 
 .select2-container {
-  width: 22.5em !important;
+  width: 320px !important;
 }
 
 .select2-container--default .select2-selection--multiple {

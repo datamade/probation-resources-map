@@ -224,21 +224,22 @@ var CartoDbLib = {
               }
 
               // Check if facility is in 'location' cookie.
+              console.log(obj_array[idx].organization_name)
               if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
-                icon = "<i class='fa fa-check-circle' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
+                icon = "<i class='fa fa-star' aria-hidden='true' data-toggle='tooltip' title='Location saved'></i>"
               }
               else {
-                icon = "<i class='fa fa-bookmark' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
+                icon = "<i class='fa fa-star-o' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
               }
 
               var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
-                "<td <span class='facility-name'>{{facility}}</span><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
+                "<td><span class='facility-name'>{{facility}}</span><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
-                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i><span class='facility-address'>&nbsp&nbsp{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
 
-// <td class='facility-address'>{{address}}</td>
               results.append(output);
-              $('.fa-bookmark').tooltip();
+              $('.fa-star-o').tooltip();
+              $('.fa-star').tooltip();
             }
           }
         }
@@ -592,10 +593,12 @@ var CartoDbLib = {
   checkCookieDuplicate: function(name) {
     var objArray = JSON.parse($.cookie("location"));
     var returnVal = true;
+    console.log(objArray)
 
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         if (obj.name == name) {
+          console.log(obj.name)
           returnVal = false;
         }
       });
@@ -644,10 +647,10 @@ var CartoDbLib = {
     }
     else if (objArray.length == 1) {
       $("#saved-locations").show();
-      $("#saved-locations").append(objArray.length + " Location Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Location Saved")
     }
     else {
-      $("#saved-locations").append(objArray.length + " Locations Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations Saved")
     }
 
   },

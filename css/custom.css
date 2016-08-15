@@ -305,7 +305,7 @@ p {
 
 #copy-button {
   margin: 0 .5em 0 0;
-  padding: .35em 1em;
+  padding: .35em .7em;
 }
 
 .fa-times-circle {

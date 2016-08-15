@@ -224,7 +224,6 @@ var CartoDbLib = {
               }
 
               // Check if facility is in 'location' cookie.
-              console.log(obj_array[idx].organization_name)
               if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
                 icon = "<i class='fa fa-star' aria-hidden='true' data-toggle='tooltip' title='Location saved'></i>"
               }
@@ -593,12 +592,10 @@ var CartoDbLib = {
   checkCookieDuplicate: function(name) {
     var objArray = JSON.parse($.cookie("location"));
     var returnVal = true;
-    console.log(objArray)
 
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         if (obj.name == name) {
-          console.log(obj.name)
           returnVal = false;
         }
       });
@@ -615,7 +612,8 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-location' href='#'>Remove From List</a></p><hr></div>");
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><button class='btn btn-search btn-view remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</button></p><hr></div>");
+
       });
     }
 

@@ -291,15 +291,16 @@ p {
 
 .modal-bottom { margin-top: 2em; }
 
+.modal-body-bottom { border-top: 1px solid #F0F0F0; }
+
 .modal-directions { font-weight: 700; }
 
-.share {
-  float: right;
-  margin-top: 0.4em;
-}
-
 #post-shortlink {
-  width: 24em;
+  width: 206px;
+  border-radius: 5px;
+  margin-right: 0.5em;
+  margin-bottom: 1em;
+  color: #CECECE;
 }
 
 #copy-button {
@@ -309,6 +310,10 @@ p {
 
 .fa-times-circle {
   margin-top: .15em;
+}
+
+.facility-name:hover {
+  color: #7F7F7F;
 }
 
 

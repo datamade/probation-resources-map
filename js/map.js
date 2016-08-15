@@ -18,6 +18,7 @@ $(function() {
 
   $('#btnReset').tooltip();
   $('#btnViewMode').tooltip();
+  $('[data-tooltip="true"]').tooltip();
 
   $(':checkbox').click(function(){
     CartoDbLib.doSearch();

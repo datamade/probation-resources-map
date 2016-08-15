@@ -312,4 +312,8 @@ p {
   margin-top: .15em;
 }
 
+.facility-name:hover {
+  color: #7F7F7F;
+}
+
 

@@ -214,7 +214,7 @@ var CartoDbLib = {
                 elements["phone"] = facilityNumber;
               }
               if (facilityWebsite != "") {
-                site = "<a href='{{website}}' target='_blank'>Website</a>"
+                site = "<a href='{{website}}' target='_blank'><i class='fa fa-reply' aria-hidden='true'></i> Website</a>"
                 if (facilityWebsite.match(/^http/)) {
                   elements["website"] = facilityWebsite;
                 }
@@ -232,7 +232,7 @@ var CartoDbLib = {
               }
 
               var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
-                "<td><span class='facility-name'>{{facility}}</span><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
+                "<td><span class='facility-name'>{{facility}}</span><br><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
                 "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
 
@@ -242,8 +242,17 @@ var CartoDbLib = {
             }
           }
         }
-    })
-    .error(function(errors) {
+    }).done(function(listData) {
+        $(".facility-name").on("click", function() {
+          var thisName = $(this).text();
+          var objArray = listData.rows;
+          $.each(objArray, function( index, obj ) {
+            if (obj.organization_name == thisName ) {
+              CartoDbLib.modalPop(obj)
+            }
+          });
+        });
+    }).error(function(errors) {
       console.log("errors:" + errors);
     });
   },
@@ -288,7 +297,6 @@ var CartoDbLib = {
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
       var url = ''
       var urlName = ''
-
       if (data.website != "") {
         if (data.website.match(/^http/)) {
           url =  data.website;

@@ -106,10 +106,10 @@ $(function() {
     var tr = ($(this).parents().eq(1));
     var name = tr.find("span.facility-name").text();
     var address = tr.find("span.facility-address").text();
+    $(this).removeClass('fa-star-o');
     $(this).addClass('fa-star');
     $(this).removeAttr('data-original-title');
     $(this).attr('title', 'Location saved');
-    $(this).removeClass('fa-star-o');
     CartoDbLib.addFacilityCookie(name, address);
   });
 
@@ -121,6 +121,14 @@ $(function() {
 
   $(".close-btn").on('click', function() {
     $.address.parameter('modal_id', null)
+  });
+
+  $(".list-table").on('click', '.fa-star', function() {
+    var tr = ($(this).parents().eq(1));
+    var address = tr.find("span.facility-address").text();
+    $(this).removeClass('fa-star');
+    $(this).addClass('fa-star-o');
+    CartoDbLib.deleteSavedFacility(address);
   });
 
 });

@@ -39,15 +39,14 @@ layout: default
   <div class='col-md-8'>
     <div id='mapCanvas' style="display: block"></div>
     <div id="listCanvas" style="display: none">
-      <h2>Probation Resources</h2>
-      <table class="table table-list-liew">
+      <h2 class='hidden-xs'>Probation Resources</h2>
+      <table class="table list-table table-striped">
         <thead>
           <tr>
-            <th></th>
+            <th class='hidden-xs'></th>
             <th>Facility</th>
-            <th>Address</th>
-            <th>Hours</th>
-            <th><i class='fa fa-phone'></i> Contact</th>
+            <th class='hidden-xs'>Hours</th>
+            <th class='hidden-xs'>Contact</th>
           </tr>
         </thead>
         <tbody id='results-list'></tbody>
@@ -133,22 +132,6 @@ layout: default
 </style>
 
 <script type="text/javascript" src="/js/map.js"></script>
-
-<!-- Add DataTable JS files -->
-<script>
-//     $('.table-list-liew').dataTable( {
-//         "aaSorting": [ [0,'desc'] ],
-//         "aoColumns": [
-//             null,
-//             null,
-//             null,
-//             null
-//         ],
-//         "paging": false,
-//         "searching": false,
-//         "info": false
-//     } );
-// </script>
 
 
 

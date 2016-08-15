@@ -226,10 +226,6 @@ p {
   text-align: center;
 }
 
-.list-table {
-  width: 100%;
-}
-
 .list-table thead {
   border-bottom: 3px solid #ddd;
 }

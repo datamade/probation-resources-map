@@ -1,9 +1,9 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size: 15px;
 }
 
-h1,h2,h3 { line-height:inherit; }
+h1,h2,h3 { line-height:inherit; font-family: 'Lato', sans-serif;}
 
 h5 { margin-top: 0px ; margin-bottom: 2px; }
 
@@ -86,7 +86,7 @@ p {
 }
 
 .select2-container {
-  width: 24em !important;
+  width: 22.5em !important;
 }
 
 .select2-container--default .select2-selection--multiple {
@@ -192,7 +192,7 @@ p {
 }
 
 .info {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Lato', sans-serif;
   padding: 6px 8px;
   background: #ffffff;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -215,7 +215,7 @@ p {
   }
 
 .results-count {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Lato', sans-serif;
   padding: 6px 8px;
   background: #ffffff;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -226,10 +226,6 @@ p {
   text-align: center;
 }
 
-.list-table {
-  width: 100%;
-}
-
 .list-table thead {
   border-bottom: 3px solid #ddd;
 }
@@ -238,8 +234,8 @@ p {
   border-bottom: 1px solid #ddd;
 }
 
-.no-results {
-  padding-top: 15px;
+#no-locations {
+  font-size: 18px;
 }
 
 .facility-list li.divider {
@@ -258,9 +254,14 @@ p {
   color: #ffffff;
   background: #7C7F83;
   border: solid 1px #7C7F83;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
+.badge {
+  background-color: #2967A3;
+  padding: 4px 9px 7px;
+  vertical-align: 4px;
+}
 /* Style for modals */
 .modal-header {
   background-color: #72A5D6;
@@ -300,3 +301,5 @@ p {
 .fa-times-circle {
   margin-top: .15em;
 }
+
+

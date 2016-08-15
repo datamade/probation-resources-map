@@ -194,6 +194,8 @@ var CartoDbLib = {
             var facilityHours = obj_array[idx].hours_of_operation;
             var facilityNumber = obj_array[idx].intake_number;
             var facilityWebsite = obj_array[idx].website;
+            var icon = ''
+            var site = ''
 
             attributeArr.push(facilityName, facilityAddress, facilityHours, facilityNumber, facilityWebsite)
 
@@ -212,6 +214,7 @@ var CartoDbLib = {
                 elements["phone"] = facilityNumber;
               }
               if (facilityWebsite != "") {
+                site = "<a href='{{website}}' target='_blank'>Website</a>"
                 if (facilityWebsite.match(/^http/)) {
                   elements["website"] = facilityWebsite;
                 }
@@ -220,19 +223,22 @@ var CartoDbLib = {
                 }
               }
 
-              var icon = ''
               // Check if facility is in 'location' cookie.
               if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
-                icon = "<i class='fa fa-check-circle' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
+                icon = "<i class='fa fa-star' aria-hidden='true' data-toggle='tooltip' title='Location saved'></i>"
               }
               else {
-                icon = "<i class='fa fa-bookmark' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
+                icon = "<i class='fa fa-star-o' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
               }
 
-              var output = Mustache.render("<tr><td>" + icon + "</td><td class='facility-name'>{{facility}}</td><td class='facility-address'>{{address}}</td><td>{{hours}}</td><td><strong>Phone:</strong> {{phone}} <br><strong>Website:&nbsp</strong><a href='{{website}}' target='_blank'>{{website}}</a></td></tr>", elements);
+              var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
+                "<td><span class='facility-name'>{{facility}}</span><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
+                "<td class='hidden-xs'>{{hours}}</td>" +
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
 
               results.append(output);
-              $('.fa-bookmark').tooltip();
+              $('.fa-star-o').tooltip();
+              $('.fa-star').tooltip();
             }
           }
         }
@@ -606,7 +612,8 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p><p><a class='remove-location' href='#'>Remove From List</a></p><hr></div>");
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><button class='btn btn-search btn-view remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</button></p><hr></div>");
+
       });
     }
 
@@ -638,10 +645,10 @@ var CartoDbLib = {
     }
     else if (objArray.length == 1) {
       $("#saved-locations").show();
-      $("#saved-locations").append(objArray.length + " Location Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Location Saved")
     }
     else {
-      $("#saved-locations").append(objArray.length + " Locations Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations Saved")
     }
 
   },

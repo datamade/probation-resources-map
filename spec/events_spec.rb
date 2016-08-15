@@ -74,15 +74,15 @@ describe "events", type: :feature, js: true do
     it "adds an element to nav bar" do
       do_search(address)
       find('#btnViewMode', match: :first).click
-      find(".fa-bookmark", match: :first).click
+      find(".fa-star-o", match: :first).click
       expect(page).to have_selector("#saved-locations", visible: true)
     end
 
     it "changes the icon to a circle" do
       do_search(address)
       find('#btnViewMode', match: :first).click
-      find(".fa-bookmark", match: :first).click
-      expect(page).to have_selector(".fa-check-circle", visible: true)
+      find(".fa-star-o", match: :first).click
+      expect(page).to have_selector(".fa-star", visible: true)
     end
   end
 

@@ -101,12 +101,14 @@ $(function() {
     $(this).parent().remove();
   });
 
-  $(".list-table").on('click', '.fa-bookmark', function() {
+  $(".list-table").on('click', '.fa-star-o', function() {
     var tr = ($(this).parents().eq(1));
-    var name = tr.find("td.facility-name").text();
-    var address = tr.find("td.facility-address").text();
-    $(this).addClass('fa-check-circle');
-    $(this).removeClass('fa-bookmark');
+    var name = tr.find("span.facility-name").text();
+    var address = tr.find("span.facility-address").text();
+    $(this).addClass('fa-star');
+    $(this).removeAttr('data-original-title');
+    $(this).attr('title', 'Location saved');
+    $(this).removeClass('fa-star-o');
     CartoDbLib.addFacilityCookie(name, address);
   });
 

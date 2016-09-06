@@ -1,7 +1,7 @@
 port:  5000
 markdown: kramdown
-name: Probation Resources Map
-title: Probation Resources Map
+name: Probation Community Resources
+title: Probation Community Resources
 url: https://probationresources.datamade.us
 description: ""
 encoding: utf-8

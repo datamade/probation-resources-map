@@ -232,7 +232,9 @@ var CartoDbLib = {
               }
 
               var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
-                "<td><span class='facility-name'>{{facility}}</span><br><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
+                "<td><span class='facility-name'>{{facility}}</span><br>" +
+                // Address and phone hidden; show for mobile.
+                "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
                 "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
 
@@ -331,7 +333,7 @@ var CartoDbLib = {
             insurance_count += 1;
           }
           if ($.inArray(String(prop), languageOptions) > -1) {
-            $("#language-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+            $("#language-subsection").append("<p>English</p>" + "<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
           }
         }
@@ -341,7 +343,7 @@ var CartoDbLib = {
         $("#insurance-header").append("PAYMENT OPTIONS");
       }
       if (language_count > 0) {
-        $("#language-header").append("LANGUAGE");
+        $("#language-header").append("LANGUAGES");
       }
 
       $.address.parameter('modal_id', data.id);
@@ -627,7 +629,8 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><button class='btn btn-search btn-view remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</button></p><hr></div>");
+        console.log(obj)
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><a class='remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
 
       });
     }
@@ -663,7 +666,7 @@ var CartoDbLib = {
       $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Location Saved")
     }
     else {
-      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations saved")
     }
 
   },

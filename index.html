@@ -21,6 +21,8 @@ layout: default
       </label>
     </div>
 
+    <div class="filter-ex"><span class="label">Filter</span>Narrow your search! <strong>Click</strong> on each filter name to view a list of options and make selections. You may <strong>select multiple options</strong> per filter (e.g. choose both Medicare and Medicaid as payment methods).</div>
+
     <div>
       <select class="data-array-age" id="select-age" multiple="multiple"></select>
       <select class="data-array-language" id="select-language" multiple="multiple"></select>
@@ -39,7 +41,7 @@ layout: default
   <div class='col-md-8'>
     <div id='mapCanvas' style="display: block"></div>
     <div id="listCanvas" style="display: none">
-      <h2 class='hidden-xs'>Probation Resources</h2>
+      <h2 class='list-header hidden-xs'>Search results<button class='btn btn-print'><i class="fa fa-print" aria-hidden="true"></i> Print list</button></h2>
       <table class="table list-table table-striped">
         <thead>
           <tr>
@@ -55,8 +57,6 @@ layout: default
   </div>
 
 </div>
-
-
 
 
 <!-- Modal -->
@@ -124,6 +124,7 @@ layout: default
 </style>
 
 <script type="text/javascript" src="/js/map.js"></script>
+
 
 
 

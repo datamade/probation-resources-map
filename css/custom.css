@@ -14,8 +14,6 @@ a:hover {
   color: #5187BB;
 }
 
-label { font-weight: normal;}
-
 th, td { padding: 8px; }
 
 p {
@@ -49,30 +47,33 @@ p {
   border: 0px;
 }
 
+.navbar-nav > li > a { padding-top: 0; }
+
 .navbar-inverse .navbar-header > a:hover {
   color: #FFFFFF;
 }
 
 .navbar .brand { padding: 10px 0 7px 15px; }
 
-.navbar-brand { font-size: 34px; }
+.navbar-brand {
+  font-size: 30px;
+  padding-top: 10px;
+}
 
 .navbar .navbar-text {
   margin-bottom: 0;
   line-height: 60px;
 }
 
+.nav-subhead {
+  color: #ffffff;
+  padding-top: 1em;
+  font-size: 20px;
+}
+
 .dropdown-menu > li > a {
   display: inline;
   padding: 5px 4px;
-}
-
-.well {
-  padding: 10px 15px;
-}
-
-.well, .panel-group {
-  margin-bottom: 10px;
 }
 
 #mapCanvas img {
@@ -84,6 +85,10 @@ p {
   padding: 6px 12px;
   font-size: 14px;
 }
+
+.filter-ex { padding-top: 1em; }
+
+.label { margin-right: 0.5em; }
 
 .select2-container {
   width: 22.5em !important;
@@ -117,11 +122,10 @@ p {
   border-color: #FF3A41;
 }
 
-.btn-reset {
+.btn-reset, .label {
   color: #ffffff;
   background-color: #5187BB;
   border-color: #5187BB;
-
 }
 
 .btn-change {
@@ -134,6 +138,16 @@ p {
   color: #ffffff;
   background-color: #7F7F7F;
   border-color: #7F7F7F;
+}
+
+.btn-print {
+  float: right;
+  /*color: #333333;
+  background-color: #dddddd;
+  border-color: #dddddd;*/
+  color: #ffffff;
+  background-color: #CECECE;
+  border-color: #CECECE;
 }
 
 .zone-box {
@@ -271,6 +285,7 @@ p {
   padding: 4px 9px 7px;
   vertical-align: 4px;
 }
+
 /* Style for modals */
 .modal-header {
   background-color: #72A5D6;

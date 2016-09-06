@@ -131,6 +131,10 @@ $(function() {
     CartoDbLib.deleteSavedFacility(address);
   });
 
+  $(".btn-print").on("click", function() {
+    window.print();
+  });
+
 });
 
 function makeSelectData(array) {

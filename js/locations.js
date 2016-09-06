@@ -21,6 +21,10 @@ $(function() {
     $(this).parent().remove();
   });
 
+  $(".btn-print").on("click", function() {
+    window.print();
+  });
+
 });
 
 

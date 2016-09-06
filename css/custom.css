@@ -14,8 +14,6 @@ a:hover {
   color: #5187BB;
 }
 
-label { font-weight: normal;}
-
 th, td { padding: 8px; }
 
 p {
@@ -85,6 +83,10 @@ p {
   font-size: 14px;
 }
 
+.filter-ex { padding-top: 1em; }
+
+.label { margin-right: 0.5em; }
+
 .select2-container {
   width: 22.5em !important;
 }
@@ -117,11 +119,10 @@ p {
   border-color: #FF3A41;
 }
 
-.btn-reset {
+.btn-reset, .label {
   color: #ffffff;
   background-color: #5187BB;
   border-color: #5187BB;
-
 }
 
 .btn-change {
@@ -134,6 +135,13 @@ p {
   color: #ffffff;
   background-color: #7F7F7F;
   border-color: #7F7F7F;
+}
+
+.btn-print {
+  float: right;
+  color: #ffffff;
+  background-color: #FF3A41;
+  border-color: #FF3A41;
 }
 
 .zone-box {
@@ -271,6 +279,7 @@ p {
   padding: 4px 9px 7px;
   vertical-align: 4px;
 }
+
 /* Style for modals */
 .modal-header {
   background-color: #72A5D6;

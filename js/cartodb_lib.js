@@ -232,7 +232,9 @@ var CartoDbLib = {
               }
 
               var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
-                "<td><span class='facility-name'>{{facility}}</span><br><span class='hidden-sm hidden-md hidden-lg'><br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
+                "<td><span class='facility-name'>{{facility}}</span><br>" +
+                // Address and phone hidden; show for mobile.
+                "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
                 "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
 

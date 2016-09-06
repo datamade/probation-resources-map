@@ -61,9 +61,17 @@ var CartoDbLib = {
 
       // method that we will use to update the control based on feature properties passed
       CartoDbLib.info.update = function (props) {
+        var facilityType = ""
+
         if (props) {
-          // this._div.innerHTML = props.full_address;
-          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + props.full_address + "</li></ul>";
+          $.each(props, function (prop, value) {
+            if ($.inArray(String(prop), facilityTypeOptions) > -1 && value == 'Yes') {
+              facilityType += (CartoDbLib.removeUnderscore(prop) + ", ")
+            }
+          });
+          facilityType = facilityType.slice(0, -2);
+
+          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + facilityType + "</li><li>" + props.full_address + "</li></ul>";
         }
         else {
           this._div.innerHTML = 'Hover over a location';
@@ -314,7 +322,7 @@ var CartoDbLib = {
       var website = "<p><a href='" + url + "' target='_blank'>" + urlName + "</a></p>"
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #language-header, #insurance-header, #insurance-subsection, #language-subsection').empty();
+      $('#modal-title, #modal-main, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
       $('#modal-title').append(data.organization_name);
       $('#modal-main').append(contact);
       if (data.hours_of_operation != "") {
@@ -324,6 +332,8 @@ var CartoDbLib = {
 
       var insurance_count = 0
       var language_count = 0
+      var age_count = 0
+      var type_count = 0
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
@@ -333,17 +343,38 @@ var CartoDbLib = {
             insurance_count += 1;
           }
           if ($.inArray(String(prop), languageOptions) > -1) {
-            $("#language-subsection").append("<p>English</p>" + "<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+            $("#language-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
+          }
+          if ($.inArray(String(prop), ageOptions) > -1) {
+            if (prop == "under_18") {
+              $("#age-subsection").prepend("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+              age_count += 1;
+            }
+            else {
+              $("#age-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+              age_count += 1;
+            }
+          }
+          if ($.inArray(String(prop), facilityTypeOptions) > -1) {
+            $("#type-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+            type_count += 1;
           }
         }
       }
       // Add headers or not.
+      if (age_count > 0) {
+        $("#age-header").append("AGE GROUPS")
+      }
+      if (type_count > 0) {
+        $("#type-header").append("FACILITY TYPE")
+      }
       if (insurance_count > 0) {
-        $("#insurance-header").append("PAYMENT OPTIONS");
+        $("#insurance-header").append("PAYMENT");
       }
       if (language_count > 0) {
         $("#language-header").append("LANGUAGES");
+        $("#language-subsection").prepend("<p class='modal-p'>English</p>");
       }
 
       $.address.parameter('modal_id', data.id);
@@ -629,7 +660,6 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        console.log(obj)
         $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><a class='remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
 
       });
@@ -663,7 +693,7 @@ var CartoDbLib = {
     }
     else if (objArray.length == 1) {
       $("#saved-locations").show();
-      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Location Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Location saved")
     }
     else {
       $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations saved")

@@ -38,7 +38,7 @@ p {
 }
 
 .navbar-inverse .navbar-nav > li > a {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:focus, .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:visited {
@@ -47,7 +47,10 @@ p {
   border: 0px;
 }
 
-.navbar-nav > li > a { margin-top: 0; }
+.navbar-nav > li > a {
+  margin-top: 0;
+  padding: 12px 4px;
+}
 
 .navbar-inverse .navbar-header > a:hover {
   color: #FFFFFF;
@@ -138,16 +141,6 @@ p {
   color: #ffffff;
   background-color: #7F7F7F;
   border-color: #7F7F7F;
-}
-
-.btn-print {
-  float: right;
-  /*color: #333333;
-  background-color: #dddddd;
-  border-color: #dddddd;*/
-  color: #ffffff;
-  background-color: #CECECE;
-  border-color: #CECECE;
 }
 
 .zone-box {
@@ -300,8 +293,9 @@ p {
 }
 
 .modal-p {
-  margin-bottom: 2px;
+  margin-bottom: 0.8em;
   word-wrap: break-word;
+  line-height: 1;
 }
 
 .modal-bottom { margin-top: 2em; }

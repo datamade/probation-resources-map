@@ -139,9 +139,12 @@ p {
 
 .btn-print {
   float: right;
+  /*color: #333333;
+  background-color: #dddddd;
+  border-color: #dddddd;*/
   color: #ffffff;
-  background-color: #FF3A41;
-  border-color: #FF3A41;
+  background-color: #CECECE;
+  border-color: #CECECE;
 }
 
 .zone-box {

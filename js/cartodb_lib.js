@@ -629,7 +629,8 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><button class='btn btn-search btn-view remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</button></p><hr></div>");
+        console.log(obj)
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><a class='remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
 
       });
     }
@@ -665,7 +666,7 @@ var CartoDbLib = {
       $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Location Saved")
     }
     else {
-      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations Saved")
+      $("#saved-locations").append('<span class="badge">' + objArray.length + '</span>' + " Locations saved")
     }
 
   },

@@ -275,8 +275,8 @@ p {
 
 .badge {
   background-color: #2967A3;
-  padding: 4px 9px 7px;
-  vertical-align: 4px;
+  padding: 2px 6px 2px;
+  vertical-align: 1px;
 }
 
 /* Style for modals */

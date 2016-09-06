@@ -1,12 +1,12 @@
-# Probation Resources
+# Probation Community Resources
 
-Probation Resources is an online interactive, searchable map that helps users:
+Probation Community Resources is an online interactive, searchable map that helps users:
 
 -   find **social, health, and cultural resources** throughout Chicago
 -   identify services within **certain geographic boundaries**
 -   suggest **updates, changes, and additions** to the directory
 
-Built in collaboration with the Cook County Adult Probation Department (CCAPD), the Cook County Juvenile Probation Department (CCJPD), the Sargent Shriver National Center on Poverty Law, the Chicago Appleseed Fund, and the Health & Medicine Policy Research Group, Probation Resources helps criminal justice personnel refer clients to culturally relevant and geographically specific community-based services.
+Built in collaboration with the Cook County Adult Probation Department (CCAPD), the Cook County Juvenile Probation Department (CCJPD), the Sargent Shriver National Center on Poverty Law, the Chicago Appleseed Fund, and the Health & Medicine Policy Research Group, Probation Community Resources helps criminal justice personnel refer clients to culturally relevant and geographically specific community-based services.
 
 ## Installation
 

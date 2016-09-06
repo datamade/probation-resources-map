@@ -47,30 +47,33 @@ p {
   border: 0px;
 }
 
+.navbar-nav > li > a { padding-top: 0; }
+
 .navbar-inverse .navbar-header > a:hover {
   color: #FFFFFF;
 }
 
 .navbar .brand { padding: 10px 0 7px 15px; }
 
-.navbar-brand { font-size: 34px; }
+.navbar-brand {
+  font-size: 30px;
+  padding-top: 10px;
+}
 
 .navbar .navbar-text {
   margin-bottom: 0;
   line-height: 60px;
 }
 
+.nav-subhead {
+  color: #ffffff;
+  padding-top: 1em;
+  font-size: 20px;
+}
+
 .dropdown-menu > li > a {
   display: inline;
   padding: 5px 4px;
-}
-
-.well {
-  padding: 10px 15px;
-}
-
-.well, .panel-group {
-  margin-bottom: 10px;
 }
 
 #mapCanvas img {

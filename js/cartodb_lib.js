@@ -61,9 +61,17 @@ var CartoDbLib = {
 
       // method that we will use to update the control based on feature properties passed
       CartoDbLib.info.update = function (props) {
+        var facilityType = ""
+
         if (props) {
-          // this._div.innerHTML = props.full_address;
-          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + props.full_address + "</li></ul>";
+          $.each(props, function (prop, value) {
+            if ($.inArray(String(prop), facilityTypeOptions) > -1 && value == 'Yes') {
+              facilityType += (CartoDbLib.removeUnderscore(prop) + ", ")
+            }
+          });
+          facilityType = facilityType.slice(0, -2);
+
+          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + facilityType + "</li><li>" + props.full_address + "</li></ul>";
         }
         else {
           this._div.innerHTML = 'Hover over a location';

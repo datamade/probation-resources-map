@@ -333,7 +333,7 @@ var CartoDbLib = {
             insurance_count += 1;
           }
           if ($.inArray(String(prop), languageOptions) > -1) {
-            $("#language-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
+            $("#language-subsection").append("<p>English</p>" + "<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             language_count += 1;
           }
         }
@@ -343,7 +343,7 @@ var CartoDbLib = {
         $("#insurance-header").append("PAYMENT OPTIONS");
       }
       if (language_count > 0) {
-        $("#language-header").append("LANGUAGE");
+        $("#language-header").append("LANGUAGES");
       }
 
       $.address.parameter('modal_id', data.id);

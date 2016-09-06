@@ -293,8 +293,9 @@ p {
 }
 
 .modal-p {
-  margin-bottom: 2px;
+  margin-bottom: 0.8em;
   word-wrap: break-word;
+  line-height: 1;
 }
 
 .modal-bottom { margin-top: 2em; }

@@ -47,7 +47,7 @@ p {
   border: 0px;
 }
 
-.navbar-nav > li > a { padding-top: 0; }
+.navbar-nav > li > a { margin-top: 0; }
 
 .navbar-inverse .navbar-header > a:hover {
   color: #FFFFFF;

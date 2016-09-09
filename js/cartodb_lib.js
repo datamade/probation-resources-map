@@ -18,7 +18,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid",
+  fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
 
   initialize: function(){
     //reset filters
@@ -322,12 +322,19 @@ var CartoDbLib = {
       var website = "<p><a href='" + url + "' target='_blank'>" + urlName + "</a></p>"
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
+      $('#modal-title, #modal-main, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
       $('#modal-title').append(data.organization_name);
       $('#modal-main').append(contact);
+
+      var img_input = (data.image_url).toLowerCase();
+      if (img_input != "no photo" && img_input != "no image") {
+        $('#modal-image').append('<img src=' + data.image_url + '>');
+      }
+
       if (data.hours_of_operation != "") {
         $('#modal-main').append(hours);
       }
+
       $('#modal-main').append(website);
 
       var insurance_count = 0

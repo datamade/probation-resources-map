@@ -147,56 +147,6 @@ img {
   border-color: #7F7F7F;
 }
 
-.zone-box {
-  height: 15px;
-  width: 15px;
-  display: inline-block;
-  *border-right-width: 2px;
-  *border-bottom-width: 2px;
-  -webkit-border-radius: 5px;
-     -moz-border-radius: 5px;
-          border-radius: 5px;
-  -webkit-background-clip: padding-box;
-     -moz-background-clip: padding;
-          background-clip: padding-box;
-}
-
-.zone-B   { background-color: #7474D7; }
-.zone-C   { background-color: #7474D7; }
-.zone-M   { background-color: #DCDC7F; }
-.zone-R   { background-color: #7DD67D; }
-.zone-RS  { background-color: #7DD67D; }
-.zone-RT  { background-color: #7DD67D; }
-.zone-RTA { background-color: #7DD67D; }
-.zone-RM  { background-color: #7DD67D; }
-.zone-PD  { background-color: #d27979; }
-.zone-PMD { background-color: #DCDC7F; }
-.zone-DX  { background-color: #7474D7; }
-.zone-DC  { background-color: #7474D7; }
-.zone-DR  { background-color: #7DD67D; }
-.zone-DS  { background-color: #7474D7; }
-.zone-T   { background-color: #9C9C9C; }
-.zone-POS { background-color: #869b7c; }
-
-.zone-B-text{ color: #7474D7; }
-.zone-C-text{ color: #7474D7; }
-.zone-M-text{ color: #DCDC7F; }
-.zone-R-text{ color: #7DD67D; }
-.zone-RS-text{ color: #7DD67D; }
-.zone-RT-text{ color: #7DD67D; }
-.zone-RTA-text{ color: #7DD67D; }
-.zone-RM-text{ color: #7DD67D; }
-.zone-PD-text{ color: #d27979; }
-.zone-PMD-text{ color: #DCDC7F; }
-.zone-DX-text{ color: #7474D7; }
-.zone-DC-text{ color: #7474D7; }
-.zone-DR-text{ color: #7DD67D; }
-.zone-DS-text{ color: #7474D7; }
-.zone-T-text{ color: #9C9C9C; }
-.zone-POS-text{ color: #869b7c; }
-
-.zone-legend li {font-weight: bold;}
-
 .district-list { margin-bottom: 40px;}
 .district-list td{
   font-size: 0.9em;
@@ -223,16 +173,6 @@ img {
   margin: 0 0 5px;
   color: #777;
 }
-
-.info ul {
-  display: block;
-  list-style: none;
-  -webkit-margin-before: 0.3em;
-  -webkit-margin-after: 0.3em;
-  -webkit-margin-start: 0.3em;
-  -webkit-margin-end: 0.3em;
-  -webkit-padding-start: 0.3em;
-  }
 
 .results-count {
   font-family: 'Lato', sans-serif;

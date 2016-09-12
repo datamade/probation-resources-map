@@ -71,7 +71,7 @@ var CartoDbLib = {
           });
           facilityType = facilityType.slice(0, -2);
 
-          this._div.innerHTML = "<ul><li><strong>" + props.organization_name + "</strong></li><li>" + facilityType + "</li><li>" + props.full_address + "</li></ul>";
+          this._div.innerHTML = "<strong>" + props.organization_name + "</strong><br />" + facilityType + "<br />" + props.full_address;
         }
         else {
           this._div.innerHTML = 'Hover over a location';
@@ -82,13 +82,13 @@ var CartoDbLib = {
         this._div.innerHTML = 'Hover over a location';
       };
 
-      CartoDbLib.makeResultsDiv();
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.clearSearch();
       CartoDbLib.renderMap();
       CartoDbLib.renderList();
       CartoDbLib.renderSavedResults();
       CartoDbLib.updateSavedCounter();
+      CartoDbLib.getResults();
     }
   },
 
@@ -285,17 +285,17 @@ var CartoDbLib = {
     sql.execute("SELECT count(*) FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(data) {
         CartoDbLib.resultsCount = data.rows[0]["count"];
-        $(".results-count").empty();
-        $(".results-count").append("Results: " + CartoDbLib.resultsCount);
-      });
+        CartoDbLib.makeResultsDiv(CartoDbLib.resultsCount);
+      }
+    );
   },
 
-  makeResultsDiv: function() {
+  makeResultsDiv: function(count) {
     var results = L.control({position: 'topright'});
 
     results.onAdd = function (map) {
       var div = L.DomUtil.create('div', 'results-count');
-      div.innerHTML = "Results: " + CartoDbLib.resultsCount
+      div.innerHTML = count + " locations found";
       return div;
     };
 

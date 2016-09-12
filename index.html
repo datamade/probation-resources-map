@@ -4,29 +4,29 @@ layout: default
 
 <div class='row'>
   <div class="col-md-4">
+    <p>Find resources near you for adults and juveniles on probation in Cook County.</p>
+    Address
     <div class="form-group">
-      <input class='form-control' id='search-address' placeholder='Enter an address or an intersection' type='text'>
+        <input class='form-control' id='search-address' placeholder='Enter an address or an intersection' type='text'>
     </div>
-    <div>Within:</div>
-    <div>
-      <label>
-        <select id='search-radius'>
+    <div class='form-group'>
+        Within
+        <select id='search-radius' class='form-control'>
           <option value='400'>2 blocks</option>
           <option value='805'>1/2 mile</option>
           <option value='1610'>1 mile</option>
           <option value='3220'>2 miles</option>
           <option value='8050'>5 miles</option>
         </select>
-      </label>
     </div>
 
-    <div class="filter-ex"><span class="label">Filter</span>Narrow your search! <strong>Click</strong> on each filter name to view a list of options and make selections. You may <strong>select multiple options</strong> per filter (e.g. choose both Medicare and Medicaid as payment methods).</div>
+    <p><strong>Filter your search.</strong> Click on each filter to view a list of options. You can select more than one.</p>
 
     <div>
-      <select class="data-array-age" id="select-age" multiple="multiple"></select>
-      <select class="data-array-language" id="select-language" multiple="multiple"></select>
-      <select class="data-array-type" id="select-type" multiple="multiple"></select>
-      <select class="data-array-insurance" id="select-insurance" multiple="multiple"></select>
+      <select class="data-array-age form-control" id="select-age" multiple="multiple"></select>
+      <select class="data-array-language form-control" id="select-language" multiple="multiple"></select>
+      <select class="data-array-type form-control" id="select-type" multiple="multiple"></select>
+      <select class="data-array-insurance form-control" id="select-insurance" multiple="multiple"></select>
     </div>
 
     <div>

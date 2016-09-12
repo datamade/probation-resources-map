@@ -5,7 +5,7 @@ var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "milita
 
 $(window).resize(function () {
   var h = $(window).height(),
-    offsetTop = 110; // Calculate the top offset
+    offsetTop = 120; // Calculate the top offset
 
   $('#mapCanvas').css('height', (h - offsetTop));
 }).resize();

@@ -51,6 +51,7 @@ var CartoDbLib = {
 
       CartoDbLib.map.addLayer(CartoDbLib.google);
 
+      //add hover info control
       CartoDbLib.info = L.control({position: 'bottomleft'});
 
       CartoDbLib.info.onAdd = function (map) {
@@ -81,6 +82,21 @@ var CartoDbLib = {
       CartoDbLib.info.clear = function(){
         this._div.innerHTML = 'Hover over a location';
       };
+
+      //add results control
+      CartoDbLib.results_div = L.control({position: 'topright'});
+
+      CartoDbLib.results_div.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'results-count');
+        this._div.innerHTML = "";
+        return this._div;
+      };
+
+      CartoDbLib.results_div.update = function (count){
+        this._div.innerHTML = count + ' locations found';
+      };
+
+      CartoDbLib.results_div.addTo(CartoDbLib.map);
 
       CartoDbLib.info.addTo(CartoDbLib.map);
       CartoDbLib.clearSearch();
@@ -285,21 +301,9 @@ var CartoDbLib = {
     sql.execute("SELECT count(*) FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(data) {
         CartoDbLib.resultsCount = data.rows[0]["count"];
-        CartoDbLib.makeResultsDiv(CartoDbLib.resultsCount);
+        CartoDbLib.results_div.update(CartoDbLib.resultsCount);
       }
     );
-  },
-
-  makeResultsDiv: function(count) {
-    var results = L.control({position: 'topright'});
-
-    results.onAdd = function (map) {
-      var div = L.DomUtil.create('div', 'results-count');
-      div.innerHTML = count + " locations found";
-      return div;
-    };
-
-    results.addTo(CartoDbLib.map);
   },
 
   modalPop: function(data) {

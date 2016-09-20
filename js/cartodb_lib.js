@@ -375,16 +375,16 @@ var CartoDbLib = {
       }
       // Add headers or not.
       if (age_count > 0) {
-        $("#age-header").append("AGE GROUPS")
+        $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups')
       }
       if (type_count > 0) {
-        $("#type-header").append("FACILITY TYPE")
+        $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type')
       }
       if (insurance_count > 0) {
-        $("#insurance-header").append("PAYMENT");
+        $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');
       }
       if (language_count > 0) {
-        $("#language-header").append("LANGUAGES");
+        $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
         $("#language-subsection").prepend("<p class='modal-p'>English</p>");
       }
 

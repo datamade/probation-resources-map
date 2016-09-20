@@ -68,6 +68,14 @@ img {
   padding-top: 10px;
 }
 
+@media all and (max-width: 480px) {
+  .navbar-brand {
+      font-size: 20px;
+      padding-top: 30px;
+      line-height: 0;
+  }
+}
+
 .navbar .navbar-text {
   margin-bottom: 0;
   line-height: 60px;
@@ -98,25 +106,22 @@ img {
 .label { margin-right: 0.5em; }
 
 .select2-container {
-  width: 22.5em !important;
-}
-
-@media only screen
-  and (min-device-width: 320px)
-  and (max-device-width: 480px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-    .select2-container {
-      width: 280px !important;
-    }
+   width: 94% !important;
 }
 
 .select2-container--default .select2-selection--multiple {
-  margin: 5px 0;
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-left: 0;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
   margin-top: 2%;
 }
+
+.m-top-sm { margin-top: 10px; }
+
+.m-bottom-sm { margin-bottom: 10px; }
 
 .btn {
   margin: 0.3em;

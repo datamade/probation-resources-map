@@ -378,7 +378,7 @@ var CartoDbLib = {
         $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups')
       }
       if (type_count > 0) {
-        $("#type-header").append('<i class="fa fa-home" aria-hidden="true"></i> Facility type')
+        $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type')
       }
       if (insurance_count > 0) {
         $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');

@@ -70,9 +70,9 @@ img {
 
 @media all and (max-width: 480px) {
   .navbar-brand {
-      font-size: 20px;
-      padding-top: 30px;
-      line-height: 0;
+      font-size: 26px;
+      padding-bottom: 20%;
+      line-height: 1em;
   }
 }
 

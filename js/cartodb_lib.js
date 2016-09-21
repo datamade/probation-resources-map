@@ -270,7 +270,7 @@ var CartoDbLib = {
                 // Address and phone hidden; show for mobile.
                 "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
-                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" + site + "</td></tr>", elements);
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" + "<span class='facility-site'>" + site + "</span>" + "</td></tr>", elements);
 
               results.append(output);
               $('.fa-star-o').tooltip();
@@ -645,7 +645,7 @@ var CartoDbLib = {
     CartoDbLib.renderSavedResults();
   },
 
-  addFacilityCookie: function(name, address, phone) {
+  addFacilityCookie: function(name, address, phone, site) {
     var objArr = new Array
 
     if ($.cookie("location") != null) {
@@ -656,7 +656,8 @@ var CartoDbLib = {
     var parameters = {
       "name": name,
       "address": address,
-      "phone": phone
+      "phone": phone,
+      "site": site
     }
 
     objArr.push(parameters)
@@ -686,12 +687,11 @@ var CartoDbLib = {
 
     var objArray = JSON.parse($.cookie("location"));
 
-    console.log(objArray)
-
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p>" + obj.phone + "</p>" + "<p><a class='remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
+        console.log(obj.site)
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p>" + obj.phone + "</p>" + "<p>" + obj.site + "</p>" + "<p><a class='remove-location btn btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
 
       });
     }

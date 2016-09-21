@@ -145,6 +145,16 @@ var CartoDbLib = {
     }
     else { //search without geocoding callback
       CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
+
+      CartoDbLib.createSQL();
+      $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
+      $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
+      $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+      $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
+
+      CartoDbLib.renderMap();
+      CartoDbLib.renderList();
+      CartoDbLib.getResults();
     }
   },
 
@@ -198,7 +208,7 @@ var CartoDbLib = {
       website: ''
     };
 
-    if (CartoDbLib.whereClause == ' WHERE the_geom is not null AND ') {
+    if ((CartoDbLib.whereClause == ' WHERE the_geom is not null AND ') || (CartoDbLib.whereClause == ' WHERE the_geom is not null ')) {
       CartoDbLib.whereClause = '';
     }
 
@@ -471,7 +481,9 @@ var CartoDbLib = {
 
   createSQL: function() {
      // Devise SQL calls for geosearch and language search.
-    CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+    if(CartoDbLib.currentPinpoint != null) {
+      CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+    }
 
     CartoDbLib.userSelection = '';
     // Gets selected elements in dropdown (represented as an array of objects).
@@ -493,13 +505,16 @@ var CartoDbLib = {
     var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
     CartoDbLib.insuranceSelections = insuranceResults;
 
-    CartoDbLib.whereClause = " WHERE the_geom is not null AND "
+    CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
 
     if (CartoDbLib.geoSearch != "") {
       CartoDbLib.whereClause += CartoDbLib.geoSearch;
       CartoDbLib.whereClause += CartoDbLib.userSelection;
     }
-
+    else {
+      CartoDbLib.whereClause = " WHERE the_geom is not null ";
+      CartoDbLib.whereClause += CartoDbLib.userSelection;
+    }
   },
 
   setZoom: function() {

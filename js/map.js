@@ -106,11 +106,13 @@ $(function() {
     var tr = ($(this).parents().eq(1));
     var name = tr.find("span.facility-name").text();
     var address = tr.find("span.facility-address").text();
+    var phone = tr.find("span.facility-phone").text();
+    var site = tr.find("span.facility-site").html();
     $(this).removeClass('fa-star-o');
     $(this).addClass('fa-star');
     $(this).removeAttr('data-original-title');
     $(this).attr('title', 'Location saved');
-    CartoDbLib.addFacilityCookie(name, address);
+    CartoDbLib.addFacilityCookie(name, address, phone, site);
   });
 
   $(".btn-save-bookmark").on('click', function() {

@@ -145,6 +145,16 @@ var CartoDbLib = {
     }
     else { //search without geocoding callback
       CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
+
+      CartoDbLib.createSQL();
+      $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
+      $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
+      $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+      $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
+
+      CartoDbLib.renderMap();
+      CartoDbLib.renderList();
+      CartoDbLib.getResults();
     }
   },
 
@@ -198,7 +208,7 @@ var CartoDbLib = {
       website: ''
     };
 
-    if (CartoDbLib.whereClause == ' WHERE the_geom is not null AND ') {
+    if ((CartoDbLib.whereClause == ' WHERE the_geom is not null AND ') || (CartoDbLib.whereClause == ' WHERE the_geom is not null ')) {
       CartoDbLib.whereClause = '';
     }
 
@@ -260,7 +270,7 @@ var CartoDbLib = {
                 // Address and phone hidden; show for mobile.
                 "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
-                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp{{phone}} <br>" + site + "</td></tr>", elements);
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" + "<span class='facility-site'>" + site + "</span>" + "</td></tr>", elements);
 
               results.append(output);
               $('.fa-star-o').tooltip();
@@ -471,7 +481,9 @@ var CartoDbLib = {
 
   createSQL: function() {
      // Devise SQL calls for geosearch and language search.
-    CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+    if(CartoDbLib.currentPinpoint != null) {
+      CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+    }
 
     CartoDbLib.userSelection = '';
     // Gets selected elements in dropdown (represented as an array of objects).
@@ -493,13 +505,18 @@ var CartoDbLib = {
     var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
     CartoDbLib.insuranceSelections = insuranceResults;
 
-    CartoDbLib.whereClause = " WHERE the_geom is not null AND "
+    CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
 
     if (CartoDbLib.geoSearch != "") {
       CartoDbLib.whereClause += CartoDbLib.geoSearch;
       CartoDbLib.whereClause += CartoDbLib.userSelection;
     }
+    else {
+      CartoDbLib.whereClause = " WHERE the_geom is not null ";
+      CartoDbLib.whereClause += CartoDbLib.userSelection;
+    }
 
+    console.log(CartoDbLib.whereClause)
   },
 
   setZoom: function() {
@@ -628,7 +645,7 @@ var CartoDbLib = {
     CartoDbLib.renderSavedResults();
   },
 
-  addFacilityCookie: function(name, address) {
+  addFacilityCookie: function(name, address, phone, site) {
     var objArr = new Array
 
     if ($.cookie("location") != null) {
@@ -638,7 +655,9 @@ var CartoDbLib = {
 
     var parameters = {
       "name": name,
-      "address": address
+      "address": address,
+      "phone": phone,
+      "site": site
     }
 
     objArr.push(parameters)
@@ -671,11 +690,10 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p><a class='remove-location'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
-
+        console.log(obj.site)
+        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p>" + obj.phone + "</p>" + "<p>" + obj.site + "</p>" + "<p><a class='remove-location btn btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
       });
     }
-
   },
 
   deleteSavedFacility: function(address) {

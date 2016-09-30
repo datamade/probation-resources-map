@@ -14,5 +14,59 @@ permalink: /locations/
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="modal-pop" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times-circle" aria-hidden="true"></i></span></button>
+        <h4 class="modal-title" id="modal-title"></h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="container-fluid bd-example-row">
+          <div class="row">
+            <div class="col-md-8" id="modal-main"></div>
+            <div class="col-md-4" id="modal-image"></div>
+          </div>
+          <div class="row modal-bottom">
+            <div class="col-md-3">
+              <h4 id="age-header"></h4>
+              <div id="age-subsection"></div>
+            </div>
+            <div class="col-md-3">
+              <h4 id="type-header"></h4>
+              <div id="type-subsection"></div>
+            </div>
+            <div class="col-md-3" id="insurance-section">
+              <h4 id="insurance-header"></h4>
+              <div id="insurance-subsection"></div>
+            </div>
+            <div class="col-md-3">
+              <h4 id="language-header"></h4>
+              <div id="language-subsection"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal-body modal-body-bottom">
+        <div class="container-fluid bd-example-row">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <button type="button" class="btn btn-change" id="copy-button" data-clipboard-target="#post-shortlink" data-tooltip="true" title="Copy to clipboard"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                <input id="post-shortlink" type="text" class="form-control">
+              </div>
+              <div><button type="button" class="btn btn-reset btn-save-bookmark"><i class="fa fa-star-o" aria-hidden="true"></i> Save location</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript" src="/js/locations.js"></script>
 

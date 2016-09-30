@@ -25,6 +25,22 @@ $(function() {
     window.print();
   });
 
+  $(".locate-name").on('click', function() {
+    name = $(this).text();
+    address = $(this).parent().children().eq(1).text();
+    phone = $(this).parent().children().eq(2).text();
+    website = $(this).parent().children().eq(3).children(0).attr('href');
+    var data = {
+      organization_name: name,
+      full_address: address,
+      intake_number: phone,
+      website: website,
+      hours_of_operation: "",
+      image_url: ""
+    };
+    CartoDbLib.modalPop(data);
+  });
+
 });
 
 

@@ -272,6 +272,12 @@ img {
   margin-top: .15em;
 }
 
-.facility-name:hover {
+.facility-name:hover, .locate-name:hover {
   color: #7F7F7F;
 }
+
+
+
+iframe { width: 100%; }
+
+

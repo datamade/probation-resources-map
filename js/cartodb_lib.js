@@ -690,8 +690,7 @@ var CartoDbLib = {
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
         // TODO: Clean up with good CSS.
-        console.log(obj.site)
-        $('#locations-div').append("<div><p>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p>" + obj.phone + "</p>" + "<p>" + obj.site + "</p>" + "<p><a class='remove-location btn btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
+        $('#locations-div').append("<div><p class='locate-name'>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p>" + obj.phone + "</p>" + "<p>" + obj.site + "</p>" + "<p><a class='remove-location btn btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
       });
     }
   },

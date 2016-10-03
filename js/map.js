@@ -108,11 +108,12 @@ $(function() {
     var address = tr.find("span.facility-address").text();
     var phone = tr.find("span.facility-phone").text();
     var site = tr.find("span.facility-site").html();
+    var id = tr.find("span#given-id").text();
     $(this).removeClass('fa-star-o');
     $(this).addClass('fa-star');
     $(this).removeAttr('data-original-title');
     $(this).attr('title', 'Location saved');
-    CartoDbLib.addFacilityCookie(name, address, phone, site);
+    CartoDbLib.addFacilityCookie(name, address, phone, site, id);
   });
 
   $(".btn-save-bookmark").on('click', function() {
@@ -120,7 +121,8 @@ $(function() {
     var name = $("#modal-title").text();
     var phone = $("#modal-phone").text();
     var site = $("#modal-site").html();
-    CartoDbLib.addFacilityCookie(name, address, phone, site);
+    var id = $.address.parameter('modal_id');
+    CartoDbLib.addFacilityCookie(name, address, phone, site, id);
   });
 
   $(".close-btn").on('click', function() {
@@ -129,10 +131,10 @@ $(function() {
 
   $(".list-table").on('click', '.fa-star', function() {
     var tr = ($(this).parents().eq(1));
-    var address = tr.find("span.facility-address").text();
+    var id_nbr = tr.find('#given-id').text();
     $(this).removeClass('fa-star');
     $(this).addClass('fa-star-o');
-    CartoDbLib.deleteSavedFacility(address);
+    CartoDbLib.deleteSavedFacility(id_nbr);
   });
 
   $(".btn-print").on("click", function() {

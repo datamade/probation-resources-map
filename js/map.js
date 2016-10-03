@@ -118,7 +118,9 @@ $(function() {
   $(".btn-save-bookmark").on('click', function() {
     var address = $("#modal-address").text();
     var name = $("#modal-title").text();
-    CartoDbLib.addFacilityCookie(name, address);
+    var phone = $("#modal-phone").text();
+    var site = $("#modal-site").html();
+    CartoDbLib.addFacilityCookie(name, address, phone, site);
   });
 
   $(".close-btn").on('click', function() {

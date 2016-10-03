@@ -317,7 +317,7 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
-      var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
+      var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p id='modal-phone'><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
       var url = ''
       var urlName = ''
@@ -333,7 +333,7 @@ var CartoDbLib = {
         }
       }
 
-      var website = "<p><a href='" + url + "' target='_blank'>" + urlName + "</a></p>"
+      var website = "<p id='modal-site'><a href='" + url + "' target='_blank'>" + urlName + "</a></p>"
 
       $('#modal-pop').modal();
       $('#modal-title, #modal-main, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
@@ -581,7 +581,6 @@ var CartoDbLib = {
     $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
 
     var objArray = JSON.parse($.cookie("probationResources"));
-
     if (objArray == null || objArray.length == 0) {
       $('#saved-searches-nav').hide();
     }
@@ -648,6 +647,8 @@ var CartoDbLib = {
   addFacilityCookie: function(name, address, phone, site) {
     var objArr = new Array
 
+    console.log(phone)
+    console.log(site)
     if ($.cookie("location") != null) {
       storedObject = JSON.parse($.cookie("location"));
       objArr.push(storedObject)

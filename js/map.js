@@ -1,8 +1,3 @@
-var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
-var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
-var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
-
 $(window).resize(function () {
   var h = $(window).height(),
     offsetTop = 120; // Calculate the top offset

@@ -281,4 +281,8 @@ iframe {
   height: 172em;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 

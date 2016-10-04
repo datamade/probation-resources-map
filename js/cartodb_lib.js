@@ -275,7 +275,9 @@ var CartoDbLib = {
                 // Address and phone hidden; show for mobile.
                 "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
-                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br>" +
+                "<span class='modal-directions'><a href='http://maps.google.com/?q={{address}}' target='_blank'>GET DIRECTIONS</a></span><br>" +
+                "<i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
                  "<span class='facility-site'>" + site + "</span>" +
                  "<span class='hidden' id='given-id'>" + givenId + "</span>" + "</td></tr>", elements);
 
@@ -753,11 +755,14 @@ var CartoDbLib = {
 
               var output = Mustache.render("<tr><td><span class='facility-name'>{{facility}}</span>" +
                 "<span class='given-id hidden'>" + givenId + "</span>" + "<br>" +
-                "<td>{{hours}}</td>" +
-                "<td style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
-                 "<span class='facility-site'>" + site + "</span></td>" +
-                 "<td><a class='remove-location btn btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a>" +
-                 "</td></tr>", elements);
+                "<td class='hidden-xs'>{{hours}}</td>" +
+                "<td style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br>" +
+                "<span class='modal-directions'><a href='http://maps.google.com/?q={{address}}' target='_blank'>GET DIRECTIONS</a></span><br>" +
+                "<i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
+                "<span class='facility-site hidden-xs'>" + site + "</span><br>" +
+                "<a class='remove-location btn-sm btn-reset hidden-sm hidden-md hidden-lg'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></td>" +
+                "<td class='hidden-xs no-wrap'><a class='remove-location btn-sm btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></td>" +
+                "</tr>", elements);
 
               $("#locations-div").append(output);
             }

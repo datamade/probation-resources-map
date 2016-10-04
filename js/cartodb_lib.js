@@ -263,7 +263,7 @@ var CartoDbLib = {
               }
 
               // Check if facility is in 'location' cookie.
-              if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
+              if(CartoDbLib.checkCookieDuplicate(obj_array[idx].id) == false) {
                 icon = "<i class='fa fa-star' aria-hidden='true' data-toggle='tooltip' title='Location saved'></i>"
               }
               else {
@@ -651,7 +651,7 @@ var CartoDbLib = {
     CartoDbLib.renderSavedResults();
   },
 
-  addFacilityCookie: function(name, address, phone, site, id) {
+  addFacilityCookie: function(address, id_nbr) {
     var objArr = new Array
 
     if ($.cookie("location") != null) {
@@ -660,27 +660,25 @@ var CartoDbLib = {
     }
 
     var parameters = {
-      "name": name,
       "address": address,
-      "phone": phone,
-      "site": site,
-      "id": id
+      "id": id_nbr
     }
 
     objArr.push(parameters)
+    // Concatenate and flatten array of objects, after pushing new 'parameters' in.
     flatArray = [].concat.apply([], objArr)
     $.cookie("location", JSON.stringify(flatArray), { path: '/' });
     CartoDbLib.updateSavedCounter();
   },
 
   // Call when rendering list. To determine icon.
-  checkCookieDuplicate: function(name) {
+  checkCookieDuplicate: function(id_nbr) {
     var objArray = JSON.parse($.cookie("location"));
     var returnVal = true;
 
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
-        if (obj.name == name) {
+        if (obj.id == id_nbr) {
           returnVal = false;
         }
       });

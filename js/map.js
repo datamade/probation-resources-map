@@ -99,25 +99,19 @@ $(function() {
 
   $(".list-table").on('click', '.fa-star-o', function() {
     var tr = ($(this).parents().eq(1));
-    var name = tr.find("span.facility-name").text();
     var address = tr.find("span.facility-address").text();
-    var phone = tr.find("span.facility-phone").text();
-    var site = tr.find("span.facility-site").html();
-    var id = tr.find("span#given-id").text();
+    var id_nbr = tr.find("span#given-id").text();
     $(this).removeClass('fa-star-o');
     $(this).addClass('fa-star');
     $(this).removeAttr('data-original-title');
     $(this).attr('title', 'Location saved');
-    CartoDbLib.addFacilityCookie(name, address, phone, site, id);
+    CartoDbLib.addFacilityCookie(address, id_nbr);
   });
 
   $(".btn-save-bookmark").on('click', function() {
     var address = $("#modal-address").text();
-    var name = $("#modal-title").text();
-    var phone = $("#modal-phone").text();
-    var site = $("#modal-site").html();
-    var id = $.address.parameter('modal_id');
-    CartoDbLib.addFacilityCookie(name, address, phone, site, id);
+    var id_nbr = $.address.parameter('modal_id');
+    CartoDbLib.addFacilityCookie(address, id_nbr);
   });
 
   $(".close-btn").on('click', function() {

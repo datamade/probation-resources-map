@@ -1,3 +1,8 @@
+var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
+var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
+var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
+
 var CartoDbLib = CartoDbLib || {};
 var CartoDbLib = {
 
@@ -112,6 +117,10 @@ var CartoDbLib = {
     CartoDbLib.clearSearch();
     var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
+
+    if (CartoDbLib.radius == null) {
+      CartoDbLib.radius = 8050;
+    }
 
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
@@ -230,7 +239,7 @@ var CartoDbLib = {
             var facilityWebsite = obj_array[idx].website;
             var icon = ''
             var site = ''
-
+            var givenId = obj_array[idx].id;
             attributeArr.push(facilityName, facilityAddress, facilityHours, facilityNumber, facilityWebsite)
 
             if (CartoDbLib.deleteBlankResults(attributeArr) < 5) {
@@ -258,7 +267,7 @@ var CartoDbLib = {
               }
 
               // Check if facility is in 'location' cookie.
-              if(CartoDbLib.checkCookieDuplicate(obj_array[idx].organization_name) == false) {
+              if(CartoDbLib.checkCookieDuplicate(obj_array[idx].id) == false) {
                 icon = "<i class='fa fa-star' aria-hidden='true' data-toggle='tooltip' title='Location saved'></i>"
               }
               else {
@@ -270,7 +279,11 @@ var CartoDbLib = {
                 // Address and phone hidden; show for mobile.
                 "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
                 "<td class='hidden-xs'>{{hours}}</td>" +
-                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br><i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" + "<span class='facility-site'>" + site + "</span>" + "</td></tr>", elements);
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br>" +
+                "<span class='modal-directions'><a href='http://maps.google.com/?q={{address}}' target='_blank'>GET DIRECTIONS</a></span><br>" +
+                "<i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
+                 "<span class='facility-site'>" + site + "</span>" +
+                 "<span class='hidden' id='given-id'>" + givenId + "</span>" + "</td></tr>", elements);
 
               results.append(output);
               $('.fa-star-o').tooltip();
@@ -644,37 +657,34 @@ var CartoDbLib = {
     CartoDbLib.renderSavedResults();
   },
 
-  addFacilityCookie: function(name, address, phone, site) {
+  addFacilityCookie: function(address, id_nbr) {
     var objArr = new Array
 
-    console.log(phone)
-    console.log(site)
     if ($.cookie("location") != null) {
       storedObject = JSON.parse($.cookie("location"));
       objArr.push(storedObject)
     }
 
     var parameters = {
-      "name": name,
       "address": address,
-      "phone": phone,
-      "site": site
+      "id": id_nbr
     }
 
     objArr.push(parameters)
+    // Concatenate and flatten array of objects, after pushing new 'parameters' in.
     flatArray = [].concat.apply([], objArr)
     $.cookie("location", JSON.stringify(flatArray), { path: '/' });
     CartoDbLib.updateSavedCounter();
   },
 
   // Call when rendering list. To determine icon.
-  checkCookieDuplicate: function(name) {
+  checkCookieDuplicate: function(id_nbr) {
     var objArray = JSON.parse($.cookie("location"));
     var returnVal = true;
 
     if (objArray != null) {
       $.each(objArray, function( index, obj ) {
-        if (obj.name == name) {
+        if (obj.id == id_nbr) {
           returnVal = false;
         }
       });
@@ -686,21 +696,112 @@ var CartoDbLib = {
   renderSavedFacilities: function() {
     $("#locations-div").empty();
 
+    var elements = {
+      facility: '',
+      address: '',
+      hours: '',
+      phone: '',
+      website: ''
+    };
+
     var objArray = JSON.parse($.cookie("location"));
 
     if (objArray != null) {
+      // Create SQL call.
+      CartoDbLib.whereClause = " WHERE the_geom is not null AND "
       $.each(objArray, function( index, obj ) {
-        // TODO: Clean up with good CSS.
-        $('#locations-div').append("<div><p class='locate-name'>" + obj.name + "</p>" + "<p>" + obj.address + "</p>" + "<p>" + obj.phone + "</p>" + "<p>" + obj.site + "</p>" + "<p><a class='remove-location btn btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></p><hr></div>");
+        CartoDbLib.whereClause += "id=" + obj.id + " OR "
       });
+      CartoDbLib.whereClause += "id=0"
+
+      // Execute SQL.
+      var sql = new cartodb.SQL({ user: CartoDbLib.userName });
+      sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
+        .done(function(listData) {
+          var obj_array = listData.rows;
+
+          for (idx in obj_array) {
+            var attributeArr = new Array;
+            var facilityName = obj_array[idx].organization_name;
+            var facilityAddress = obj_array[idx].full_address;
+            var facilityHours = obj_array[idx].hours_of_operation;
+            var facilityNumber = obj_array[idx].intake_number;
+            var facilityWebsite = obj_array[idx].website;
+            var givenId = obj_array[idx].id;
+            var icon = ''
+            var site = ''
+
+            attributeArr.push(facilityName, facilityAddress, facilityHours, facilityNumber, facilityWebsite);
+
+            // Check that the array has only five elements (start count from 0).
+            if (CartoDbLib.deleteBlankResults(attributeArr) < 5) {
+              if (facilityName != "") {
+                elements["facility"] = facilityName;
+              }
+              if (facilityAddress != "") {
+                elements["address"] = facilityAddress;
+              }
+              if (facilityHours != "") {
+                elements["hours"] = facilityHours;
+              }
+              if (facilityNumber != "") {
+                elements["phone"] = facilityNumber;
+              }
+              if (facilityWebsite != "") {
+                site = "<a href='{{website}}' target='_blank'><i class='fa fa-reply' aria-hidden='true'></i> Website</a>"
+                if (facilityWebsite.match(/^http/)) {
+                  elements["website"] = facilityWebsite;
+                }
+                else {
+                  elements["website"] = "http://" + facilityWebsite;
+                }
+              }
+
+              var output = Mustache.render("<tr><td><span class='facility-name'>{{facility}}</span>" +
+                "<span class='given-id hidden'>" + givenId + "</span>" + "<br>" +
+                "<td class='hidden-xs'>{{hours}}</td>" +
+                "<td style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br>" +
+                "<span class='modal-directions'><a href='http://maps.google.com/?q={{address}}' target='_blank'>GET DIRECTIONS</a></span><br>" +
+                "<i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
+                "<span class='facility-site hidden-xs'>" + site + "</span><br>" +
+                "<a class='remove-location btn-sm btn-reset hidden-sm hidden-md hidden-lg'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></td>" +
+                "<td class='hidden-xs no-wrap'><a class='remove-location btn-sm btn-reset'><i class='fa fa-times' aria-hidden='true'></i> Remove</a></td>" +
+                "</tr>", elements);
+
+              $("#locations-div").append(output);
+            }
+          }
+          // Activate jQuery for removing a location.
+          $(".remove-location").on('click', function() {
+            var tr = $(this).parent().parent();
+            var id_nbr = tr.children().eq(0).find('.given-id').text();
+            CartoDbLib.deleteSavedFacility(id_nbr);
+            tr.remove();
+          });
+
+          // Activate jQuery for modalPop.
+          $(".facility-name").on('click', function() {
+
+            var thisId = $(this).siblings().text();
+            var objArray = listData.rows;
+            $.each(objArray, function( index, obj ) {
+              if (obj.id == thisId ) {
+                console.log(obj)
+                CartoDbLib.modalPop(obj)
+              }
+            });
+
+          });
+
+        });
     }
   },
 
-  deleteSavedFacility: function(address) {
+  deleteSavedFacility: function(givenId) {
     var objArray = JSON.parse($.cookie("location"));
 
     for (var idx = 0; idx < objArray.length; idx++) {
-      if (objArray[idx].address == address ) {
+      if (objArray[idx].id == givenId ) {
         objArray.splice(idx, 1);
       }
     }

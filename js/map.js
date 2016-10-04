@@ -1,8 +1,3 @@
-var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
-var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
-var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
-
 $(window).resize(function () {
   var h = $(window).height(),
     offsetTop = 120; // Calculate the top offset
@@ -104,23 +99,19 @@ $(function() {
 
   $(".list-table").on('click', '.fa-star-o', function() {
     var tr = ($(this).parents().eq(1));
-    var name = tr.find("span.facility-name").text();
     var address = tr.find("span.facility-address").text();
-    var phone = tr.find("span.facility-phone").text();
-    var site = tr.find("span.facility-site").html();
+    var id_nbr = tr.find("span#given-id").text();
     $(this).removeClass('fa-star-o');
     $(this).addClass('fa-star');
     $(this).removeAttr('data-original-title');
     $(this).attr('title', 'Location saved');
-    CartoDbLib.addFacilityCookie(name, address, phone, site);
+    CartoDbLib.addFacilityCookie(address, id_nbr);
   });
 
   $(".btn-save-bookmark").on('click', function() {
     var address = $("#modal-address").text();
-    var name = $("#modal-title").text();
-    var phone = $("#modal-phone").text();
-    var site = $("#modal-site").html();
-    CartoDbLib.addFacilityCookie(name, address, phone, site);
+    var id_nbr = $.address.parameter('modal_id');
+    CartoDbLib.addFacilityCookie(address, id_nbr);
   });
 
   $(".close-btn").on('click', function() {
@@ -129,10 +120,10 @@ $(function() {
 
   $(".list-table").on('click', '.fa-star', function() {
     var tr = ($(this).parents().eq(1));
-    var address = tr.find("span.facility-address").text();
+    var id_nbr = tr.find('#given-id').text();
     $(this).removeClass('fa-star');
     $(this).addClass('fa-star-o');
-    CartoDbLib.deleteSavedFacility(address);
+    CartoDbLib.deleteSavedFacility(id_nbr);
   });
 
   $(".btn-print").on("click", function() {

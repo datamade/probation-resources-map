@@ -6,9 +6,19 @@ permalink: /locations/
 
 <div class='row'>
   <div class='container'>
-    <div class='col-md-10'>
+    <div class='col-md-12'>
       <h2>Locations saved</h2>
-      <div id="locations-div"></div>
+       <table class="table list-table table-striped">
+        <thead>
+          <tr>
+            <th>Facility</th>
+            <th class='hidden-xs'>Hours</th>
+            <th>Contact</th>
+            <th class='hidden-xs'></th>
+          </tr>
+        </thead>
+        <tbody id='locations-div'></tbody>
+      </table>
       <div id="no-locations"></div>
     </div>
   </div>

@@ -118,6 +118,10 @@ var CartoDbLib = {
     var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
 
+    if (CartoDbLib.radius == null) {
+      CartoDbLib.radius = 8050;
+    }
+
     if (address != "") {
       if (address.toLowerCase().indexOf(CartoDbLib.locationScope) == -1)
         address = address + " " + CartoDbLib.locationScope;

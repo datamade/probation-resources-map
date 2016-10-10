@@ -124,8 +124,10 @@ img {
 .m-bottom-sm { margin-bottom: 10px; }
 
 .btn {
-  margin: 0.3em;
+  margin-right: 0.1%;
   margin-left: 0;
+  margin-bottom: 1em;
+  font-size: 16px;
 }
 
 .btn-search {
@@ -254,11 +256,15 @@ img {
 .modal-directions { font-weight: 700; }
 
 #post-shortlink {
-  width: 200px;
+  width: 50%;
   border-radius: 5px;
   margin-right: 0.5em;
   margin-bottom: 1em;
   color: #CECECE;
+}
+
+.modal-body-bottom .input-group {
+  width: 100%;
 }
 
 #copy-button {

@@ -108,9 +108,13 @@ $(function() {
     CartoDbLib.addFacilityCookie(address, id_nbr);
   });
 
-  $(".btn-save-bookmark").on('click', function() {
+  $(".modal-header").on('click', '.fa-star-o', function() {
     var address = $("#modal-address").text();
     var id_nbr = $.address.parameter('modal_id');
+    $(this).removeClass('fa-star-o');
+    $(this).addClass('fa-star');
+    $(this).removeAttr('data-original-title');
+    $(this).attr('title', 'Location saved');
     CartoDbLib.addFacilityCookie(address, id_nbr);
   });
 

@@ -124,8 +124,12 @@ img {
 .m-bottom-sm { margin-bottom: 10px; }
 
 .btn {
-  margin: 0.3em;
+  margin: 0.2em;
   margin-left: 0;
+  padding: 6px 13px;
+  font-size: 16px;
+/*  line-height: 1.5;
+  border-radius: 3px;*/
 }
 
 .btn-search {

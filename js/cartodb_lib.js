@@ -118,7 +118,7 @@ var CartoDbLib = {
     var address = $("#search-address").val();
     CartoDbLib.radius = $("#search-radius").val();
 
-    if (CartoDbLib.radius == null) {
+    if (CartoDbLib.radius == null && address != "") {
       CartoDbLib.radius = 8050;
     }
 
@@ -507,8 +507,13 @@ var CartoDbLib = {
 
   createSQL: function() {
      // Devise SQL calls for geosearch and language search.
-    if(CartoDbLib.currentPinpoint != null) {
+    var address = $("#search-address").val();
+
+    if(CartoDbLib.currentPinpoint != null && address != '') {
       CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+    }
+    else {
+      CartoDbLib.geoSearch = ''
     }
 
     CartoDbLib.userSelection = '';
@@ -542,7 +547,6 @@ var CartoDbLib = {
       CartoDbLib.whereClause += CartoDbLib.userSelection;
     }
 
-    console.log(CartoDbLib.whereClause)
   },
 
   setZoom: function() {
@@ -613,7 +617,31 @@ var CartoDbLib = {
     else {
       $('#saved-searches-nav').show();
       $.each(objArray, function( index, obj ) {
-        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + obj.address + '<span class="hidden">' + obj.path + '</span></a></li>');
+        var text = ''
+        if (obj.address) {
+          text += obj.address;
+        }
+        else {
+          if (obj.age) {
+            var result = obj.age.slice(0, -2);
+            text += result + ' + ';
+          }
+          if (obj.language) {
+            var result = obj.language.slice(0, -2);
+            text += result + ' + ';
+          }
+          if (obj.type) {
+            var result = obj.type.slice(0, -2);
+            text += result + ' + ';
+          }
+          if (obj.insurance) {
+            var result = obj.insurance.slice(0, -2);
+            text += result + ' + ';
+          }
+          text = text.slice(0, -2);
+        }
+
+        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + text + '<span class="hidden">' + obj.path + '</span></a></li>');
       });
     }
   },

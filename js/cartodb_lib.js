@@ -348,9 +348,17 @@ var CartoDbLib = {
 
       var website = "<p id='modal-site'><a href='" + url + "' target='_blank'>" + urlName + "</a></p>"
 
+      // Check if facility is in 'location' cookie.
+      if(CartoDbLib.checkCookieDuplicate(data.id) == false) {
+        icon = "<i class='fa fa-star' aria-hidden='true' data-toggle='tooltip' title='Location saved'></i>"
+      }
+      else {
+        icon = "<i class='fa fa-star-o' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
+      }
+
       $('#modal-pop').modal();
       $('#modal-title, #modal-main, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
-      $('#modal-title').append(data.organization_name);
+      $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
       var img_input = (data.image_url).toLowerCase();
@@ -413,6 +421,11 @@ var CartoDbLib = {
 
       $.address.parameter('modal_id', data.id);
       $("#post-shortlink").val(location.href);
+
+      // Add tooltip.
+      $('.fa-star-o').tooltip();
+      $('.fa-star').tooltip();
+
   },
 
   clearSearch: function(){

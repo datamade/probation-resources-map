@@ -298,11 +298,10 @@ div#modal-programs {
 }
 
 .img-borders {
-          box-shadow:
+    box-shadow:
         0px 0px 0px 2px #fff,
-                0px 0px 0px 2px #fff,
-                0px 0px 0px 6px rgba(0,0,0,0.2);
-
+        0px 0px 0px 2px #fff,
+        0px 0px 0px 6px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 768px) {

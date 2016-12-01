@@ -377,7 +377,7 @@ var CartoDbLib = {
 
       var img_input = (data.image_url).toLowerCase();
       if (img_input != "no photo" && img_input != "no image") {
-        $('#modal-image').append('<img src=' + data.image_url + '>');
+        $('#modal-image').append('<img class="img-borders" src=' + data.image_url + '>');
       }
 
       if (data.hours_of_operation != "") {

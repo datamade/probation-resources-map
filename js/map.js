@@ -58,6 +58,7 @@ $(function() {
   var age_data = makeSelectData(ageOptions);
   var language_data = makeSelectData(languageOptions);
   var facility_type_data = makeSelectData(facilityTypeOptions);
+  var program_data = makeSelectData(programOptions);
   var insurance_data = makeSelectData(insuranceOptions);
 
   $(".data-array-age").select2({
@@ -73,6 +74,11 @@ $(function() {
   $(".data-array-type").select2({
     placeholder: "Facility type",
     data: facility_type_data
+  });
+
+  $(".data-array-program").select2({
+    placeholder: "Programs",
+    data: program_data
   });
 
   $(".data-array-insurance").select2({

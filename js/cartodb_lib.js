@@ -1,6 +1,7 @@
 var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
 var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 var CartoDbLib = CartoDbLib || {};
@@ -23,7 +24,8 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
+  // fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
+  fields : ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
     //reset filters
@@ -32,6 +34,7 @@ var CartoDbLib = {
     $("#select-age").val(CartoDbLib.convertToPlainString($.address.parameter('age')));
     $("#select-language").val(CartoDbLib.convertToPlainString($.address.parameter('lang')));
     $("#select-type").val(CartoDbLib.convertToPlainString($.address.parameter('type')));
+    $("#select-type").val(CartoDbLib.convertToPlainString($.address.parameter('program')));
     $("#select-insurance").val(CartoDbLib.convertToPlainString($.address.parameter('insure')));
 
     var num = $.address.parameter('modal_id');
@@ -137,6 +140,7 @@ var CartoDbLib = {
           $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
           $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
           $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+          $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
           $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
 
           CartoDbLib.setZoom();
@@ -159,6 +163,7 @@ var CartoDbLib = {
       $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
       $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
       $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+      $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
       $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
 
       CartoDbLib.renderMap();
@@ -226,6 +231,9 @@ var CartoDbLib = {
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
         var obj_array = listData.rows;
+        console.log("wheee!")
+        console.log(obj_array[0].organization_name)
+
         if (listData.rows.length == 0) {
           results.append("<p class='no-results'>No results. Please broaden your search.</p>");
         }
@@ -307,6 +315,7 @@ var CartoDbLib = {
   },
 
   deleteBlankResults: function(array) {
+    console.log(array)
     var counter = 0;
     // Count number of instances of whitespace.
     $.each(array, function (index, value) {
@@ -474,9 +483,16 @@ var CartoDbLib = {
   },
 
   removeUnderscore: function(text) {
-    // Find ASL. Capitalize first three letters.
-    if (text.match(/^asl/)) {
-      var capitalText = "ASL or assistance for hearing impaired"
+    // Format text with acronyms.
+    var lookup = {
+      "asl_or_assistance_for_hearing_impaired": "ASL or assistance for hearing impaired",
+      "dui_drunk_driving_treatment": "DUI/Drunk driving treatment",
+      "mental_illness_and_substance_abuse_misa_or_dual_diagnosis": "Mental illness and substance abuse (MISA)",
+      "community_meetings_aa_na": "Community meetings (AA/NA)",
+      "recovery_home_halfway_house": "Recovery home/Halfway house"
+    }
+    if (text in lookup) {
+      var capitalText = lookup[text]
     }
     else {
       var capitalText = text.charAt(0).toUpperCase() + text.slice(1);
@@ -521,6 +537,9 @@ var CartoDbLib = {
     var ageUserSelections = ($("#select-age").select2('data'))
     var langUserSelections = ($("#select-language").select2('data'))
     var typeUserSelections = ($("#select-type").select2('data'))
+    var programUserSelections = ($("#select-program").select2('data'))
+    console.log("Heree!!")
+    console.log(programUserSelections);
     var insuranceUserSelections = ($("#select-insurance").select2('data'))
 
     // Set results equal to varaible – to be used when creating cookies.
@@ -532,6 +551,9 @@ var CartoDbLib = {
 
     var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
     CartoDbLib.typeSelections = facilityTypeResults;
+
+    var programResults = CartoDbLib.userSelectSQL(programUserSelections);
+    CartoDbLib.programSelections = programResults;
 
     var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
     CartoDbLib.insuranceSelections = insuranceResults;
@@ -654,16 +676,19 @@ var CartoDbLib = {
         $("#search-address").val(obj.address);
         $("#search-radius").val(obj.radius);
 
-        var ageArr = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
+        var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");
 
-        var langArr = CartoDbLib.makeSelectionArray(obj.language, languageOptions);
+        var langArr    = CartoDbLib.makeSelectionArray(obj.language, languageOptions);
         $('#select-language').val(langArr).trigger("change");
 
-        var typeArr = CartoDbLib.makeSelectionArray(obj.type, facilityTypeOptions);
+        var typeArr    = CartoDbLib.makeSelectionArray(obj.type, facilityTypeOptions);
         $('#select-type').val(typeArr).trigger("change");
 
-        var insureArr = CartoDbLib.makeSelectionArray(obj.insurance, insuranceOptions);
+        var programArr = CartoDbLib.makeSelectionArray(obj.program, programOptions);
+        $('#select-program').val(typeArr).trigger("change");
+
+        var insureArr  = CartoDbLib.makeSelectionArray(obj.insurance, insuranceOptions);
         $('#select-insurance').val(insureArr).trigger("change");
       }
     });

@@ -342,6 +342,8 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
+      console.log(data)
+
       var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p id='modal-phone'><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
       var url = ''
@@ -369,7 +371,7 @@ var CartoDbLib = {
       }
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
+      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
@@ -387,7 +389,9 @@ var CartoDbLib = {
       var insurance_count = 0
       var language_count = 0
       var age_count = 0
+      var program_count = 0
       var type_count = 0
+      var program_list = ''
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
@@ -410,6 +414,10 @@ var CartoDbLib = {
               age_count += 1;
             }
           }
+          if ($.inArray(String(prop), programOptions) > -1) {
+            program_list += CartoDbLib.removeUnderscore(prop) + ", "
+            program_count += 1;
+          }
           if ($.inArray(String(prop), facilityTypeOptions) > -1) {
             $("#type-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             type_count += 1;
@@ -425,6 +433,9 @@ var CartoDbLib = {
       }
       if (insurance_count > 0) {
         $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');
+      }
+      if (program_count > 0) {
+        $("#modal-programs").append('<p><strong> Programs offered:</strong> ' + program_list.slice(0, -2) + "</p>");
       }
       if (language_count > 0) {
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');

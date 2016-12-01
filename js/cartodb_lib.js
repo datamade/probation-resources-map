@@ -1,6 +1,7 @@
 var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
 var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 var CartoDbLib = CartoDbLib || {};
@@ -23,7 +24,8 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
+  // fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
+  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
     //reset filters
@@ -32,6 +34,7 @@ var CartoDbLib = {
     $("#select-age").val(CartoDbLib.convertToPlainString($.address.parameter('age')));
     $("#select-language").val(CartoDbLib.convertToPlainString($.address.parameter('lang')));
     $("#select-type").val(CartoDbLib.convertToPlainString($.address.parameter('type')));
+    $("#select-type").val(CartoDbLib.convertToPlainString($.address.parameter('program')));
     $("#select-insurance").val(CartoDbLib.convertToPlainString($.address.parameter('insure')));
 
     var num = $.address.parameter('modal_id');
@@ -137,6 +140,7 @@ var CartoDbLib = {
           $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
           $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
           $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+          $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
           $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
 
           CartoDbLib.setZoom();
@@ -159,6 +163,7 @@ var CartoDbLib = {
       $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
       $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
       $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+      $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
       $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
 
       CartoDbLib.renderMap();
@@ -180,6 +185,9 @@ var CartoDbLib = {
           }
         ]
       }
+
+      console.log("printing the sql")
+      console.log("SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
 
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
@@ -223,9 +231,13 @@ var CartoDbLib = {
 
     results.empty();
 
+    console.log("printing list sql")
+    console.log("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
+
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
         var obj_array = listData.rows;
+
         if (listData.rows.length == 0) {
           results.append("<p class='no-results'>No results. Please broaden your search.</p>");
         }
@@ -330,6 +342,8 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
+      console.log(data)
+
       var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p id='modal-phone'><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
       var url = ''
@@ -357,7 +371,7 @@ var CartoDbLib = {
       }
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
+      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
@@ -375,7 +389,9 @@ var CartoDbLib = {
       var insurance_count = 0
       var language_count = 0
       var age_count = 0
+      var program_count = 0
       var type_count = 0
+      var program_list = ''
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
@@ -398,6 +414,10 @@ var CartoDbLib = {
               age_count += 1;
             }
           }
+          if ($.inArray(String(prop), programOptions) > -1) {
+            program_list += CartoDbLib.removeUnderscore(prop) + ", "
+            program_count += 1;
+          }
           if ($.inArray(String(prop), facilityTypeOptions) > -1) {
             $("#type-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
             type_count += 1;
@@ -413,6 +433,9 @@ var CartoDbLib = {
       }
       if (insurance_count > 0) {
         $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');
+      }
+      if (program_count > 0) {
+        $("#modal-programs").append('<p><strong> Programs offered:</strong> ' + program_list.slice(0, -2) + "</p>");
       }
       if (language_count > 0) {
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
@@ -474,9 +497,16 @@ var CartoDbLib = {
   },
 
   removeUnderscore: function(text) {
-    // Find ASL. Capitalize first three letters.
-    if (text.match(/^asl/)) {
-      var capitalText = "ASL or assistance for hearing impaired"
+    // Format text with acronyms.
+    var lookup = {
+      "asl_or_assistance_for_hearing_impaired": "ASL or assistance for hearing impaired",
+      "dui_drunk_driving_treatment": "DUI Drunk driving treatment",
+      "mental_illness_and_substance_abuse_misa_or_dual_diagnosis": "Mental illness and substance abuse (MISA)",
+      "community_meetings_aa_na": "Community meetings (AA/NA)",
+      "recovery_home_halfway_house": "Recovery home/Halfway house"
+    }
+    if (text in lookup) {
+      var capitalText = lookup[text]
     }
     else {
       var capitalText = text.charAt(0).toUpperCase() + text.slice(1);
@@ -486,9 +516,15 @@ var CartoDbLib = {
   },
 
   addUnderscore: function(text) {
-    newText = text.replace(/\s/g, '_')
+    newText = text.replace(/\s/g, '_').replace(/[\/]/g, '_')
     if (newText[0].match(/^[1-9]\d*/)) {
       newText = "_" + newText
+    }
+    if (newText.includes("MISA")) {
+      newText = "mental_illness_and_substance_abuse_misa_or_dual_diagnosis"
+    }
+    if (newText.includes("Community_meetings")) {
+      newText = "community_meetings_aa_na"
     }
     return newText.toLowerCase();
   },
@@ -521,6 +557,9 @@ var CartoDbLib = {
     var ageUserSelections = ($("#select-age").select2('data'))
     var langUserSelections = ($("#select-language").select2('data'))
     var typeUserSelections = ($("#select-type").select2('data'))
+    var programUserSelections = ($("#select-program").select2('data'))
+    console.log("Heree!!")
+    console.log(programUserSelections);
     var insuranceUserSelections = ($("#select-insurance").select2('data'))
 
     // Set results equal to varaible – to be used when creating cookies.
@@ -532,6 +571,9 @@ var CartoDbLib = {
 
     var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
     CartoDbLib.typeSelections = facilityTypeResults;
+
+    var programResults = CartoDbLib.userSelectSQL(programUserSelections);
+    CartoDbLib.programSelections = programResults;
 
     var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
     CartoDbLib.insuranceSelections = insuranceResults;
@@ -654,16 +696,19 @@ var CartoDbLib = {
         $("#search-address").val(obj.address);
         $("#search-radius").val(obj.radius);
 
-        var ageArr = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
+        var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");
 
-        var langArr = CartoDbLib.makeSelectionArray(obj.language, languageOptions);
+        var langArr    = CartoDbLib.makeSelectionArray(obj.language, languageOptions);
         $('#select-language').val(langArr).trigger("change");
 
-        var typeArr = CartoDbLib.makeSelectionArray(obj.type, facilityTypeOptions);
+        var typeArr    = CartoDbLib.makeSelectionArray(obj.type, facilityTypeOptions);
         $('#select-type').val(typeArr).trigger("change");
 
-        var insureArr = CartoDbLib.makeSelectionArray(obj.insurance, insuranceOptions);
+        var programArr = CartoDbLib.makeSelectionArray(obj.program, programOptions);
+        $('#select-program').val(typeArr).trigger("change");
+
+        var insureArr  = CartoDbLib.makeSelectionArray(obj.insurance, insuranceOptions);
         $('#select-insurance').val(insureArr).trigger("change");
       }
     });

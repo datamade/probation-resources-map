@@ -34,8 +34,13 @@ layout: default
       </div>
 
       <div class="input-group select2-bootstrap-prepend m-top-sm">
-        <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></i></span>
+        <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
         <select class="data-array-type form-control" id="select-type" multiple="multiple"></select>
+      </div>
+
+      <div class="input-group select2-bootstrap-prepend m-top-sm">
+        <span class="input-group-addon"><i class="fa fa-heart" aria-hidden="true"></i></span>
+        <select class="data-array-program form-control" id="select-program" multiple="multiple"></select>
       </div>
 
       <div class="input-group select2-bootstrap-prepend m-top-sm m-bottom-sm">
@@ -85,27 +90,38 @@ layout: default
       <div class="modal-body">
         <div class="container-fluid bd-example-row">
           <div class="row">
-            <div class="col-md-8" id="modal-main"></div>
-            <div class="col-md-4" id="modal-image"></div>
+            <div class="col-md-8 get-sm">
+              <div id="modal-main"></div>
+            </div>
+            <div class="col-md-4 hidden-xs hidden-s img-borders" id="modal-image"></div>
           </div>
           <div class="row modal-bottom">
-            <div class="col-md-3">
+            <div class="col-md-3 get-sm">
               <h4 id="age-header"></h4>
               <div id="age-subsection"></div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 get-sm">
               <h4 id="type-header"></h4>
               <div id="type-subsection"></div>
             </div>
-            <div class="col-md-3" id="insurance-section">
+            <div class="col-md-3 get-sm" id="insurance-section">
               <h4 id="insurance-header"></h4>
               <div id="insurance-subsection"></div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 get-sm">
               <h4 id="language-header"></h4>
               <div id="language-subsection"></div>
             </div>
           </div>
+
+
+          <div class="row">
+            <div class="col-md-12">
+              <div id="modal-programs"></div>
+            </div>
+          </div>
+
+
         </div>
       </div>
 

@@ -25,7 +25,7 @@ var CartoDbLib = {
   radius: '',
   resultsCount: 0,
   // fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
-  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
+  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
     //reset filters
@@ -186,6 +186,9 @@ var CartoDbLib = {
         ]
       }
 
+      console.log("printing the sql")
+      console.log("SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
+
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
@@ -227,6 +230,9 @@ var CartoDbLib = {
     }
 
     results.empty();
+
+    console.log("printing list sql")
+    console.log("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
 
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
@@ -313,7 +319,6 @@ var CartoDbLib = {
   },
 
   deleteBlankResults: function(array) {
-    console.log(array)
     var counter = 0;
     // Count number of instances of whitespace.
     $.each(array, function (index, value) {
@@ -484,7 +489,7 @@ var CartoDbLib = {
     // Format text with acronyms.
     var lookup = {
       "asl_or_assistance_for_hearing_impaired": "ASL or assistance for hearing impaired",
-      "dui_drunk_driving_treatment": "DUI/Drunk driving treatment",
+      "dui_drunk_driving_treatment": "DUI Drunk driving treatment",
       "mental_illness_and_substance_abuse_misa_or_dual_diagnosis": "Mental illness and substance abuse (MISA)",
       "community_meetings_aa_na": "Community meetings (AA/NA)",
       "recovery_home_halfway_house": "Recovery home/Halfway house"
@@ -500,9 +505,15 @@ var CartoDbLib = {
   },
 
   addUnderscore: function(text) {
-    newText = text.replace(/\s/g, '_')
+    newText = text.replace(/\s/g, '_').replace(/[\/]/g, '_')
     if (newText[0].match(/^[1-9]\d*/)) {
       newText = "_" + newText
+    }
+    if (newText.includes("MISA")) {
+      newText = "mental_illness_and_substance_abuse_misa_or_dual_diagnosis"
+    }
+    if (newText.includes("Community_meetings")) {
+      newText = "community_meetings_aa_na"
     }
     return newText.toLowerCase();
   },

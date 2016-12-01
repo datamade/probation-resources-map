@@ -25,7 +25,7 @@ var CartoDbLib = {
   radius: '',
   resultsCount: 0,
   // fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
-  fields : ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
+  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
     //reset filters
@@ -231,8 +231,6 @@ var CartoDbLib = {
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
         var obj_array = listData.rows;
-        console.log("wheee!")
-        console.log(obj_array[0].organization_name)
 
         if (listData.rows.length == 0) {
           results.append("<p class='no-results'>No results. Please broaden your search.</p>");

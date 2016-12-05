@@ -363,7 +363,7 @@ var CartoDbLib = {
       }
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
+      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
@@ -378,60 +378,57 @@ var CartoDbLib = {
 
       $('#modal-main').append(website);
 
-      var insurance_count = 0
-      var language_count = 0
-      var age_count = 0
-      var program_count = 0
-      var type_count = 0
+      var age_list = ''
+      var type_list = ''
+      var insurance_list = ''
+      var language_list = 'English,&nbsp;&nbsp;'
       var program_list = ''
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
         if (String(value).toLowerCase().match(/yes/) != null) {
-          if ($.inArray(String(prop), insuranceOptions) > -1) {
-            $("#insurance-subsection").append("<p class='modal-p'>" + CartoDbLib.formatText(prop) + "</p>");
-            insurance_count += 1;
-          }
-          if ($.inArray(String(prop), languageOptions) > -1) {
-            $("#language-subsection").append("<p class='modal-p'>" + CartoDbLib.formatText(prop) + "</p>");
-            language_count += 1;
-          }
           if ($.inArray(String(prop), ageOptions) > -1) {
             if (prop == "under_18") {
-              $("#age-subsection").prepend("<p class='modal-p'>" + CartoDbLib.formatText(prop) + "</p>");
-              age_count += 1;
+              age_list = CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;" + age_list
             }
             else {
-              $("#age-subsection").append("<p class='modal-p'>" + CartoDbLib.formatText(prop) + "</p>");
-              age_count += 1;
+              age_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
             }
           }
-          if ($.inArray(String(prop), programOptions) > -1) {
-            program_list += CartoDbLib.formatText(prop) + ", "
-            program_count += 1;
-          }
           if ($.inArray(String(prop), facilityTypeOptions) > -1) {
-            $("#type-subsection").append("<p class='modal-p'>" + CartoDbLib.formatText(prop) + "</p>");
-            type_count += 1;
+              type_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+          }
+          if ($.inArray(String(prop), insuranceOptions) > -1) {
+              insurance_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+          }
+          if ($.inArray(String(prop), languageOptions) > -1) {
+              language_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+          }
+          if ($.inArray(String(prop), programOptions) > -1) {
+              program_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
           }
         }
       }
       // Add headers or not.
-      if (age_count > 0) {
-        $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups')
+      if (age_list != '') {
+        $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups');
+        $("#age-subsection").append("<p>" + age_list.slice(0, -13) + "</p>");
       }
-      if (type_count > 0) {
-        $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type')
+      if (type_list != '') {
+        $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type');
+        $("#type-subsection").append("<p>" + type_list.slice(0, -13) + "</p>");
       }
-      if (insurance_count > 0) {
+      if (insurance_list != '') {
         $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');
+        $("#insurance-subsection").append("<p>" + insurance_list.slice(0, -13) + "</p>")
       }
-      if (program_count > 0) {
-        $("#modal-programs").append('<p><strong> Programs offered:</strong> ' + program_list.slice(0, -2) + "</p>");
+      if (program_list != '') {
+        $("#programs-header").append('<i class="fa fa-heart" aria-hidden="true"></i> Programs');
+        $("#modal-programs").append('<p>' + program_list.slice(0, -13) + "</p>");
       }
-      if (language_count > 0) {
+      if (language_list != '') {
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
-        $("#language-subsection").prepend("<p class='modal-p'>English</p>");
+        $("#language-subsection").append("<p>" + language_list.slice(0, -13) + "</p>")
       }
 
       $.address.parameter('modal_id', data.id);

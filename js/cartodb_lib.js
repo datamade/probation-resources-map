@@ -636,6 +636,7 @@ var CartoDbLib = {
       "language": CartoDbLib.langSelections,
       "type": CartoDbLib.typeSelections,
       "insurance": CartoDbLib.insuranceSelections,
+      "program": CartoDbLib.programSelections,
       "path": path
     }
 
@@ -672,6 +673,10 @@ var CartoDbLib = {
             var result = obj.type.slice(0, -2);
             text += result + ' + ';
           }
+          if (obj.program) {
+            var result = obj.program.slice(0, -2);
+            text += result + ' + ';
+          }
           if (obj.insurance) {
             var result = obj.insurance.slice(0, -2);
             text += result + ' + ';
@@ -702,7 +707,7 @@ var CartoDbLib = {
         $('#select-type').val(typeArr).trigger("change");
 
         var programArr = CartoDbLib.makeSelectionArray(obj.program, programOptions);
-        $('#select-program').val(typeArr).trigger("change");
+        $('#select-program').val(programArr).trigger("change");
 
         var insureArr  = CartoDbLib.makeSelectionArray(obj.insurance, insuranceOptions);
         $('#select-insurance').val(insureArr).trigger("change");

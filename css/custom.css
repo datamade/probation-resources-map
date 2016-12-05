@@ -249,7 +249,10 @@ img {
   line-height: 1;
 }
 
-.modal-bottom { margin-top: 2em; }
+.modal-bottom {
+  border-top: 1px solid #CECECE;
+  margin-top: 2em;
+}
 
 .modal-body-bottom { border-top: 1px solid #F0F0F0; }
 
@@ -292,10 +295,6 @@ iframe {
 }
 
 div#modal-image { padding: 0; }
-
-div#modal-programs {
-  margin-top: 1.4em;
-}
 
 .img-borders {
     box-shadow:

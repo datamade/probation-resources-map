@@ -2,7 +2,7 @@ var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
 var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
 var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
-var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
+var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid", "medicaid_family_health_network", "medicaid_meridian", "medicaid_illinicare_cenpatico", "medicaid_humana_managed_care_plan", "medicaid_harmony_beacon_health_strategies", "medicaid_countycare", "medicaid_community_care_alliance_of_illinois", "medicaid_cigna_healthspring", "medicaid_blue_cross_blue_shield", "medicaid_aetna"];
 
 var CartoDbLib = CartoDbLib || {};
 var CartoDbLib = {
@@ -75,7 +75,7 @@ var CartoDbLib = {
         if (props) {
           $.each(props, function (prop, value) {
             if ($.inArray(String(prop), facilityTypeOptions) > -1 && value == 'Yes') {
-              facilityType += (CartoDbLib.removeUnderscore(prop) + ", ")
+              facilityType += (CartoDbLib.formatText(prop) + ", ")
             }
           });
           facilityType = facilityType.slice(0, -2);
@@ -186,9 +186,6 @@ var CartoDbLib = {
         ]
       }
 
-      console.log("printing the sql")
-      console.log("SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
-
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
@@ -230,9 +227,6 @@ var CartoDbLib = {
     }
 
     results.empty();
-
-    console.log("printing list sql")
-    console.log("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
 
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
@@ -342,8 +336,6 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
-      console.log(data)
-
       var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p id='modal-phone'><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
       var url = ''
@@ -371,7 +363,7 @@ var CartoDbLib = {
       }
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
+      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
@@ -386,60 +378,57 @@ var CartoDbLib = {
 
       $('#modal-main').append(website);
 
-      var insurance_count = 0
-      var language_count = 0
-      var age_count = 0
-      var program_count = 0
-      var type_count = 0
+      var age_list = ''
+      var type_list = ''
+      var insurance_list = ''
+      var language_list = 'English,&nbsp;&nbsp;'
       var program_list = ''
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
         if (String(value).toLowerCase().match(/yes/) != null) {
-          if ($.inArray(String(prop), insuranceOptions) > -1) {
-            $("#insurance-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
-            insurance_count += 1;
-          }
-          if ($.inArray(String(prop), languageOptions) > -1) {
-            $("#language-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
-            language_count += 1;
-          }
           if ($.inArray(String(prop), ageOptions) > -1) {
             if (prop == "under_18") {
-              $("#age-subsection").prepend("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
-              age_count += 1;
+              age_list = CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;" + age_list
             }
             else {
-              $("#age-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
-              age_count += 1;
+              age_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
             }
           }
-          if ($.inArray(String(prop), programOptions) > -1) {
-            program_list += CartoDbLib.removeUnderscore(prop) + ", "
-            program_count += 1;
-          }
           if ($.inArray(String(prop), facilityTypeOptions) > -1) {
-            $("#type-subsection").append("<p class='modal-p'>" + CartoDbLib.removeUnderscore(prop) + "</p>");
-            type_count += 1;
+              type_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+          }
+          if ($.inArray(String(prop), insuranceOptions) > -1) {
+              insurance_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+          }
+          if ($.inArray(String(prop), languageOptions) > -1) {
+              language_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+          }
+          if ($.inArray(String(prop), programOptions) > -1) {
+              program_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
           }
         }
       }
       // Add headers or not.
-      if (age_count > 0) {
-        $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups')
+      if (age_list != '') {
+        $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups');
+        $("#age-subsection").append("<p>" + age_list.slice(0, -13) + "</p>");
       }
-      if (type_count > 0) {
-        $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type')
+      if (type_list != '') {
+        $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type');
+        $("#type-subsection").append("<p>" + type_list.slice(0, -13) + "</p>");
       }
-      if (insurance_count > 0) {
+      if (insurance_list != '') {
         $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');
+        $("#insurance-subsection").append("<p>" + insurance_list.slice(0, -13) + "</p>")
       }
-      if (program_count > 0) {
-        $("#modal-programs").append('<p><strong> Programs offered:</strong> ' + program_list.slice(0, -2) + "</p>");
+      if (program_list != '') {
+        $("#programs-header").append('<i class="fa fa-heart" aria-hidden="true"></i> Programs');
+        $("#modal-programs").append('<p>' + program_list.slice(0, -13) + "</p>");
       }
-      if (language_count > 0) {
+      if (language_list != '') {
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
-        $("#language-subsection").prepend("<p class='modal-p'>English</p>");
+        $("#language-subsection").append("<p>" + language_list.slice(0, -13) + "</p>")
       }
 
       $.address.parameter('modal_id', data.id);
@@ -496,7 +485,12 @@ var CartoDbLib = {
     return decodeURIComponent(text);
   },
 
-  removeUnderscore: function(text) {
+  // Use this function to capitalize the insurance brand names
+  capitalizeBrand: function(text) {
+    return text.replace(/(?:^|\s|\_)\S/g, function(a) { return a.toUpperCase(); });
+  },
+
+  formatText: function(text) {
     // Format text with acronyms.
     var lookup = {
       "asl_or_assistance_for_hearing_impaired": "ASL or assistance for hearing impaired",
@@ -508,6 +502,10 @@ var CartoDbLib = {
     if (text in lookup) {
       var capitalText = lookup[text]
     }
+    else if (text.includes("medicaid_" )) {
+      brandName = CartoDbLib.capitalizeBrand(text);
+      var capitalText = brandName.replace('Medicaid_', 'Medicaid: ');
+    }
     else {
       var capitalText = text.charAt(0).toUpperCase() + text.slice(1);
     }
@@ -516,7 +514,7 @@ var CartoDbLib = {
   },
 
   addUnderscore: function(text) {
-    newText = text.replace(/\s/g, '_').replace(/[\/]/g, '_')
+    newText = text.replace(/\s/g, '_').replace(/[\/]/g, '_').replace(/[\:]/g, '')
     if (newText[0].match(/^[1-9]\d*/)) {
       newText = "_" + newText
     }
@@ -558,8 +556,6 @@ var CartoDbLib = {
     var langUserSelections = ($("#select-language").select2('data'))
     var typeUserSelections = ($("#select-type").select2('data'))
     var programUserSelections = ($("#select-program").select2('data'))
-    console.log("Heree!!")
-    console.log(programUserSelections);
     var insuranceUserSelections = ($("#select-insurance").select2('data'))
 
     // Set results equal to varaible – to be used when creating cookies.
@@ -872,7 +868,6 @@ var CartoDbLib = {
             var objArray = listData.rows;
             $.each(objArray, function( index, obj ) {
               if (obj.id == thisId ) {
-                console.log(obj)
                 CartoDbLib.modalPop(obj)
               }
             });

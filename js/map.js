@@ -143,7 +143,20 @@ $(function() {
     window.print();
   });
 
+  $(".btn-print-modal").on("click", function() {
+    printModal();
+  });
+
 });
+
+function printModal() {
+   var modalContents = document.getElementById('modal-pop').innerHTML;
+   var originalContents = document.body.innerHTML;
+
+   document.body.innerHTML = modalContents;
+   window.print();
+   document.body.innerHTML = originalContents;
+};
 
 function makeSelectData(array) {
   data_arr = []

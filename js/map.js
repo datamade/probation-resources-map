@@ -10,6 +10,7 @@ $(function() {
   new Clipboard('#copy-button');
 
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
+  var modalURL;
 
   $('#btnReset').tooltip();
   $('#btnViewMode').tooltip();
@@ -144,19 +145,10 @@ $(function() {
   });
 
   $(".btn-print-modal").on("click", function() {
-    printModal();
+      $("#printModal").printThis();
   });
 
 });
-
-function printModal() {
-   var modalContents = document.getElementById('modal-pop').innerHTML;
-   var originalContents = document.body.innerHTML;
-
-   document.body.innerHTML = modalContents;
-   window.print();
-   document.body.innerHTML = originalContents;
-};
 
 function makeSelectData(array) {
   data_arr = []

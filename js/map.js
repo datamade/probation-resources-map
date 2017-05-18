@@ -145,7 +145,7 @@ $(function() {
   });
 
   $(".btn-print-modal").on("click", function() {
-      $("#printModal").printThis();
+      $("#printModal, #break_page").printThis();
   });
 
 });

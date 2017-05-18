@@ -2,7 +2,7 @@ var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
 var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
 var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
-var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid", "medicaid_family_health_network", "medicaid_meridian", "medicaid_illinicare_cenpatico", "medicaid_humana_managed_care_plan", "medicaid_harmony_beacon_health_strategies", "medicaid_countycare", "medicaid_community_care_alliance_of_illinois", "medicaid_cigna_healthspring", "medicaid_blue_cross_blue_shield", "medicaid_aetna"];
+var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 var CartoDbLib = CartoDbLib || {};
 var CartoDbLib = {
@@ -226,7 +226,6 @@ var CartoDbLib = {
     }
 
     results.empty();
-
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
         var obj_array = listData.rows;

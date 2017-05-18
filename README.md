@@ -27,6 +27,12 @@ Built in collaboration with the Cook County Adult Probation Department (CCAPD), 
 * [jQuery Address](http://www.asual.com/jquery/address)
 * [Bootstrap](http://getbootstrap.com)
 
+## Data
+
+The data for this tool resides in a Google spreadsheet and its corresponding Carto table.
+
+Most of the data has been (and continues to be) manually entered by people associated with CCAPD, CCJPD, the Shriver Center, the Appleseed Fund, and the HMPR Group. One data piece can be automated: the discovery of latitude and longitude for facility addresses. We use [Google Sheets Geocoder](https://github.com/jackdougherty/google-sheets-geocoder) - specifically, [geocoder-census-google.gs](https://raw.githubusercontent.com/JackDougherty/google-sheets-geocoder/master/geocoder-census-google.gs) - a library that converts addresses into lat-long coordinates.
+
 ## Run Tests
 
 This site includes a basic test suite built with Rspec and Capybara, which drive the browser to perform acceptance tests.

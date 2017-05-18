@@ -60,10 +60,8 @@ $(function() {
   var language_data = makeSelectData(languageOptions);
   var facility_type_data = makeSelectData(facilityTypeOptions);
   var program_data = makeSelectData(programOptions);
-  // var insurance_data = makeSelectData(insuranceOptions);
-  var insurance_data = makeSelectDataGroups(insuranceOptions);
-  // var thiss = makeSelectDataGroups(insuranceOptions);
-  // console.log(thiss)
+  var insurance_data = makeSelectData(insuranceOptions);
+  // var insurance_data = makeSelectDataGroups(insuranceOptions);
 
   $(".data-array-age").select2({
     placeholder: "Age group",
@@ -159,27 +157,7 @@ function makeSelectData(array) {
   return data_arr
 };
 
-function makeSelectDataGroups(insuranceArray) {
 
-  data_arr_generic = []
-  data_arr_specific = []
-  for(var i = 0; i < insuranceArray.length; i++) {
-    if (insuranceArray[i].includes('medicaid_')) {
-      data_arr_specific.push({ id: i, text: CartoDbLib.formatText(insuranceArray[i]) })
-    }
-    else {
-      data_arr_generic.push({ id: i, text: CartoDbLib.formatText(insuranceArray[i]) })
-    }
-  }
-
-   return [
-      {text: "Insurance type",
-      children: data_arr_generic},
-      {text: "Specific plans (Medicaid only)",
-      children: data_arr_specific},
-    ]
-
-};
 
 
 

@@ -10,6 +10,7 @@ $(function() {
   new Clipboard('#copy-button');
 
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
+  var modalURL;
 
   $('#btnReset').tooltip();
   $('#btnViewMode').tooltip();
@@ -141,6 +142,10 @@ $(function() {
 
   $(".btn-print").on("click", function() {
     window.print();
+  });
+
+  $(".btn-print-modal").on("click", function() {
+      $("#printModal, #break_page").printThis();
   });
 
 });

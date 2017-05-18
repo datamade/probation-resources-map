@@ -24,8 +24,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  // fields: "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, under_18, _18_to_24, _25_to_64, over_65, spanish, asl_or_assistance_for_hearing_impaired, housing, health, legal, education_and_employment, social_support, food_and_clothing, sliding_fee_scale, private_health_insurance, military_insurance, medicare, medicaid, image_url",
-  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
+  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, religious_affiliation, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
     //reset filters
@@ -363,13 +362,18 @@ var CartoDbLib = {
       }
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection').empty();
+      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection, #religion-subsection, #religion-header').empty();
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
       var img_input = (data.image_url).toLowerCase();
+
       if (img_input != "no photo" && img_input != "no image") {
-        $('#modal-image').append('<img class="img-borders" src=' + data.image_url + '>');
+          $('#modal-image').append('<img class="img-borders" src=' + data.image_url + '>');
+          loaded_image = $('img.img-borders')
+          loaded_image.on('error', function() {
+            loaded_image.hide();
+          });
       }
 
       if (data.hours_of_operation != "") {
@@ -409,6 +413,7 @@ var CartoDbLib = {
           }
         }
       }
+
       // Add headers or not.
       if (age_list != '') {
         $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups');
@@ -429,6 +434,14 @@ var CartoDbLib = {
       if (language_list != '') {
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
         $("#language-subsection").append("<p>" + language_list.slice(0, -13) + "</p>")
+      }
+      if (data.religious_affiliation == '') {
+        $("#religion-header").append('<i class="fa fa-sun-o" aria-hidden="true"></i> Religious affiliation');
+        $('#religion-subsection').append('<p>This facility has no known religious affiliation.</p>')
+      }
+      else {
+        $("#religion-header").append('<i class="fa fa-sun-o" aria-hidden="true"></i> Religious affiliation');
+        $('#religion-subsection').append('<p>' + data.religious_affiliation + '</p>')
       }
 
       $.address.parameter('modal_id', data.id);
@@ -921,6 +934,18 @@ var CartoDbLib = {
     while(word.charAt(0) === ' ')
         word = word.substr(1);
     return word;
-  }
+  },
+
+  urlExists: function(url, cb){
+    jQuery.ajax({
+        url:      url,
+        dataType: 'text',
+        type:     'GET',
+        complete:  function(xhr){
+            if(typeof cb === 'function')
+               cb.apply(this, [xhr.status]);
+        }
+    });
+  },
 
 }

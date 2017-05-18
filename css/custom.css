@@ -290,8 +290,10 @@ iframe {
   height: 172em;
 }
 
-.no-wrap {
-  white-space: nowrap;
+.no-wrap { white-space: nowrap; }
+
+button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
+  outline:0;
 }
 
 div#modal-image { padding: 0; }

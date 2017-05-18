@@ -1,79 +1,98 @@
-<div class="modal fade bd-example-modal-lg" id="modal-pop" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times-circle" aria-hidden="true"></i></span></button>
-        <h4 class="modal-title" id="modal-title"></h4>
-      </div>
+  <div class="modal fade bd-example-modal-lg" id="modal-pop" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
 
-      <div class="modal-body">
-        <div class="container-fluid bd-example-row">
-          <div class="row">
-            <div class="col-md-8 get-sm">
-              <div id="modal-main"></div>
-            </div>
-            <div class="col-md-4 hidden-xs hidden-s" id="modal-image"></div>
+        <div id="printModal">
+
+          <div class="modal-header">
+            <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times-circle" aria-hidden="true"></i></span></button>
+            <h4 class="modal-title" id="modal-title"></h4>
           </div>
 
-          <div class="row modal-bottom">
-            <div class="col-md-12">
-
+          <div class="modal-body">
+            <div class="container-fluid bd-example-row">
               <div class="row">
-                <div class="col-md-12 get-sm">
-                  <h4 id="age-header"></h4>
-                  <div id="age-subsection"></div>
+                <div class="col-md-8 get-sm">
+                  <div id="modal-main"></div>
                 </div>
+                <div class="col-md-4 hidden-xs hidden-s" id="modal-image"></div>
               </div>
 
-              <div class="row">
-                <div class="col-md-12 get-sm">
-                  <h4 id="language-header"></h4>
-                  <div id="language-subsection"></div>
-                </div>
-              </div>
-
-              <div class="row">
+              <div class="row modal-bottom">
                 <div class="col-md-12">
-                  <h4 id="programs-header"></h4>
-                  <div id="modal-programs"></div>
+
+                  <div class="row">
+                    <div class="col-md-12 get-sm">
+                      <h4 id="age-header"></h4>
+                      <div id="age-subsection"></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 get-sm">
+                      <h4 id="language-header"></h4>
+                      <div id="language-subsection"></div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-md-12 get-sm">
+                      <h4 id="programs-header"></h4>
+                      <div id="modal-programs"></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 get-sm">
+                      <h4 id="type-header"></h4>
+                      <div id="type-subsection"></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 get-sm" id="insurance-section">
+                      <h4 id="insurance-header"></h4>
+                      <div id="insurance-subsection"></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 get-sm">
+                      <h4 id="religion-header"></h4>
+                      <div id="religion-subsection"></div>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <div class="row">
+                    <div class="col-md-12"><strong>See an error? Please send data corrections to <a href="mailto:reginafcompton@datamade.us">reginafcompton@datamade.us</a>.</strong></div>
+                  </div>
+
                 </div>
               </div>
-
-              <div class="row">
-                <div class="col-md-12 get-sm">
-                  <h4 id="type-header"></h4>
-                  <div id="type-subsection"></div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 get-sm" id="insurance-section">
-                  <h4 id="insurance-header"></h4>
-                  <div id="insurance-subsection"></div>
-                </div>
-              </div>
-
-
             </div>
           </div>
 
-
-
         </div>
-      </div>
 
-      <div class="modal-body modal-body-bottom">
-        <div class="container-fluid bd-example-row">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="input-group">
-                <button type="button" class="btn btn-change" id="copy-button" data-clipboard-target="#post-shortlink" data-tooltip="true" title="Copy to clipboard"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
-                <input id="post-shortlink" type="text" class="form-control">
+        <div class="modal-body modal-body-bottom">
+          <div class="container-fluid bd-example-row">
+            <div class="row">
+              <div class="col-xs-9">
+                <div class="input-group">
+                  <button type="button" class="btn btn-save" id="copy-button" data-clipboard-target="#post-shortlink" data-tooltip="true" title="Copy to clipboard"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                  <input id="post-shortlink" type="text" class="form-control">
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <a href="#" class="btn-print-modal btn btn-reset pull-right"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+

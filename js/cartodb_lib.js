@@ -21,12 +21,14 @@ var CartoDbLib = {
   langSelections: '',
   typeSelections: '',
   insuranceSelections: '',
+  lgbtqSelection: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
   fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, religious_affiliation, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
+
     //reset filters
     $("#search-address").val(CartoDbLib.convertToPlainString($.address.parameter('address')));
     $("#search-radius").val(CartoDbLib.convertToPlainString($.address.parameter('radius')));
@@ -141,6 +143,7 @@ var CartoDbLib = {
           $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
           $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
           $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
+          $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
 
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
@@ -164,6 +167,7 @@ var CartoDbLib = {
       $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
       $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
       $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
+      $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
 
       CartoDbLib.renderMap();
       CartoDbLib.renderList();
@@ -548,6 +552,8 @@ var CartoDbLib = {
       results += (obj.text + ", ")
     })
 
+    console.log(results)
+
     return results
   },
 
@@ -585,6 +591,12 @@ var CartoDbLib = {
 
     var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
     CartoDbLib.insuranceSelections = insuranceResults;
+
+    lgbtq_checked = $('#lgbtq').is(':checked')
+    if (lgbtq_checked == true) {
+      CartoDbLib.userSelection += " AND LOWER(specialize_with_lgbtq) LIKE '%yes%'";
+      CartoDbLib.lgbtqSelection = true;
+    }
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
 
@@ -648,6 +660,7 @@ var CartoDbLib = {
       "language": CartoDbLib.langSelections,
       "type": CartoDbLib.typeSelections,
       "insurance": CartoDbLib.insuranceSelections,
+      "lgbtq": CartoDbLib.lgbtqSelection,
       "program": CartoDbLib.programSelections,
       "path": path
     }

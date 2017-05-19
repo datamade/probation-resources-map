@@ -16,10 +16,6 @@ $(function() {
   $('#btnViewMode').tooltip();
   $('[data-tooltip="true"]').tooltip();
 
-  $(':checkbox').click(function(){
-    CartoDbLib.doSearch();
-  });
-
   $('#btnSearch').click(function(){
     // Temporary fix for map load issue: set show map as default.
     if ($('#mapCanvas').is(":visible")){

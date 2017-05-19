@@ -525,10 +525,6 @@ var CartoDbLib = {
     if (text in lookup) {
       var capitalText = lookup[text]
     }
-    else if (text.includes("medicaid_" )) {
-      brandName = CartoDbLib.capitalizeBrand(text);
-      var capitalText = brandName.replace('Medicaid_', 'Medicaid: ');
-    }
     else {
       var capitalText = text.charAt(0).toUpperCase() + text.slice(1);
     }
@@ -541,10 +537,10 @@ var CartoDbLib = {
     if (newText[0].match(/^[1-9]\d*/)) {
       newText = "_" + newText
     }
-    if (newText.includes("MISA")) {
+    if (newText.indexOf("MISA") >= 0) {
       newText = "mental_illness_and_substance_abuse_misa_or_dual_diagnosis"
     }
-    if (newText.includes("Community_meetings")) {
+    if (newText.indexOf("Community_meetings") >= 0) {
       newText = "community_meetings_aa_na"
     }
     return newText.toLowerCase();

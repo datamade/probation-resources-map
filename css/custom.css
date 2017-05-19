@@ -26,6 +26,7 @@ img {
   height: auto;
 }
 
+/* Navbar */
 .navbar {
   margin-bottom: 10px;
   border-radius: 0px;
@@ -70,9 +71,8 @@ img {
 
 @media all and (max-width: 480px) {
   .navbar-brand {
-      font-size: 26px;
-      padding-bottom: 20%;
-      line-height: 1em;
+      font-size: 20px;
+      padding-top: 22px;
   }
 }
 
@@ -86,15 +86,20 @@ img {
   padding-top: 1em;
 }
 
+.navbar-inverse .navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+.navbar-inverse .navbar-toggle .icon-bar {
+  border-color: #fff;
+}
+
 .dropdown-menu > li > a {
   display: inline;
   padding: 5px 4px;
 }
 
-#mapCanvas img {
-  max-width: none;
-}
-
+/* Filters */
 .form-control {
   height: 36px;
   padding: 6px 12px;
@@ -105,9 +110,9 @@ img {
 
 .label { margin-right: 0.5em; }
 
-.select2-container {
-   width: 94% !important;
-}
+.select2-container { width: 94% !important; }
+
+.select2-container .select2-selection--single { height: 36px; }
 
 .select2-container--default .select2-selection--multiple {
     border-bottom-left-radius: 0 !important;
@@ -119,9 +124,18 @@ img {
   margin-top: 2%;
 }
 
+input[type="checkbox"]#lgbtq { margin-top: 7px; }
+
 .m-top-sm { margin-top: 10px; }
 
 .m-bottom-sm { margin-bottom: 10px; }
+
+button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
+  outline:0;
+  color: #fff;
+}
+
+.btn:hover, .btn-sm:hover { color: #fff; }
 
 .btn {
   margin-right: 0.1%;
@@ -136,10 +150,20 @@ img {
   border-color: #FF3A41;
 }
 
+.btn-search:hover {
+  background-color: #FF474E;
+  border-color: #FF474E;
+}
+
 .btn-reset, .label {
   color: #ffffff;
   background-color: #5187BB;
   border-color: #5187BB;
+}
+
+.btn-reset:hover {
+  background-color: #6C9AC6;
+  border-color: #6C9AC6;
 }
 
 .btn-change {
@@ -148,16 +172,36 @@ img {
   border-color: #CECECE;
 }
 
+.btn-change:hover {
+  background-color: #E0E0E0;
+  border-color: #E0E0E0;
+}
+
 .btn-save {
   color: #ffffff;
   background-color: #7F7F7F;
   border-color: #7F7F7F;
 }
 
+.btn-save:hover {
+  background-color: #999999;
+  border-color: #999999;
+}
+
 .district-list { margin-bottom: 40px;}
 .district-list td{
   font-size: 0.9em;
   color: #333;
+}
+
+.warning {
+  color: #FF3A41;
+  display: none;
+}
+
+/* Map map */
+#mapCanvas img {
+  max-width: none;
 }
 
 .leaflet-google-layer{
@@ -291,10 +335,6 @@ iframe {
 }
 
 .no-wrap { white-space: nowrap; }
-
-button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
-  outline:0;
-}
 
 div#modal-image { padding: 0; }
 

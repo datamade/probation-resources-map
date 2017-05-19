@@ -38,6 +38,12 @@ var CartoDbLib = {
     $("#select-type").val(CartoDbLib.convertToPlainString($.address.parameter('program')));
     $("#select-insurance").val(CartoDbLib.convertToPlainString($.address.parameter('insure')));
 
+    if ( $.address.parameter('lgbtq') ) {
+      $("#lgbtq").prop( "checked", true );
+    } else {
+      $("#lgbtq").prop( "checked", false );
+    }
+
     var num = $.address.parameter('modal_id');
 
     if (typeof num !== 'undefined') {
@@ -173,6 +179,7 @@ var CartoDbLib = {
       CartoDbLib.renderList();
       CartoDbLib.getResults();
     }
+
   },
 
   renderMap: function() {
@@ -552,8 +559,6 @@ var CartoDbLib = {
       results += (obj.text + ", ")
     })
 
-    console.log(results)
-
     return results
   },
 
@@ -595,7 +600,9 @@ var CartoDbLib = {
     lgbtq_checked = $('#lgbtq').is(':checked')
     if (lgbtq_checked == true) {
       CartoDbLib.userSelection += " AND LOWER(specialize_with_lgbtq) LIKE '%yes%'";
-      CartoDbLib.lgbtqSelection = true;
+      CartoDbLib.lgbtqSelection = 'true';
+    } else {
+      CartoDbLib.lgbtqSelection = '';
     }
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
@@ -608,7 +615,6 @@ var CartoDbLib = {
       CartoDbLib.whereClause = " WHERE the_geom is not null ";
       CartoDbLib.whereClause += CartoDbLib.userSelection;
     }
-
   },
 
   setZoom: function() {
@@ -653,6 +659,8 @@ var CartoDbLib = {
     }
 
     var path = $.address.value();
+    var save_name = $("#saveInput").val()
+
     var parameters = {
       "address": CartoDbLib.address,
       "radius": CartoDbLib.radius,
@@ -662,7 +670,8 @@ var CartoDbLib = {
       "insurance": CartoDbLib.insuranceSelections,
       "lgbtq": CartoDbLib.lgbtqSelection,
       "program": CartoDbLib.programSelections,
-      "path": path
+      "path": path,
+      "save_name": save_name,
     }
 
     objArr.push(parameters)
@@ -675,41 +684,16 @@ var CartoDbLib = {
     $('.saved-searches').append('<li class="dropdown-header">Saved searches</li><li class="divider"></li>');
 
     var objArray = JSON.parse($.cookie("probationResources"));
+
     if (objArray == null || objArray.length == 0) {
       $('#saved-searches-nav').hide();
     }
     else {
       $('#saved-searches-nav').show();
       $.each(objArray, function( index, obj ) {
-        var text = ''
-        if (obj.address) {
-          text += obj.address;
-        }
-        else {
-          if (obj.age) {
-            var result = obj.age.slice(0, -2);
-            text += result + ' + ';
-          }
-          if (obj.language) {
-            var result = obj.language.slice(0, -2);
-            text += result + ' + ';
-          }
-          if (obj.type) {
-            var result = obj.type.slice(0, -2);
-            text += result + ' + ';
-          }
-          if (obj.program) {
-            var result = obj.program.slice(0, -2);
-            text += result + ' + ';
-          }
-          if (obj.insurance) {
-            var result = obj.insurance.slice(0, -2);
-            text += result + ' + ';
-          }
-          text = text.slice(0, -2);
-        }
+        text = obj.save_name
 
-        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + text + '<span class="hidden">' + obj.path + '</span></a></li>');
+        $('.saved-searches').append('<li><a href="#" class="remove-icon"><i class="fa fa-times"></i></a><a class="saved-search" href="#"> ' + obj.save_name + '<span class="hidden">' + obj.path + '</span></a></li>');
       });
     }
   },
@@ -721,6 +705,12 @@ var CartoDbLib = {
       if (obj.path == path ) {
         $("#search-address").val(obj.address);
         $("#search-radius").val(obj.radius);
+
+        if (obj.lgbtq != '') {
+          $("#lgbtq").prop( "checked", true );
+        } else {
+          $("#lgbtq").prop( "checked", false );
+        }
 
         var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");

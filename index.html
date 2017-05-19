@@ -5,19 +5,29 @@ layout: default
 <div class='row'>
   <div class="col-md-4">
     <p>Find resources near you for adults and juveniles on probation in Cook County.</p>
-    Address
-    <div class="form-group">
-        <input class='form-control' id='search-address' placeholder='Enter an address or an intersection' type='text'>
-    </div>
-    <div class='form-group'>
-        Within
-        <select id='search-radius' class='form-control'>
-          <option value='400'>2 blocks</option>
-          <option value='805'>1/2 mile</option>
-          <option value='1610'>1 mile</option>
-          <option value='3220'>2 miles</option>
-          <option value='8050'>5 miles</option>
-        </select>
+
+    <div class='row'>
+
+      <div class="col-md-9">
+        <div class="form-group">
+            Address
+            <input class='form-control' id='search-address' placeholder='Enter an address or an intersection' type='text'>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class='form-group'>
+            Within
+            <select id='search-radius' class='form-control'>
+              <option value='400'>2 blocks</option>
+              <option value='805'>1/2 mile</option>
+              <option value='1610'>1 mile</option>
+              <option value='3220'>2 miles</option>
+              <option value='8050'>5 miles</option>
+            </select>
+        </div>
+      </div>
+
     </div>
 
     <p><strong>Filter your search.</strong> Click on each filter to view a list of options. You can select more than one.</p>
@@ -63,8 +73,9 @@ layout: default
       <button class='btn btn-search' id="btnSearch"><i class='fa fa-search'></i> Search</button>
       <a href="/" class='btn btn-reset' id="btnReset" data-toggle="tooltip" data-placement="bottom" title="Reset"><i class="fa fa-repeat" aria-hidden="true"></i></a>
       <button class='btn btn-change' id='btnViewMode' data-toggle='tooltip' data-placement="bottom" title='Change view'><i class='fa fa-list'></i></button>
-      <button class='btn btn-save' id="btnSave"><i class='fa fa-star-o'></i> Save Search</button>
+      <button type="button" class='btn btn-save' data-toggle="modal" data-target="#saveModal"><i class='fa fa-star'></i> Save search</button>
     </div>
+
   </div>
 
   <div class='col-md-8'>
@@ -88,6 +99,8 @@ layout: default
 </div>
 
 {% include modal.html %}
+
+{% include save-search-modal.html %}
 
 <style id="probation-maps-styles">
   #probationresourcesmap_mergeddata_resources{

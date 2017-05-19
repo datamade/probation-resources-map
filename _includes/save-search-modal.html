@@ -1,0 +1,20 @@
+<!-- Modal -->
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="saveModalLabel">Save search</h4>
+      </div>
+      <div class="modal-body">
+        <p>Like these results? Give this search a name (required), and save it for later use.</p>
+        <input type="text" class="form-control" id="saveInput" placeholder="Search name..." aria-describedby="basic-addon1">
+        <p class="warning" id="saveWarning"><small>* Please enter a search name.</small></p>
+
+        <br>
+
+        <button type="button" class="btn btn-reset" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> No, not now.</button>
+        <button class='btn btn-save' id="btnSave"><i class='fa fa-star'></i> Yes, save this search!</button>
+      </div>
+    </div>
+  </div>
+</div>

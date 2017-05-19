@@ -18,6 +18,10 @@ $(function() {
     window.print();
   });
 
+  $(".btn-print-modal").on("click", function() {
+      $("#printModal").printThis();
+  });
+
 });
 
 

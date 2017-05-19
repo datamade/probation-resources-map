@@ -16,10 +16,6 @@ $(function() {
   $('#btnViewMode').tooltip();
   $('[data-tooltip="true"]').tooltip();
 
-  $(':checkbox').click(function(){
-    CartoDbLib.doSearch();
-  });
-
   $('#btnSearch').click(function(){
     // Temporary fix for map load issue: set show map as default.
     if ($('#mapCanvas').is(":visible")){
@@ -89,8 +85,13 @@ $(function() {
   });
 
   $("#btnSave").on('click', function() {
-    CartoDbLib.addCookieValues();
-    CartoDbLib.renderSavedResults();
+    if ($("#saveInput").val() != '') {
+      CartoDbLib.addCookieValues();
+      $('#saveModal').modal('toggle');
+      CartoDbLib.renderSavedResults();
+    } else {
+      $('.warning').show();
+    }
   });
 
   $("#dropdown-results").on('click', '.saved-search', function() {
@@ -143,7 +144,7 @@ $(function() {
   });
 
   $(".btn-print-modal").on("click", function() {
-      $("#printModal, #break_page").printThis();
+      $("#printModal").printThis();
   });
 
 });

@@ -1,6 +1,7 @@
 var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+// var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+var facilityTypeOptions = ["facility_type___mental_health", "facility_type___behavioral_health", "facility_type___medical_health", "facility_type___social_services"];
 var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
@@ -13,7 +14,8 @@ var CartoDbLib = {
   locationScope:   "chicago",
   currentPinpoint: null,
   layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
-  tableName: 'probationresourcesmap_mergeddata_resources',
+  // tableName: 'probationresourcesmap_mergeddata_resources',
+  tableName: 'databasecopyforbehavioralhealthmentalhealthclassification_sheet',
   userName: 'clearstreets',
   geoSearch: '',
   whereClause: '',
@@ -520,7 +522,11 @@ var CartoDbLib = {
       "dui_drunk_driving_treatment": "DUI Drunk driving treatment",
       "mental_illness_and_substance_abuse_misa_or_dual_diagnosis": "Mental illness and substance abuse (MISA)",
       "community_meetings_aa_na": "Community meetings (AA/NA)",
-      "recovery_home_halfway_house": "Recovery home/Halfway house"
+      "recovery_home_halfway_house": "Recovery home/Halfway house",
+      "facility_type___mental_health": "Mental health", 
+      "facility_type___behavioral_health": "Behavioral health", 
+      "facility_type___medical_health": "Medical health", 
+      "facility_type___social_services": "Social services"
     }
     if (text in lookup) {
       var capitalText = lookup[text]
@@ -543,6 +549,9 @@ var CartoDbLib = {
     if (newText.indexOf("Community_meetings") >= 0) {
       newText = "community_meetings_aa_na"
     }
+    if ((newText.indexOf("Mental_health") >= 0) || (newText.indexOf("Behavioral_health") >= 0) || (newText.indexOf("Medical_health") >= 0) || (newText.indexOf("Social_services") >= 0)) {
+      newText = "facility_type___" + newText
+    }
     return newText.toLowerCase();
   },
 
@@ -551,10 +560,11 @@ var CartoDbLib = {
     var results = '';
 
     $.each( array, function(index, obj) {
-      CartoDbLib.userSelection += " AND LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE '%yes%'"
+      CartoDbLib.userSelection += " AND (LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE '%yes%' or LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") = 'true')"
       results += (obj.text + ", ")
     })
 
+    console.log(CartoDbLib.userSelection)
     return results
   },
 

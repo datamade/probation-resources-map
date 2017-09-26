@@ -1,6 +1,5 @@
 var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-// var facilityTypeOptions = ["housing", "health", "legal", "education_and_employment", "social_support", "food_and_clothing"];
 var facilityTypeOptions = ["facility_type___mental_health", "facility_type___behavioral_health", "facility_type___medical_health", "facility_type___social_services"];
 var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
@@ -374,7 +373,8 @@ var CartoDbLib = {
       }
 
       $('#modal-pop').modal();
-      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection, #religion-subsection, #religion-header').empty();
+      $('.modal-map-marker div.row').hide();
+      $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #religion-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection, #religion-subsection').empty();
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
@@ -402,7 +402,8 @@ var CartoDbLib = {
       // Find all instances of "yes."
       for (prop in data) {
         var value = data[prop];
-        if (String(value).toLowerCase().match(/yes/) != null) {
+
+        if ((String(value).toLowerCase().match(/yes/) != null) || (value == 'true')) {
           if ($.inArray(String(prop), ageOptions) > -1) {
             if (prop == "under_18") {
               age_list = CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;" + age_list
@@ -428,22 +429,27 @@ var CartoDbLib = {
 
       // Add headers or not.
       if (age_list != '') {
+        $("#age-header").parent().parent().show()
         $("#age-header").append('<i class="fa fa-user" aria-hidden="true"></i> Age groups');
         $("#age-subsection").append("<p>" + age_list.slice(0, -13) + "</p>");
       }
       if (type_list != '') {
+        $("#type-header").parent().parent().show()
         $("#type-header").append('<i class="fa fa-building-o" aria-hidden="true"></i> Facility type');
         $("#type-subsection").append("<p>" + type_list.slice(0, -13) + "</p>");
       }
       if (insurance_list != '') {
+        $("#insurance-header").parent().parent().show()
         $("#insurance-header").append('<i class="fa fa-usd" aria-hidden="true"></i> Payment');
         $("#insurance-subsection").append("<p>" + insurance_list.slice(0, -13) + "</p>")
       }
       if (program_list != '') {
+        $("#programs-header").parent().parent().show()
         $("#programs-header").append('<i class="fa fa-heart" aria-hidden="true"></i> Programs');
         $("#modal-programs").append('<p>' + program_list.slice(0, -13) + "</p>");
       }
       if (language_list != '') {
+        $("#language-header").parent().parent().show()
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
         $("#language-subsection").append("<p>" + language_list.slice(0, -13) + "</p>")
       }

@@ -13,9 +13,8 @@ var CartoDbLib = {
   locationScope:   "chicago",
   currentPinpoint: null,
   layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
-  // tableName: 'probationresourcesmap_mergeddata_resources',
-  tableName: 'databasecopyforbehavioralhealthmentalhealthclassification_sheet',
-  userName: 'clearstreets',
+  tableName: 'probationresourcesmap_mergeddata_resources',
+  userName: 'jboulger',
   geoSearch: '',
   whereClause: '',
   ageSelections: '',
@@ -569,8 +568,7 @@ var CartoDbLib = {
       CartoDbLib.userSelection += " AND (LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE '%yes%' or LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") = 'true')"
       results += (obj.text + ", ")
     })
-
-    console.log(CartoDbLib.userSelection)
+    
     return results
   },
 

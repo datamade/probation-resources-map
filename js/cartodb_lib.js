@@ -1,6 +1,6 @@
 var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var facilityTypeOptions = ["facility_type___mental_health", "facility_type___behavioral_health", "facility_type___medical_health", "facility_type___social_services"];
+var facilityTypeOptions = ["facility_type___mental_health", "facility_type___behavioral_health", "facility_type___medical_health", "housing", "legal", "education_and_employment", "social_support", "food_and_clothing"];
 var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
@@ -13,9 +13,8 @@ var CartoDbLib = {
   locationScope:   "chicago",
   currentPinpoint: null,
   layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
-  // tableName: 'probationresourcesmap_mergeddata_resources',
-  tableName: 'databasecopyforbehavioralhealthmentalhealthclassification_sheet',
-  userName: 'clearstreets',
+  tableName: 'probationresourcesmap_mergeddata_resources',
+  userName: 'jboulger',
   geoSearch: '',
   whereClause: '',
   ageSelections: '',
@@ -569,8 +568,7 @@ var CartoDbLib = {
       CartoDbLib.userSelection += " AND (LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE '%yes%' or LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") = 'true')"
       results += (obj.text + ", ")
     })
-
-    console.log(CartoDbLib.userSelection)
+    
     return results
   },
 

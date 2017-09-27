@@ -55,9 +55,9 @@ $(function() {
   var age_data = makeSelectData(ageOptions);
   var language_data = makeSelectData(languageOptions);
   var facility_type_data = makeSelectData(facilityTypeOptions);
+  var facility_type_data = makeSelectDataGroups(facilityTypeOptions);
   var program_data = makeSelectData(programOptions);
   var insurance_data = makeSelectData(insuranceOptions);
-  // var insurance_data = makeSelectDataGroups(insuranceOptions);
 
   $(".data-array-age").select2({
     placeholder: "Age group",
@@ -158,7 +158,25 @@ function makeSelectData(array) {
   return data_arr
 };
 
+function makeSelectDataGroups(faciltyArray) {
+  data_arr_generic = []
+  data_arr_specific = []
+  for(var i = 0; i < faciltyArray.length; i++) {
+    if (faciltyArray[i].includes('facility_type_')) {
+      data_arr_specific.push({ id: i, text: CartoDbLib.formatText(faciltyArray[i]) })
+    }
+    else {
+      data_arr_generic.push({ id: i, text: CartoDbLib.formatText(faciltyArray[i]) })
+    }
+  }
 
+   return [
+      {text: "",
+      children: data_arr_generic},
+      {text: "Health facilities",
+      children: data_arr_specific},
+    ]
+};
 
 
 

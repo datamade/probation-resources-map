@@ -26,6 +26,10 @@ img {
   height: auto;
 }
 
+.mg-top-md {
+  margin-top: 2em;
+}
+
 /* Navbar */
 .navbar {
   margin-bottom: 10px;
@@ -274,7 +278,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn
   vertical-align: 1px;
 }
 
-/* Style for modals */
+/* Modals */
 .modal-header {
   background-color: #72A5D6;
   color: #FFF;
@@ -350,4 +354,32 @@ div#modal-image { padding: 0; }
               text-align: center;
        }
     }
+
+/* About */
+.well-affixed {
+  width: 25em;
+}
+
+.contents-header {
+  border-bottom: 1px solid #ebebeb;
+  padding-bottom: 6px;
+}
+
+ul.contents-list, ul.contents-terms {
+  display: block;
+  list-style-type: disc;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-padding-start: 0;
+}
+
+ul.contents-list li {
+  list-style: none;
+  padding-bottom: 12px;
+}
+
+ul.contents-terms li {
+  padding-bottom: 0px;
+}
+
 

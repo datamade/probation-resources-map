@@ -14,7 +14,7 @@ var CartoDbLib = {
   currentPinpoint: null,
   layerUrl: 'https://clearstreets.carto.com/api/v2/viz/efcba8d2-4d16-11e6-a770-0e05a8b3e3d7/viz.json',
   tableName: 'probationresourcesmap_mergeddata_resources',
-  userName: 'jboulger',
+  userName: 'chicagoappleseed',
   geoSearch: '',
   whereClause: '',
   ageSelections: '',

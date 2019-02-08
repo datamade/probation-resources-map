@@ -12,7 +12,6 @@ Built in collaboration with the Cook County Adult Probation Department (CCAPD), 
 
 <pre>
   $ git clone https://github.com/datamade/probation-resources-map.git
-  $ cd site_template
   $ gem install jekyll
   $ jekyll serve -w
   navigate to http://localhost:5000/

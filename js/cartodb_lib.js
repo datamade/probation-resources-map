@@ -17,6 +17,7 @@ var CartoDbLib = {
   userName: 'chicagoappleseed',
   geoSearch: '',
   whereClause: '',
+  communityWhereClause: '',
   ageSelections: '',
   langSelections: '',
   typeSelections: '',
@@ -192,6 +193,10 @@ var CartoDbLib = {
             sql: "SELECT * FROM " + CartoDbLib.tableName + CartoDbLib.whereClause,
             cartocss: $('#probation-maps-styles').html().trim(),
             interactivity: CartoDbLib.fields
+          },
+          {
+            sql: "select * from probation_resources_community_service_sites " + CartoDbLib.communityWhereClause,
+            cartocss: $('#community-sites-styles').html().trim(),
           }
         ]
       }
@@ -199,20 +204,24 @@ var CartoDbLib = {
       CartoDbLib.dataLayer = cartodb.createLayer(CartoDbLib.map, layerOpts, { https: true })
         .addTo(CartoDbLib.map)
         .done(function(layer) {
-          CartoDbLib.sublayer = layer.getSubLayer(0);
-          CartoDbLib.sublayer.setInteraction(true);
-          CartoDbLib.sublayer.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
+          CartoDbLib.probationResources = layer.getSubLayer(0);
+          CartoDbLib.probationResources.setInteraction(true);
+
+          CartoDbLib.communitySites = layer.getSubLayer(1);
+          // CartoDbLib.communitySites.setInteraction(true);
+
+          CartoDbLib.probationResources.on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','pointer');
             CartoDbLib.info.update(data);
           })
-          CartoDbLib.sublayer.on('featureOut', function(e, latlng, pos, data, subLayerIndex) {
+          CartoDbLib.probationResources.on('featureOut', function(e, latlng, pos, data, subLayerIndex) {
             $('#mapCanvas div').css('cursor','inherit');
             CartoDbLib.info.clear();
           })
-          CartoDbLib.sublayer.on('featureClick', function(e, latlng, pos, data) {
+          CartoDbLib.probationResources.on('featureClick', function(e, latlng, pos, data) {
               CartoDbLib.modalPop(data);
           })
-          CartoDbLib.sublayer.on('error', function(err) {
+          CartoDbLib.probationResources.on('error', function(err) {
             console.log('error: ' + err);
           })
         }).on('error', function(e) {
@@ -471,8 +480,9 @@ var CartoDbLib = {
   },
 
   clearSearch: function(){
-    if (CartoDbLib.sublayer) {
-      CartoDbLib.sublayer.remove();
+    if (CartoDbLib.probationResources) {
+      CartoDbLib.probationResources.remove();
+      CartoDbLib.communitySites.remove();
     }
     if (CartoDbLib.centerMark)
       CartoDbLib.map.removeLayer( CartoDbLib.centerMark );
@@ -624,6 +634,32 @@ var CartoDbLib = {
     else {
       CartoDbLib.whereClause = " WHERE the_geom is not null ";
       CartoDbLib.whereClause += CartoDbLib.userSelection;
+    }
+  },
+
+  createSQLCommunityArea: function() {
+     // Devise SQL calls for geosearch and language search.
+    var address = $("#search-address").val();
+
+    if(CartoDbLib.currentPinpoint != null && address != '') {
+      CartoDbLib.geoSearch = "ST_DWithin(ST_SetSRID(ST_POINT(" + CartoDbLib.currentPinpoint[1] + ", " + CartoDbLib.currentPinpoint[0] + "), 4326)::geography, the_geom::geography, " + CartoDbLib.radius + ")";
+    }
+    else {
+      CartoDbLib.geoSearch = ''
+    }
+
+    CartoDbLib.userSelection = '';
+    // TODO: Add logic for filtering on sexoffender and handicap
+
+    CartoDbLib.communityWhereClause = " WHERE the_geom is not null AND ";
+
+    if (CartoDbLib.geoSearch != "") {
+      CartoDbLib.communityWhereClause += CartoDbLib.geoSearch;
+      // CartoDbLib.communityWhereClause += CartoDbLib.userSelection;
+    }
+    else {
+      CartoDbLib.communityWhereClause = " WHERE the_geom is not null ";
+      // CartoDbLib.communityWhereClause += CartoDbLib.userSelection;
     }
   },
 

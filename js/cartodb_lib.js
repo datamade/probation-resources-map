@@ -22,6 +22,7 @@ var CartoDbLib = {
   typeSelections: '',
   insuranceSelections: '',
   lgbtqSelection: '',
+  communitySiteSelection: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
@@ -42,6 +43,12 @@ var CartoDbLib = {
       $("#lgbtq").prop( "checked", true );
     } else {
       $("#lgbtq").prop( "checked", false );
+    }
+
+    if ( $.address.parameter('communitySite') ) {
+      $("#communitySite").prop( "checked", true );
+    } else {
+      $("#communitySite").prop( "checked", false );
     }
 
     var num = $.address.parameter('modal_id');
@@ -150,6 +157,7 @@ var CartoDbLib = {
           $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
           $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
           $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
+          $.address.parameter('communitySite', encodeURIComponent(CartoDbLib.communitySiteSelection));
 
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
@@ -174,6 +182,7 @@ var CartoDbLib = {
       $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
       $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
       $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
+      $.address.parameter('communitySite', encodeURIComponent(CartoDbLib.communitySiteSelection));
 
       CartoDbLib.renderMap();
       CartoDbLib.renderList();
@@ -615,6 +624,14 @@ var CartoDbLib = {
       CartoDbLib.lgbtqSelection = '';
     }
 
+    community_site_checked = $('#communitySite').is(':checked')
+    if (community_site_checked == true) {
+      CartoDbLib.userSelection += " AND LOWER(apd_community_service_site) LIKE '%yes%'";
+      CartoDbLib.communitySiteSelection = 'true';
+    } else {
+      CartoDbLib.communitySiteSelection = '';
+    }
+
     CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
 
     if (CartoDbLib.geoSearch != "") {
@@ -679,6 +696,7 @@ var CartoDbLib = {
       "type": CartoDbLib.typeSelections,
       "insurance": CartoDbLib.insuranceSelections,
       "lgbtq": CartoDbLib.lgbtqSelection,
+      "communitySite": CartoDbLib.communitySiteSelection,
       "program": CartoDbLib.programSelections,
       "path": path,
       "save_name": save_name,
@@ -720,6 +738,12 @@ var CartoDbLib = {
           $("#lgbtq").prop( "checked", true );
         } else {
           $("#lgbtq").prop( "checked", false );
+        }
+
+        if (obj.communitySite != '') {
+          $("#communitySite").prop( "checked", true );
+        } else {
+          $("#communitySite").prop( "checked", false );
         }
 
         var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);

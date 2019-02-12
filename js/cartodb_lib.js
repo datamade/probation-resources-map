@@ -626,7 +626,7 @@ var CartoDbLib = {
 
     community_site_checked = $('#communitySite').is(':checked')
     if (community_site_checked == true) {
-      CartoDbLib.userSelection += " AND LOWER(apd_community_service_site) LIKE '%yes%'";
+      CartoDbLib.userSelection += " AND apd_community_service_site = True";
       CartoDbLib.communitySiteSelection = 'true';
     } else {
       CartoDbLib.communitySiteSelection = '';

@@ -23,6 +23,8 @@ var CartoDbLib = {
   insuranceSelections: '',
   lgbtqSelection: '',
   communitySiteSelection: '',
+  handicapAccessibleSelection: '',
+  acceptsSexOffendersSelection: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
@@ -593,43 +595,68 @@ var CartoDbLib = {
     }
 
     CartoDbLib.userSelection = '';
-    // Gets selected elements in dropdown (represented as an array of objects).
-    var ageUserSelections = ($("#select-age").select2('data'))
-    var langUserSelections = ($("#select-language").select2('data'))
-    var typeUserSelections = ($("#select-type").select2('data'))
-    var programUserSelections = ($("#select-program").select2('data'))
-    var insuranceUserSelections = ($("#select-insurance").select2('data'))
 
-    // Set results equal to varaible – to be used when creating cookies.
-    var ageResults = CartoDbLib.userSelectSQL(ageUserSelections);
-    CartoDbLib.ageSelections = ageResults;
-
-    var langResults = CartoDbLib.userSelectSQL(langUserSelections);
-    CartoDbLib.langSelections = langResults;
-
-    var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
-    CartoDbLib.typeSelections = facilityTypeResults;
-
-    var programResults = CartoDbLib.userSelectSQL(programUserSelections);
-    CartoDbLib.programSelections = programResults;
-
-    var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
-    CartoDbLib.insuranceSelections = insuranceResults;
-
-    lgbtq_checked = $('#lgbtq').is(':checked')
-    if (lgbtq_checked == true) {
-      CartoDbLib.userSelection += " AND LOWER(specialize_with_lgbtq) LIKE '%yes%'";
-      CartoDbLib.lgbtqSelection = 'true';
-    } else {
-      CartoDbLib.lgbtqSelection = '';
-    }
-
+    // Data for the ADP community sites include only two meaningful columns:
+    // handicap_accessible and accepts_sex_offenders.
+    // A user can limit her search to ADP community sites by checking a box. 
+    // In that case, ignore other filters, e.g., for age or language.
     community_site_checked = $('#communitySite').is(':checked')
     if (community_site_checked == true) {
-      CartoDbLib.userSelection += " AND apd_community_service_site = True";
+      CartoDbLib.userSelection += " AND LOWER(apd_community_service_site) LIKE '%yes%'";
       CartoDbLib.communitySiteSelection = 'true';
-    } else {
+      
+      handicap_accessible_checked = $('#handicapAccessible').is(':checked')
+      if (handicap_accessible_checked == true) {
+        CartoDbLib.userSelection += " AND LOWER(handicap_accessible) LIKE '%yes%'";
+        CartoDbLib.handicapAccessibleSelection = 'true';
+      } else {
+        CartoDbLib.handicapAccessibleSelection = '';
+      }
+
+      accepts_sex_offenders_checked = $('#acceptsSexOffenders').is(':checked')
+      if (accepts_sex_offenders_checked == true) {
+        CartoDbLib.userSelection += " AND LOWER(accepts_sex_offenders) LIKE '%yes%'";
+        CartoDbLib.acceptsSexOffendersSelection = 'true';
+      } else {
+        CartoDbLib.acceptsSexOffendersSelection = '';
+      }
+
+    } 
+    else {
       CartoDbLib.communitySiteSelection = '';
+      CartoDbLib.handicapAccessibleSelection = '';
+      CartoDbLib.acceptsSexOffendersSelection = '';
+      // Gets selected elements in dropdown (represented as an array of objects).
+      var ageUserSelections = ($("#select-age").select2('data'))
+      var langUserSelections = ($("#select-language").select2('data'))
+      var typeUserSelections = ($("#select-type").select2('data'))
+      var programUserSelections = ($("#select-program").select2('data'))
+      var insuranceUserSelections = ($("#select-insurance").select2('data'))
+
+      // Set results equal to varaible – to be used when creating cookies.
+      var ageResults = CartoDbLib.userSelectSQL(ageUserSelections);
+      CartoDbLib.ageSelections = ageResults;
+
+      var langResults = CartoDbLib.userSelectSQL(langUserSelections);
+      CartoDbLib.langSelections = langResults;
+
+      var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
+      CartoDbLib.typeSelections = facilityTypeResults;
+
+      var programResults = CartoDbLib.userSelectSQL(programUserSelections);
+      CartoDbLib.programSelections = programResults;
+
+      var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
+      CartoDbLib.insuranceSelections = insuranceResults;
+
+      lgbtq_checked = $('#lgbtq').is(':checked')
+      if (lgbtq_checked == true) {
+        CartoDbLib.userSelection += " AND LOWER(specialize_with_lgbtq) LIKE '%yes%'";
+        CartoDbLib.lgbtqSelection = 'true';
+      } else {
+        CartoDbLib.lgbtqSelection = '';
+      }
+
     }
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND ";

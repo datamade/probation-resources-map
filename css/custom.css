@@ -203,6 +203,11 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn
   display: none;
 }
 
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: solid #aaa 1px;
+    border-left: 0;
+}
+
 /* Map map */
 #mapCanvas img {
   max-width: none;

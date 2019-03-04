@@ -20,8 +20,8 @@ $(function() {
       $('#select-program').attr('disabled',this.checked);
       $('#select-insurance').attr('disabled',this.checked);
       $('#lgbtq').attr('disabled',this.checked);
-
-      $('.apd-filters').toggleClass('hidden')
+      // show/hide the APD community site filters
+      $('.apd-filters').toggleClass('hidden');
   });
 
   $('#btnReset').tooltip();

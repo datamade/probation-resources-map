@@ -48,10 +48,16 @@ var CartoDbLib = {
       $("#lgbtq").prop( "checked", false );
     }
 
-    if ( $.address.parameter('communitySite') ) {
-      $("#communitySite").prop( "checked", true );
+    if ( $.address.parameter('handicap') ) {
+      $("#handicapAccessible").prop( "checked", true );
     } else {
-      $("#communitySite").prop( "checked", false );
+      $("#handicapAccessible").prop( "checked", false );
+    }
+
+    if ( $.address.parameter('offenders') ) {
+      $("#acceptsSexOffenders").prop( "checked", true );
+    } else {
+      $("#acceptsSexOffenders").prop( "checked", false );
     }
 
     var num = $.address.parameter('modal_id');

@@ -6,6 +6,25 @@ $(window).resize(function () {
 }).resize();
 
 $(function() {
+  // https://github.com/Aleksander98/bsgdprcookies
+  // settings for jquery.bs.gdpr.cookies.js
+  var settings = {
+      message: 'Probation Community Resources uses cookies to help save your searches for easy retrieval. By using this site you consent to our cookie policy.',
+      moreLinkLabel: '',
+      messageMaxHeightPercent: 30,
+      moreLink: '/privacy/',
+      delay: 1000,
+      allowAdvancedOptions: false,
+      OnAccept : function() {
+          var preferences = $.fn.bsgdprcookies.GetUserPreferences();
+      }
+  }
+  // events for jquery.bs.gdpr.cookies.js
+  $('body').bsgdprcookies(settings);
+  $('#cookiesBtn').on('click', function(){
+      $('body').bsgdprcookies(settings, 'reinit');
+  });
+
   CartoDbLib.initialize();
   new Clipboard('#copy-button');
 

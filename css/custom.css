@@ -159,13 +159,13 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn
   border-color: #FF474E;
 }
 
-.btn-reset, .label {
+.btn-reset, .btn-primary, .label {
   color: #ffffff;
   background-color: #5187BB;
   border-color: #5187BB;
 }
 
-.btn-reset:hover {
+.btn-primary:hover, .btn-reset:hover {
   background-color: #6C9AC6;
   border-color: #6C9AC6;
 }
@@ -359,6 +359,20 @@ div#modal-image { padding: 0; }
               text-align: center;
        }
     }
+
+
+/* GDPR modla */
+#bs-gdpr-cookies-modal {
+  font-size: 18px;
+}
+
+#bs-gdpr-cookies-modal h5 {
+  font-size: 22px;
+}
+
+#bs-gdpr-cookies-modal .modal-footer {
+  border-top: 0;
+}
 
 /* About */
 .well-affixed {

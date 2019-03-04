@@ -9,11 +9,12 @@ $(function() {
   // https://github.com/Aleksander98/bsgdprcookies
   // settings for jquery.bs.gdpr.cookies.js
   var settings = {
-      message: 'Probation Community Resources uses cookies to help save your searches for easy retrieval. By using this site you consent to our cookie policy.',
+      title: 'About our cookies',
+      message: 'Probation Community Resources uses cookies. Cookies enable the "Save search" functionality, which lets you save your favorite searches for easy retrieval: DataMade does not collect or use this data in any way. By using this site you consent to our cookie policy.',
       moreLinkLabel: '',
       messageMaxHeightPercent: 30,
-      moreLink: '/privacy/',
-      delay: 1000,
+      delay: 250,
+      acceptButtonLabel: 'Continue',
       allowAdvancedOptions: false,
       OnAccept : function() {
           var preferences = $.fn.bsgdprcookies.GetUserPreferences();

@@ -66,6 +66,13 @@ layout: default
             <p><input id="lgbtq" type="checkbox">Show only facilities that specialize with LGBTQ</p>
           </label>
         </div>
+      </div>
+    </div>
+
+    <!-- APD community service sites filters -->
+    <div class="row">
+      <div class="col-xs-12">
+        <p><strong>Filter for APD community service sites.</strong> You cannot filter by age, language, fcaility, programs, or payment preferences.</p>
         <div class="checkbox">
           <label>
             <p><input id="communitySite" type="checkbox">Show only APD community service sites</p>
@@ -73,20 +80,18 @@ layout: default
         </div>
       </div>
     </div>
-
-    <!-- TODO: Make this a panel that opens and closes, based on the value of communitySite checkbox -->
-    <div class="row">
+    <!-- Panel made visible after clicking #communitySite -->
+    <div class="row apd-filters hidden">
       <div class="col-xs-12">
-        <p><strong>Filter community service sites further.</strong></p>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="checkbox">
               <label>
                 <p><input id="handicapAccessible" type="checkbox">Handicap accessible</p>
               </label>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-8">
             <div class="checkbox">
               <label>
                 <p><input id="acceptsSexOffenders" type="checkbox">Accepts sex offenders</p>

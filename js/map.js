@@ -12,17 +12,17 @@ $(function() {
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
   var modalURL;
   
-$('#communitySite').change(function() {
-    // disable filters not relevant to community sites
-    $('#select-age').attr('disabled',this.checked);
-    $('#select-language').attr('disabled',this.checked);
-    $('#select-type').attr('disabled',this.checked);
-    $('#select-program').attr('disabled',this.checked);
-    $('#select-insurance').attr('disabled',this.checked);
-    $('#lgbtq').attr('disabled',this.checked);
-});
+  $('#communitySite').change(function() {
+      // disable filters not relevant to community sites
+      $('#select-age').attr('disabled',this.checked);
+      $('#select-language').attr('disabled',this.checked);
+      $('#select-type').attr('disabled',this.checked);
+      $('#select-program').attr('disabled',this.checked);
+      $('#select-insurance').attr('disabled',this.checked);
+      $('#lgbtq').attr('disabled',this.checked);
 
-
+      $('.apd-filters').toggleClass('hidden')
+  });
 
   $('#btnReset').tooltip();
   $('#btnViewMode').tooltip();

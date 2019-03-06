@@ -30,6 +30,10 @@ img {
   margin-top: 2em;
 }
 
+.mg-bottom-lg {
+  margin-bottom: 3em;
+}
+
 /* Navbar */
 .navbar {
   margin-bottom: 10px;

@@ -367,11 +367,11 @@ div#modal-image { padding: 0; }
 
 /* GDPR modal */
 #bs-gdpr-cookies-modal {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #bs-gdpr-cookies-modal h5 {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 #bs-gdpr-cookies-modal .modal-footer {

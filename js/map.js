@@ -10,7 +10,7 @@ $(function() {
   // settings for jquery.bs.gdpr.cookies.js
   var settings = {
       title: 'About our cookies',
-      message: 'Probation Community Resources uses cookies. Cookies enable the "Save search" functionality, which lets you save your favorite searches for easy retrieval: DataMade does not collect or use this data in any way. By using this site you consent to our cookie policy.',
+      message: 'Probation Community Resources uses cookies to allow you to save your searches for easy retrieval. DataMade does not collect or use this data in any way. By using this site you consent to our cookie policy.'
       moreLinkLabel: '',
       messageMaxHeightPercent: 30,
       delay: 250,

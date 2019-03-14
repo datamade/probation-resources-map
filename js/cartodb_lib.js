@@ -591,7 +591,9 @@ var CartoDbLib = {
     // handicap_accessible and accepts_sex_offenders.
     // A user can limit her search to ADP community sites by checking a box. 
     // In that case, ignore other filters, e.g., for age or language.
-    community_site_checked = $('#communitySite').is(':checked')
+    community_site_checked = $('li.community-tab').hasClass('active');
+    console.log(community_site_checked, "!!")
+    // community_site_checked = $('#communitySite').is(':checked')
     if (community_site_checked == true) {
       CartoDbLib.ageSelections = '';
       CartoDbLib.langSelections = '';
@@ -768,10 +770,8 @@ var CartoDbLib = {
         }
 
         if (obj.communitySite != '') {
-          $("#communitySite").prop( "checked", true );
-        } else {
-          $("#communitySite").prop( "checked", false );
-        }
+          $('li.community-tab').addClass('active');
+        } 
 
         var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");

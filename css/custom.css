@@ -108,6 +108,24 @@ img {
 }
 
 /* Filters */
+.tab-pane {
+  padding: 12px;
+}
+
+.nav-tabs>li>a {
+  background-color: #dddddd;
+  color: #fff;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #0A5193;
+  color: #fff; 
+}
+
 .form-control {
   height: 36px;
   padding: 6px 12px;

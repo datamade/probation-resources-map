@@ -20,8 +20,12 @@ var CartoDbLib = {
   ageSelections: '',
   langSelections: '',
   typeSelections: '',
+  programSelections: '',
   insuranceSelections: '',
   lgbtqSelection: '',
+  communitySiteSelection: '',
+  handicapAccessibleSelection: '',
+  acceptsSexOffendersSelection: '',
   userSelection: '',
   radius: '',
   resultsCount: 0,
@@ -42,6 +46,18 @@ var CartoDbLib = {
       $("#lgbtq").prop( "checked", true );
     } else {
       $("#lgbtq").prop( "checked", false );
+    }
+
+    if ( $.address.parameter('handicap') ) {
+      $("#handicapAccessible").prop( "checked", true );
+    } else {
+      $("#handicapAccessible").prop( "checked", false );
+    }
+
+    if ( $.address.parameter('offenders') ) {
+      $("#acceptsSexOffenders").prop( "checked", true );
+    } else {
+      $("#acceptsSexOffenders").prop( "checked", false );
     }
 
     var num = $.address.parameter('modal_id');
@@ -142,22 +158,14 @@ var CartoDbLib = {
           $.address.parameter('address', encodeURIComponent(address));
           $.address.parameter('radius', CartoDbLib.radius);
           CartoDbLib.address = address;
-          // Must call create SQL before setting language parameter.
-          CartoDbLib.createSQL();
-          $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
-          $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
-          $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
-          $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
-          $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
-          $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
-
+          CartoDbLib.createSQL(); // Must call create SQL before setting parameters.
+          CartoDbLib.addUrlParams();
           CartoDbLib.setZoom();
           CartoDbLib.addIcon();
           CartoDbLib.addCircle();
           CartoDbLib.renderMap();
           CartoDbLib.renderList();
           CartoDbLib.getResults();
-
         }
         else {
           alert("We could not find your address: " + status);
@@ -166,15 +174,8 @@ var CartoDbLib = {
     }
     else { //search without geocoding callback
       CartoDbLib.map.setView(new L.LatLng( CartoDbLib.map_centroid[0], CartoDbLib.map_centroid[1] ), CartoDbLib.defaultZoom)
-
-      CartoDbLib.createSQL();
-      $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
-      $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
-      $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
-      $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
-      $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
-      $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
-
+      CartoDbLib.createSQL(); // Must call create SQL before setting parameters.
+      CartoDbLib.addUrlParams();
       CartoDbLib.renderMap();
       CartoDbLib.renderList();
       CartoDbLib.getResults();
@@ -566,6 +567,7 @@ var CartoDbLib = {
 
     $.each( array, function(index, obj) {
       CartoDbLib.userSelection += " AND (LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") LIKE '%yes%' or LOWER(" + CartoDbLib.addUnderscore(obj.text) + ") = 'true')"
+
       results += (obj.text + ", ")
     })
     
@@ -584,35 +586,75 @@ var CartoDbLib = {
     }
 
     CartoDbLib.userSelection = '';
-    // Gets selected elements in dropdown (represented as an array of objects).
-    var ageUserSelections = ($("#select-age").select2('data'))
-    var langUserSelections = ($("#select-language").select2('data'))
-    var typeUserSelections = ($("#select-type").select2('data'))
-    var programUserSelections = ($("#select-program").select2('data'))
-    var insuranceUserSelections = ($("#select-insurance").select2('data'))
 
-    // Set results equal to varaible – to be used when creating cookies.
-    var ageResults = CartoDbLib.userSelectSQL(ageUserSelections);
-    CartoDbLib.ageSelections = ageResults;
-
-    var langResults = CartoDbLib.userSelectSQL(langUserSelections);
-    CartoDbLib.langSelections = langResults;
-
-    var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
-    CartoDbLib.typeSelections = facilityTypeResults;
-
-    var programResults = CartoDbLib.userSelectSQL(programUserSelections);
-    CartoDbLib.programSelections = programResults;
-
-    var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
-    CartoDbLib.insuranceSelections = insuranceResults;
-
-    lgbtq_checked = $('#lgbtq').is(':checked')
-    if (lgbtq_checked == true) {
-      CartoDbLib.userSelection += " AND LOWER(specialize_with_lgbtq) LIKE '%yes%'";
-      CartoDbLib.lgbtqSelection = 'true';
-    } else {
+    // Data for the ADP community sites include only two meaningful columns:
+    // handicap_accessible and accepts_sex_offenders.
+    // A user can limit her search to ADP community sites by checking a box. 
+    // In that case, ignore other filters, e.g., for age or language.
+    community_site_clicked = $('li.community-tab').hasClass('active');
+    if (community_site_clicked == true) {
+      CartoDbLib.ageSelections = '';
+      CartoDbLib.langSelections = '';
+      CartoDbLib.typeSelections = '';
+      CartoDbLib.programSelections = '';
+      CartoDbLib.insuranceSelections = '';
       CartoDbLib.lgbtqSelection = '';
+
+      CartoDbLib.userSelection += " AND LOWER(apd_community_service_site) LIKE '%yes%'";
+      CartoDbLib.communitySiteSelection = 'true';
+      
+      handicap_accessible_checked = $('#handicapAccessible').is(':checked')
+      if (handicap_accessible_checked == true) {
+        CartoDbLib.userSelection += " AND LOWER(handicap_accessible) LIKE '%yes%'";
+        CartoDbLib.handicapAccessibleSelection = 'true';
+      } else {
+        CartoDbLib.handicapAccessibleSelection = '';
+      }
+
+      accepts_sex_offenders_checked = $('#acceptsSexOffenders').is(':checked')
+      if (accepts_sex_offenders_checked == true) {
+        CartoDbLib.userSelection += " AND LOWER(accepts_sex_offenders) LIKE '%yes%'";
+        CartoDbLib.acceptsSexOffendersSelection = 'true';
+      } else {
+        CartoDbLib.acceptsSexOffendersSelection = '';
+      }
+
+    } 
+    else {
+      CartoDbLib.communitySiteSelection = '';
+      CartoDbLib.handicapAccessibleSelection = '';
+      CartoDbLib.acceptsSexOffendersSelection = '';
+      // Gets selected elements in dropdown (represented as an array of objects).
+      var ageUserSelections = ($("#select-age").select2('data'))
+      var langUserSelections = ($("#select-language").select2('data'))
+      var typeUserSelections = ($("#select-type").select2('data'))
+      var programUserSelections = ($("#select-program").select2('data'))
+      var insuranceUserSelections = ($("#select-insurance").select2('data'))
+
+      // Set results equal to varaible – to be used when creating cookies.
+      var ageResults = CartoDbLib.userSelectSQL(ageUserSelections);
+      CartoDbLib.ageSelections = ageResults;
+
+      var langResults = CartoDbLib.userSelectSQL(langUserSelections);
+      CartoDbLib.langSelections = langResults;
+
+      var facilityTypeResults = CartoDbLib.userSelectSQL(typeUserSelections);
+      CartoDbLib.typeSelections = facilityTypeResults;
+
+      var programResults = CartoDbLib.userSelectSQL(programUserSelections);
+      CartoDbLib.programSelections = programResults;
+
+      var insuranceResults = CartoDbLib.userSelectSQL(insuranceUserSelections);
+      CartoDbLib.insuranceSelections = insuranceResults;
+
+      lgbtq_checked = $('#lgbtq').is(':checked')
+      if (lgbtq_checked == true) {
+        CartoDbLib.userSelection += " AND LOWER(specialize_with_lgbtq) LIKE '%yes%'";
+        CartoDbLib.lgbtqSelection = 'true';
+      } else {
+        CartoDbLib.lgbtqSelection = '';
+      }
+
     }
 
     CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
@@ -678,8 +720,11 @@ var CartoDbLib = {
       "language": CartoDbLib.langSelections,
       "type": CartoDbLib.typeSelections,
       "insurance": CartoDbLib.insuranceSelections,
-      "lgbtq": CartoDbLib.lgbtqSelection,
       "program": CartoDbLib.programSelections,
+      "lgbtq": CartoDbLib.lgbtqSelection,
+      "community": CartoDbLib.communitySiteSelection,
+      "handicap": CartoDbLib.handicapAccessibleSelection,
+      "offenders": CartoDbLib.acceptsSexOffendersSelection,
       "path": path,
       "save_name": save_name,
     }
@@ -720,6 +765,34 @@ var CartoDbLib = {
           $("#lgbtq").prop( "checked", true );
         } else {
           $("#lgbtq").prop( "checked", false );
+        }
+
+        // Activate correct pane
+        console.log($('li.community-tab').hasClass('active'), "communittyyy")
+        if (obj.community != '') {
+          $('li.community-tab').addClass('active');
+          $('div#community-sites').addClass('active');
+
+          $('li.probation-tab').removeClass('active');
+          $('div#probation').removeClass('active');
+        } else {
+          $('div#probation').addClass('active');
+          $('li.probation-tab').addClass('active');
+
+          $('li.community-tab').removeClass('active');
+          $('div#community-sites').removeClass('active');
+        }
+
+        if (obj.handicap != '') {
+          $("#handicapAccessible").prop( "checked", true );
+        } else {
+          $("#handicapAccessible").prop( "checked", false );
+        }
+
+        if (obj.offenders != '') {
+          $("#acceptsSexOffenders").prop( "checked", true );
+        } else {
+          $("#acceptsSexOffenders").prop( "checked", false );
         }
 
         var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
@@ -958,6 +1031,18 @@ var CartoDbLib = {
                cb.apply(this, [xhr.status]);
         }
     });
+  },
+
+  addUrlParams: function() {
+      $.address.parameter('age', encodeURIComponent(CartoDbLib.ageSelections));
+      $.address.parameter('lang', encodeURIComponent(CartoDbLib.langSelections));
+      $.address.parameter('type', encodeURIComponent(CartoDbLib.typeSelections));
+      $.address.parameter('program', encodeURIComponent(CartoDbLib.programSelections));
+      $.address.parameter('insure', encodeURIComponent(CartoDbLib.insuranceSelections));
+      $.address.parameter('lgbtq', encodeURIComponent(CartoDbLib.lgbtqSelection));
+      $.address.parameter('community', encodeURIComponent(CartoDbLib.communitySiteSelection));
+      $.address.parameter('handicap', encodeURIComponent(CartoDbLib.handicapAccessibleSelection));
+      $.address.parameter('offenders', encodeURIComponent(CartoDbLib.acceptsSexOffendersSelection));
   },
 
 }

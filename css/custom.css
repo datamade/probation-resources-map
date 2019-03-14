@@ -30,6 +30,10 @@ img {
   margin-top: 2em;
 }
 
+.mg-bottom-lg {
+  margin-bottom: 3em;
+}
+
 /* Navbar */
 .navbar {
   margin-bottom: 10px;
@@ -104,6 +108,24 @@ img {
 }
 
 /* Filters */
+.tab-pane {
+  padding: 12px;
+}
+
+.nav-tabs>li>a {
+  background-color: #C7C7C7;
+  color: #fff;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #0A5193;
+  color: #fff; 
+}
+
 .form-control {
   height: 36px;
   padding: 6px 12px;
@@ -159,13 +181,13 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn
   border-color: #FF474E;
 }
 
-.btn-reset, .label {
+.btn-reset, .btn-primary, .label {
   color: #ffffff;
   background-color: #5187BB;
   border-color: #5187BB;
 }
 
-.btn-reset:hover {
+.btn-primary:hover, .btn-reset:hover {
   background-color: #6C9AC6;
   border-color: #6C9AC6;
 }
@@ -201,6 +223,11 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn
 .warning {
   color: #FF3A41;
   display: none;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: solid #aaa 1px;
+    border-left: 0;
 }
 
 /* Map map */
@@ -354,6 +381,20 @@ div#modal-image { padding: 0; }
               text-align: center;
        }
     }
+
+
+/* GDPR modal */
+#bs-gdpr-cookies-modal {
+  font-size: 16px;
+}
+
+#bs-gdpr-cookies-modal h5 {
+  font-size: 20px;
+}
+
+#bs-gdpr-cookies-modal .modal-footer {
+  border-top: 0;
+}
 
 /* About */
 .well-affixed {

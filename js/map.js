@@ -6,11 +6,41 @@ $(window).resize(function () {
 }).resize();
 
 $(function() {
+  // https://github.com/Aleksander98/bsgdprcookies
+  // settings for jquery.bs.gdpr.cookies.js
+  var settings = {
+      title: 'About our cookies',
+      message: 'Probation Community Resources uses cookies to allow you to save your searches for easy retrieval. DataMade does not collect or use this data in any way. By using this site you consent to our cookie policy.',
+      moreLinkLabel: '',
+      messageMaxHeightPercent: 30,
+      delay: 250,
+      acceptButtonLabel: 'Continue',
+      allowAdvancedOptions: false,
+      OnAccept : function() {
+          var preferences = $.fn.bsgdprcookies.GetUserPreferences();
+      }
+  }
+  // events for jquery.bs.gdpr.cookies.js
+  $('body').bsgdprcookies(settings);
+  $('#cookiesBtn').on('click', function(){
+      $('body').bsgdprcookies(settings, 'reinit');
+  });
+
   CartoDbLib.initialize();
   new Clipboard('#copy-button');
 
   var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-address'));
   var modalURL;
+  
+  $('#communitySite').change(function() {
+      // disable filters not relevant to community sites
+      $('#select-age').attr('disabled',this.checked);
+      $('#select-language').attr('disabled',this.checked);
+      $('#select-type').attr('disabled',this.checked);
+      $('#select-program').attr('disabled',this.checked);
+      $('#select-insurance').attr('disabled',this.checked);
+      $('#lgbtq').attr('disabled',this.checked);
+  });
 
   $('#btnReset').tooltip();
   $('#btnViewMode').tooltip();

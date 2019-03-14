@@ -2,12 +2,11 @@
 layout: default
 ---
 
-<div class='row'>
+<div class='row mg-bottom-lg'>
   <div class="col-md-4">
     <p>Find resources near you for adults and juveniles on probation in Cook County</p>
 
     <div class='row'>
-
       <div class="col-md-8">
         <div class="form-group">
             Address
@@ -27,47 +26,72 @@ layout: default
             </select>
         </div>
       </div>
-
     </div>
 
-    <p><strong>Filter your search.</strong> Click on each filter to view a list of options. You can select more than one.</p>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="active probation-tab"><a href="#probation" role="tab" data-toggle="tab">Probation resources</a></li>
+      <li class="community-tab"><a href="#community-sites" role="tab" data-toggle="tab">Community sites</a></li>
+    </ul>
 
-    <div>
-      <div class="input-group select2-bootstrap-prepend">
-        <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
-        <select class="data-array-age form-control" id="select-age" multiple="multiple"></select>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Probation resources pane -->
+      <div class="tab-pane active" id="probation">
+        <p><strong>Filter probation resources.</strong> Click on each filter to view a list of options. You can select more than one.</p>
+        <div>
+          <div class="input-group select2-bootstrap-prepend">
+            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+            <select class="data-array-age form-control" id="select-age" multiple="multiple"></select>
+          </div>
+
+          <div class="input-group select2-bootstrap-prepend m-top-sm">
+            <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
+            <select class="data-array-language form-control" id="select-language" multiple="multiple"></select>
+          </div>
+
+          <div class="input-group select2-bootstrap-prepend m-top-sm">
+            <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+            <select class="data-array-type form-control" id="select-type" multiple="multiple"></select>
+          </div>
+
+          <div class="input-group select2-bootstrap-prepend m-top-sm">
+            <span class="input-group-addon"><i class="fa fa-heart" aria-hidden="true"></i></span>
+            <select class="data-array-program form-control" id="select-program" multiple="multiple"></select>
+          </div>
+
+          <div class="input-group select2-bootstrap-prepend m-top-sm m-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;</span>
+            <select class="data-array-insurance form-control" id="select-insurance" multiple="multiple"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="checkbox">
+              <label>
+                <p><input id="lgbtq" type="checkbox">Show only facilities that specialize with LGBTQ</p>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="input-group select2-bootstrap-prepend m-top-sm">
-        <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
-        <select class="data-array-language form-control" id="select-language" multiple="multiple"></select>
-      </div>
-
-      <div class="input-group select2-bootstrap-prepend m-top-sm">
-        <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
-        <select class="data-array-type form-control" id="select-type" multiple="multiple"></select>
-      </div>
-
-      <div class="input-group select2-bootstrap-prepend m-top-sm">
-        <span class="input-group-addon"><i class="fa fa-heart" aria-hidden="true"></i></span>
-        <select class="data-array-program form-control" id="select-program" multiple="multiple"></select>
-      </div>
-
-      <div class="input-group select2-bootstrap-prepend m-top-sm m-bottom-sm">
-        <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;</span>
-        <select class="data-array-insurance form-control" id="select-insurance" multiple="multiple"></select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12">
+      <!-- Commuinity sites pane -->
+      <div class="tab-pane" id="community-sites">
+        <p><strong>Filter community service sites.</strong> Add filters, or return all community service sites (excludes probation resource locations).</p>
         <div class="checkbox">
           <label>
-            <p><input id="lgbtq" type="checkbox">Show only facilities that specialize with LGBTQ</p>
+            <p><input id="handicapAccessible" type="checkbox">Handicap accessible</p>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <p><input id="acceptsSexOffenders" type="checkbox">Accepts sex offenders</p>
           </label>
         </div>
       </div>
-    </div>
+
+    </div> <!-- End tab panes -->
 
     <div>
       <button class='btn btn-search' id="btnSearch"><i class='fa fa-search'></i> Search</button>

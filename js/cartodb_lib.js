@@ -591,10 +591,8 @@ var CartoDbLib = {
     // handicap_accessible and accepts_sex_offenders.
     // A user can limit her search to ADP community sites by checking a box. 
     // In that case, ignore other filters, e.g., for age or language.
-    community_site_checked = $('li.community-tab').hasClass('active');
-    console.log(community_site_checked, "!!")
-    // community_site_checked = $('#communitySite').is(':checked')
-    if (community_site_checked == true) {
+    community_site_clicked = $('li.community-tab').hasClass('active');
+    if (community_site_clicked == true) {
       CartoDbLib.ageSelections = '';
       CartoDbLib.langSelections = '';
       CartoDbLib.typeSelections = '';
@@ -769,9 +767,33 @@ var CartoDbLib = {
           $("#lgbtq").prop( "checked", false );
         }
 
-        if (obj.communitySite != '') {
+        // Activate correct pane
+        console.log($('li.community-tab').hasClass('active'), "communittyyy")
+        if (obj.community != '') {
           $('li.community-tab').addClass('active');
-        } 
+          $('div#community-sites').addClass('active');
+
+          $('li.probation-tab').removeClass('active');
+          $('div#probation').removeClass('active');
+        } else {
+          $('div#probation').addClass('active');
+          $('li.probation-tab').addClass('active');
+
+          $('li.community-tab').removeClass('active');
+          $('div#community-sites').removeClass('active');
+        }
+
+        if (obj.handicap != '') {
+          $("#handicapAccessible").prop( "checked", true );
+        } else {
+          $("#handicapAccessible").prop( "checked", false );
+        }
+
+        if (obj.offenders != '') {
+          $("#acceptsSexOffenders").prop( "checked", true );
+        } else {
+          $("#acceptsSexOffenders").prop( "checked", false );
+        }
 
         var ageArr     = CartoDbLib.makeSelectionArray(obj.age, ageOptions);
         $('#select-age').val(ageArr).trigger("change");

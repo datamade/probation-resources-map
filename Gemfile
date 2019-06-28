@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 
-gem 'jekyll'
-gem 'github-pages'
+gem 'jekyll', '3.6.3'
 gem 'jasmine'
 
 group :development, :test do

@@ -1,7 +1,7 @@
-var ageOptions = ["under_18", "_18_to_24", "_25_to_64", "over_65"];
+var ageOptions = ["under_18", "column_18_to_24", "column_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
-var facilityTypeOptions = ["facility_type___mental_health", "facility_type___behavioral_health", "facility_type___medical_health", "housing", "legal", "education_and_employment", "social_support", "food_and_clothing"];
-var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
+var facilityTypeOptions = ["facility_type_mental_health", "facility_type_behavioral_health", "facility_type_medical_health", "housing", "legal", "education_and_employment", "social_support", "food_and_clothing"];
+var programOptions = ["medically_assisted_detox", "inpatient_care", "intensive_outpatient_care", "outpatient_care", "recovery_home_halfway_house", "dui_drunk_driving_treatment", "substance_abuse", "domestic_violence", "mental_illness_and_substance_abuse_misa_or_dual_diagnosis_", "individual_counseling_or_clinical_psychological_services", "psychiatric_evaluations", "medication_assisted_treatment","community_meetings_aa_na_", "anger_management", "parenting_classes", "veteran_specific", "social_work_and_services_case_management", "rapid_stabilization_programs", "residential_beds_for_clients_with_children"];
 var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "military_insurance", "medicare", "medicaid"];
 
 var CartoDbLib = CartoDbLib || {};
@@ -526,13 +526,13 @@ var CartoDbLib = {
     var lookup = {
       "asl_or_assistance_for_hearing_impaired": "ASL or assistance for hearing impaired",
       "dui_drunk_driving_treatment": "DUI Drunk driving treatment",
-      "mental_illness_and_substance_abuse_misa_or_dual_diagnosis": "Mental illness and substance abuse (MISA)",
-      "community_meetings_aa_na": "Community meetings (AA/NA)",
+      "mental_illness_and_substance_abuse_misa_or_dual_diagnosis_": "Mental illness and substance abuse (MISA)",
+      "community_meetings_aa_na_": "Community meetings (AA/NA)",
       "recovery_home_halfway_house": "Recovery home/Halfway house",
-      "facility_type___mental_health": "Mental health", 
-      "facility_type___behavioral_health": "Behavioral health", 
-      "facility_type___medical_health": "Medical health", 
-      "facility_type___social_services": "Social services"
+      "facility_type_mental_health": "Mental health", 
+      "facility_type_behavioral_health": "Behavioral health", 
+      "facility_type_medical_health": "Medical health", 
+      "facility_type_social_services": "Social services"
     }
     if (text in lookup) {
       var capitalText = lookup[text]
@@ -550,13 +550,13 @@ var CartoDbLib = {
       newText = "_" + newText
     }
     if (newText.indexOf("MISA") >= 0) {
-      newText = "mental_illness_and_substance_abuse_misa_or_dual_diagnosis"
+      newText = "mental_illness_and_substance_abuse_misa_or_dual_diagnosis_"
     }
     if (newText.indexOf("Community_meetings") >= 0) {
-      newText = "community_meetings_aa_na"
+      newText = "community_meetings_aa_na_"
     }
     if ((newText.indexOf("Mental_health") >= 0) || (newText.indexOf("Behavioral_health") >= 0) || (newText.indexOf("Medical_health") >= 0) || (newText.indexOf("Social_services") >= 0)) {
-      newText = "facility_type___" + newText
+      newText = "facility_type_" + newText
     }
     return newText.toLowerCase();
   },

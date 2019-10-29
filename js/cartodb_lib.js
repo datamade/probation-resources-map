@@ -12,11 +12,11 @@ var CartoDbLib = {
   lastClickedLayer: null,
   locationScope:   "chicago",
   currentPinpoint: null,
-  layerUrl: 'https://datamade.carto.com/api/v2/viz/7e42cdc5-a47c-4f39-8828-391631aff997/viz.json',
-  tableName: 'probationresourcesmap_mergeddata_resources',
+  layerUrl: 'https://datamade.carto.com/api/v2/viz/7c0cf763-7775-48d0-b59e-c880773fbfa6/viz.json',
+  tableName: 'probationresourcesmap_mergeddata',
   userName: 'datamade',
   geoSearch: '',
-  whereClause: '',
+  whereClause: ' WHERE the_geom is not null AND id is not null ',
   ageSelections: '',
   langSelections: '',
   typeSelections: '',
@@ -336,6 +336,7 @@ var CartoDbLib = {
 
   getResults: function() {
     var sql = new cartodb.SQL({ user: CartoDbLib.userName });
+    console.log(CartoDbLib.whereClause)
 
     sql.execute("SELECT count(*) FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(data) {
@@ -657,14 +658,14 @@ var CartoDbLib = {
 
     }
 
-    CartoDbLib.whereClause = " WHERE the_geom is not null AND ";
+    CartoDbLib.whereClause = " WHERE the_geom is not null AND id is not null AND ";
 
     if (CartoDbLib.geoSearch != "") {
       CartoDbLib.whereClause += CartoDbLib.geoSearch;
       CartoDbLib.whereClause += CartoDbLib.userSelection;
     }
     else {
-      CartoDbLib.whereClause = " WHERE the_geom is not null ";
+      CartoDbLib.whereClause = " WHERE the_geom is not null AND id is not null ";
       CartoDbLib.whereClause += CartoDbLib.userSelection;
     }
   },
@@ -893,7 +894,7 @@ var CartoDbLib = {
 
     if (objArray != null) {
       // Create SQL call.
-      CartoDbLib.whereClause = " WHERE the_geom is not null AND "
+      CartoDbLib.whereClause = " WHERE the_geom is not null AND id is not null AND "
       $.each(objArray, function( index, obj ) {
         CartoDbLib.whereClause += "id=" + obj.id + " OR "
       });

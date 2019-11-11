@@ -2,8 +2,8 @@ port:  5000
 markdown: kramdown
 name: Probation Community Resources
 title: Probation Community Resources
-url: https://probationresources.datamade.us
-description: ""
+url: https://probationcommunityresources.org
+description: "Find resources near you for adults and juveniles on probation in Cook County."
 encoding: utf-8
 timezone: America/Chicago
 

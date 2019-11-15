@@ -128,14 +128,9 @@ var CartoDbLib = {
       };
 
       CartoDbLib.results_div.addTo(CartoDbLib.map);
-
       CartoDbLib.info.addTo(CartoDbLib.map);
-      CartoDbLib.clearSearch();
-      CartoDbLib.renderMap();
-      CartoDbLib.renderList();
-      CartoDbLib.renderSavedResults();
-      CartoDbLib.updateSavedCounter();
-      CartoDbLib.getResults();
+      
+      CartoDbLib.doSearch();
     }
   },
 
@@ -272,7 +267,7 @@ var CartoDbLib = {
               if (facilityNumber != "") {
                 elements["phone"] = facilityNumber;
               }
-              if (facilityWebsite != "") {
+              if (facilityWebsite && facilityWebsite != "") {
                 site = "<a href='{{website}}' target='_blank'><i class='fa fa-reply' aria-hidden='true'></i> Website</a>"
                 if (facilityWebsite.match(/^http/)) {
                   elements["website"] = facilityWebsite;
@@ -326,9 +321,13 @@ var CartoDbLib = {
     var counter = 0;
     // Count number of instances of whitespace.
     $.each(array, function (index, value) {
-      cleanText = value.trim();
-      if (cleanText.length == 0) {
+      if (value == null)
         counter++;
+      else {
+        cleanText = value.trim();
+        if (cleanText.length == 0) {
+          counter++;
+        }
       }
     });
     return counter
@@ -621,7 +620,8 @@ var CartoDbLib = {
 
     } 
     else {
-      CartoDbLib.communitySiteSelection = '';
+      CartoDbLib.communitySiteSelection = 'false';
+      CartoDbLib.userSelection += " AND LOWER(apd_community_service_site) NOT LIKE '%yes%'";
       CartoDbLib.handicapAccessibleSelection = '';
       CartoDbLib.acceptsSexOffendersSelection = '';
       // Gets selected elements in dropdown (represented as an array of objects).
@@ -768,7 +768,7 @@ var CartoDbLib = {
         }
 
         // Activate correct pane
-        console.log($('li.community-tab').hasClass('active'), "communittyyy")
+        // console.log($('li.community-tab').hasClass('active'), "communittyyy")
         if (obj.community != '') {
           $('li.community-tab').addClass('active');
           $('div#community-sites').addClass('active');

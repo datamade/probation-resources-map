@@ -26,6 +26,8 @@ $(function() {
       $('body').bsgdprcookies(settings, 'reinit');
   });
 
+  $('select').select2();
+
   CartoDbLib.initialize();
   new Clipboard('#copy-button');
 
@@ -79,8 +81,6 @@ $(function() {
           return false;
       }
   });
-
-  $('select').select2();
 
   var age_data = makeSelectData(ageOptions);
   var language_data = makeSelectData(languageOptions);

@@ -29,7 +29,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, religious_affiliation, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
+  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, religious_affiliation, last_updated, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
 
@@ -235,6 +235,7 @@ var CartoDbLib = {
     results.empty();
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
+        // console.log(listData)
         var obj_array = listData.rows;
 
         if (listData.rows.length == 0) {
@@ -253,18 +254,21 @@ var CartoDbLib = {
             var givenId = obj_array[idx].id;
             attributeArr.push(facilityName, facilityAddress, facilityHours, facilityNumber, facilityWebsite)
 
+            // console.log(obj_array[idx].facilityName)
+            // console.log(obj_array[idx].hours_of_operation)
+
             if (CartoDbLib.deleteBlankResults(attributeArr) < 5) {
 
-              if (facilityName != "") {
+              if (facilityName && facilityName != "") {
                 elements["facility"] = facilityName;
               }
-              if (facilityAddress != "") {
+              if (facilityAddress && facilityAddress != "") {
                 elements["address"] = facilityAddress;
               }
-              if (facilityHours != "") {
+              if (facilityHours && facilityHours != "") {
                 elements["hours"] = facilityHours;
               }
-              if (facilityNumber != "") {
+              if (facilityNumber && facilityNumber != "") {
                 elements["phone"] = facilityNumber;
               }
               if (facilityWebsite && facilityWebsite != "") {
@@ -284,6 +288,8 @@ var CartoDbLib = {
               else {
                 icon = "<i class='fa fa-star-o' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
               }
+
+              // console.log(elements);
 
               var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
                 "<td><span class='facility-name'>{{facility}}</span><br>" +
@@ -377,14 +383,16 @@ var CartoDbLib = {
       $('#modal-title').append(icon + " " + data.organization_name);
       $('#modal-main').append(contact);
 
-      var img_input = (data.image_url).toLowerCase();
+      if (data.image_url && data.image_url != '') {
+        var img_input = (data.image_url).toLowerCase();
 
-      if (img_input != "no photo" && img_input != "no image") {
-          $('#modal-image').append('<img class="img-borders" src=' + data.image_url + '>');
-          loaded_image = $('img.img-borders')
-          loaded_image.on('error', function() {
-            loaded_image.hide();
-          });
+        if (img_input != "no photo" && img_input != "no image") {
+            $('#modal-image').append('<img class="img-borders" src=' + data.image_url + '>');
+            loaded_image = $('img.img-borders')
+            loaded_image.on('error', function() {
+              loaded_image.hide();
+            });
+        }
       }
 
       if (data.hours_of_operation != "") {
@@ -460,6 +468,9 @@ var CartoDbLib = {
         $("#religion-header").append('<i class="fa fa-sun-o" aria-hidden="true"></i> Religious affiliation');
         $('#religion-subsection').append('<p>' + data.religious_affiliation + '</p>')
       }
+
+      if (data.last_updated && data.last_updated != '')
+        $("#last-updated").html("Last updated: " + data.last_updated)
 
       $.address.parameter('modal_id', data.id);
       $("#post-shortlink").val(location.href);

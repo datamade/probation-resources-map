@@ -254,32 +254,7 @@ var CartoDbLib = {
             var givenId = obj_array[idx].id;
             attributeArr.push(facilityName, facilityAddress, facilityHours, facilityNumber, facilityWebsite)
 
-            // console.log(obj_array[idx].facilityName)
-            // console.log(obj_array[idx].hours_of_operation)
-
             if (CartoDbLib.deleteBlankResults(attributeArr) < 5) {
-
-              if (facilityName && facilityName != "") {
-                elements["facility"] = facilityName;
-              }
-              if (facilityAddress && facilityAddress != "") {
-                elements["address"] = facilityAddress;
-              }
-              if (facilityHours && facilityHours != "") {
-                elements["hours"] = facilityHours;
-              }
-              if (facilityNumber && facilityNumber != "") {
-                elements["phone"] = facilityNumber;
-              }
-              if (facilityWebsite && facilityWebsite != "") {
-                site = "<a href='{{website}}' target='_blank'><i class='fa fa-reply' aria-hidden='true'></i> Website</a>"
-                if (facilityWebsite.match(/^http/)) {
-                  elements["website"] = facilityWebsite;
-                }
-                else {
-                  elements["website"] = "http://" + facilityWebsite;
-                }
-              }
 
               // Check if facility is in 'location' cookie.
               if(CartoDbLib.checkCookieDuplicate(obj_array[idx].id) == false) {
@@ -289,18 +264,16 @@ var CartoDbLib = {
                 icon = "<i class='fa fa-star-o' aria-hidden='true' data-toggle='tooltip' title='Save location'></i>"
               }
 
-              // console.log(elements);
-
               var output = Mustache.render("<tr><td class='hidden-xs'>" + icon + "</td>" +
-                "<td><span class='facility-name'>{{facility}}</span><br>" +
+                "<td><span class='facility-name'>{{organization_name}}</span><br>" +
                 // Address and phone hidden; show for mobile.
-                "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{address}}<br><i class='fa fa-phone'></i> {{phone}}</span></td>" +
-                "<td class='hidden-xs'>{{hours}}</td>" +
-                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{address}}</span><br>" +
-                "<span class='modal-directions'><a href='http://maps.google.com/?q={{address}}' target='_blank'>GET DIRECTIONS</a></span><br>" +
-                "<i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{phone}}</span><br>" +
+                "<span class='hidden-sm hidden-md hidden-lg'><i class='fa fa-map-marker'></i>&nbsp&nbsp{{full_address}}<br><i class='fa fa-phone'></i> {{intake_number}}</span></td>" +
+                "<td class='hidden-xs'>{{hours_of_operation}}</td>" +
+                "<td class='hidden-xs' style='width: 300px'><i class='fa fa-map-marker' aria-hidden='true'></i>&nbsp&nbsp<span class='facility-address'>{{full_address}}</span><br>" +
+                "<span class='modal-directions'><a href='http://maps.google.com/?q={{full_address}}' target='_blank'>GET DIRECTIONS</a></span><br>" +
+                "<i class='fa fa-phone'></i>&nbsp<span class='facility-phone'>{{intake_number}}</span><br>" +
                  "<span class='facility-site'>" + site + "</span>" +
-                 "<span class='hidden' id='given-id'>" + givenId + "</span>" + "</td></tr>", elements);
+                 "<span class='hidden' id='given-id'>" + givenId + "</span>" + "</td></tr>", obj_array[idx]);
 
               results.append(output);
               $('.fa-star-o').tooltip();

@@ -1,3 +1,4 @@
+var DEBUG = false;
 var ageOptions = ["under_18", "column_18_to_24", "column_25_to_64", "over_65"];
 var languageOptions = ["spanish", "asl_or_assistance_for_hearing_impaired"];
 var facilityTypeOptions = ["facility_type_mental_health", "facility_type_behavioral_health", "facility_type_medical_health", "housing", "legal", "education_and_employment", "social_support", "food_and_clothing"];
@@ -232,10 +233,12 @@ var CartoDbLib = {
       CartoDbLib.whereClause = '';
     }
 
+    if (DEBUG) console.log(CartoDbLib.whereClause);
+
     results.empty();
     sql.execute("SELECT " + CartoDbLib.fields + " FROM " + CartoDbLib.tableName + CartoDbLib.whereClause)
       .done(function(listData) {
-        // console.log(listData)
+        if (DEBUG) console.log(listData)
         var obj_array = listData.rows;
 
         if (listData.rows.length == 0) {

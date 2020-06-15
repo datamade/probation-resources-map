@@ -30,7 +30,7 @@ var CartoDbLib = {
   userSelection: '',
   radius: '',
   resultsCount: 0,
-  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, religious_affiliation, last_updated, " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
+  fields : "id, cartodb_id, street_address, full_address, organization_name, hours_of_operation, website, intake_number, image_url, religious_affiliation, last_updated, other_languages, umbrella_organization_created_,  " + ageOptions.join(", ") + ", " + languageOptions.join(", ") + ", " + facilityTypeOptions.join(", ") + ", " + programOptions.join(", ") + ", " + insuranceOptions.join(", "),
 
   initialize: function(){
 
@@ -327,6 +327,8 @@ var CartoDbLib = {
   },
 
   modalPop: function(data) {
+      if (DEBUG) console.log(data);
+
       var contact = "<p id='modal-address'><i class='fa fa-map-marker' aria-hidden='true'></i> " + data.full_address + '</p>' + '<p class="modal-directions"><a href="http://maps.google.com/?q=' + data.full_address + '" target="_blank">GET DIRECTIONS</a></p>' +"<p id='modal-phone'><i class='fa fa-phone' aria-hidden='true'></i> " + data.intake_number + "</p>"
       var hours = "<p><i class='fa fa-calendar' aria-hidden='true'></i> " + data.hours_of_operation + "</p>"
       var url = ''
@@ -356,7 +358,12 @@ var CartoDbLib = {
       $('#modal-pop').modal();
       $('.modal-map-marker div.row').hide();
       $('#modal-title, #modal-main, #modal-programs, #modal-image, #language-header, #insurance-header, #age-header, #programs-header, #type-header, #religion-header, #language-subsection, #insurance-subsection, #age-subsection, #type-subsection, #religion-subsection').empty();
-      $('#modal-title').append(icon + " " + data.organization_name);
+
+      var modal_title = icon + " ";
+      if (data.umbrella_organization_created_ != '')
+        modal_title += data.umbrella_organization_created_ + " - ";
+      modal_title += data.organization_name;
+      $('#modal-title').append(modal_title);
       $('#modal-main').append(contact);
 
       if (data.image_url && data.image_url != '') {
@@ -380,7 +387,7 @@ var CartoDbLib = {
       var age_list = ''
       var type_list = ''
       var insurance_list = ''
-      var language_list = 'English,&nbsp;&nbsp;'
+      var language_list = 'English, '
       var program_list = ''
       // Find all instances of "yes."
       for (prop in data) {
@@ -402,13 +409,22 @@ var CartoDbLib = {
               insurance_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
           }
           if ($.inArray(String(prop), languageOptions) > -1) {
-              language_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
+              language_list += CartoDbLib.formatText(prop) + ", "
           }
           if ($.inArray(String(prop), programOptions) > -1) {
               program_list += CartoDbLib.formatText(prop) + ",&nbsp;&nbsp;"
           }
         }
       }
+
+      if (DEBUG) console.log("other languages:" + data.other_languages);
+      if (data.other_languages != '') {
+        var other_lang_tmp = data.other_languages.replace(/no|english,/gi, "");
+        if (DEBUG) console.log(other_lang_tmp)
+        language_list += other_lang_tmp;
+      }
+      // trim trailing comma
+      language_list = language_list.replace(/(^,)|(, $)/g, "");
 
       // Add headers or not.
       if (age_list != '') {
@@ -434,7 +450,7 @@ var CartoDbLib = {
       if (language_list != '') {
         $("#language-header").parent().parent().show()
         $("#language-header").append('<i class="fa fa-globe" aria-hidden="true"></i> Languages');
-        $("#language-subsection").append("<p>" + language_list.slice(0, -13) + "</p>")
+        $("#language-subsection").append("<p>" + language_list + "</p>")
       }
       if (data.religious_affiliation == '') {
         $("#religion-header").append('<i class="fa fa-sun-o" aria-hidden="true"></i> Religious affiliation');

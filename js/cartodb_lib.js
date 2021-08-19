@@ -8,10 +8,10 @@ var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "milita
 var CartoDbLib = CartoDbLib || {};
 var CartoDbLib = {
 
-  map_centroid:    [41.87811, -87.66677],
-  defaultZoom:     11,
+  map_centroid: [41.87811, -87.66677],
+  defaultZoom: 11,
   lastClickedLayer: null,
-  locationScope:   "chicago",
+  locationScope: "chicago",
   currentPinpoint: null,
   layerUrl: 'https://datamade.carto.com/api/v2/viz/b9ab99de-e4e7-4625-9dc5-032097853133/viz.json',
   tableName: 'probation_resources_map_2021_08_19',

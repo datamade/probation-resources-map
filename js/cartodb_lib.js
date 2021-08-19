@@ -8,13 +8,13 @@ var insuranceOptions = ["sliding_fee_scale", "private_health_insurance", "milita
 var CartoDbLib = CartoDbLib || {};
 var CartoDbLib = {
 
-  map_centroid:    [41.87811, -87.66677],
-  defaultZoom:     11,
+  map_centroid: [41.87811, -87.66677],
+  defaultZoom: 11,
   lastClickedLayer: null,
-  locationScope:   "chicago",
+  locationScope: "chicago",
   currentPinpoint: null,
-  layerUrl: 'https://datamade.carto.com/api/v2/viz/99548baa-f676-49bd-9fb4-6e94d4566104/viz.json',
-  tableName: 'probationresourcesmap_mergeddata_resourceslive_probationresourc',
+  layerUrl: 'https://datamade.carto.com/api/v2/viz/b9ab99de-e4e7-4625-9dc5-032097853133/viz.json',
+  tableName: 'probation_resources_map_2021_08_19',
   userName: 'datamade',
   geoSearch: '',
   whereClause: '',

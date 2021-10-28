@@ -8,7 +8,7 @@ Probation Community Resources is an online interactive, searchable map that help
 
 Built in collaboration with the Cook County Adult Probation Department (CCAPD), the Cook County Juvenile Probation Department (CCJPD), the Sargent Shriver National Center on Poverty Law, the Chicago Appleseed Fund, and the Health & Medicine Policy Research Group, Probation Community Resources helps criminal justice personnel refer clients to culturally relevant and geographically specific community-based services.
 
-![Probation Community Resources](https://raw.githubusercontent.com/datamade/probation-resources-map/master/images/probation-community-resources.jpg)
+![Probation Community Resources](https://raw.githubusercontent.com/datamade/probation-resources-map/main/images/probation-community-resources.jpg)
 
 ## Installation
 
@@ -80,4 +80,4 @@ Report it here: https://github.com/datamade/probation-resources-map/issues
 
 Copyright (c) 2016 DataMade. Released under the MIT License.
 
-[See LICENSE for details](https://github.com/datamade/probation-resources-map/blob/master/LICENSE)
+[See LICENSE for details](https://github.com/datamade/probation-resources-map/blob/main/LICENSE)

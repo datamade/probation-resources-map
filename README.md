@@ -24,7 +24,8 @@ Built in collaboration with the Cook County Adult Probation Department (CCAPD), 
 
 The data for this site is housed a Google Spreadsheet and synced with CARTO. Initially, it was set up to automatically update every 30 minutes, but the automatic import for CARTO failed on parsing the spreadsheet properly. Now, to do updates, you must take the following steps:
 
-1. Download a CSV of the `Probation Resources Map - Merged Data - Resources LIVE` Google Sheet
+1. Download a CSV of the `Probation Resources Map` Google Sheet: https://docs.google.com/spreadsheets/d/1iShheCZRamOmuWo3SETgbWopHCCu1DRB_F5_FZMKp5A/edit#. This ensures only the sheet with the info we want is included (CARTO gets confused by Excel files with multiple sheets)
+2. In Excel or LibreOffice, save the CSV as an XLSX file.
 2. In CARTO, create a new dataset and make sure the "Let CARTO automatically guess data types and content on import." box is UNCHECKED (if it is, CARTO will convert fields like Yes/No into boolean true/false)
 3. After the table is created, go to Edit => Georeference and select the latitude and longitude columns to set as the location.
 4. Set the table to visible With link
@@ -78,6 +79,6 @@ Report it here: https://github.com/datamade/probation-resources-map/issues
 
 ## Copyright
 
-Copyright (c) 2016 DataMade. Released under the MIT License.
+Copyright (c) 2022 DataMade. Released under the MIT License.
 
 [See LICENSE for details](https://github.com/datamade/probation-resources-map/blob/main/LICENSE)

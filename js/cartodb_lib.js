@@ -79,9 +79,9 @@ var CartoDbLib = {
         zoom: CartoDbLib.defaultZoom
       });
 
-      CartoDbLib.google = new L.Google('ROADMAP', {animate: false});
+      CartoDbLib.baseMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?');
 
-      CartoDbLib.map.addLayer(CartoDbLib.google);
+      CartoDbLib.map.addLayer(CartoDbLib.baseMap);
 
       //add hover info control
       CartoDbLib.info = L.control({position: 'bottomleft'});

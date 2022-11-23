@@ -79,7 +79,7 @@ var CartoDbLib = {
         zoom: CartoDbLib.defaultZoom
       });
 
-      CartoDbLib.baseMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?');
+      CartoDbLib.baseMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?', {attribution: "<img src='/images/google_on_white.png' style='height:18px; width:59px;' />"});
 
       CartoDbLib.map.addLayer(CartoDbLib.baseMap);
 

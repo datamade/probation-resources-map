@@ -13,7 +13,7 @@ var CartoDbLib = {
   lastClickedLayer: null,
   locationScope: "chicago",
   currentPinpoint: null,
-  tableName: 'probation_resources_map_2024_03_20',
+  tableName: 'probation_resources_map_live',
   userName: 'datamade',
   geoSearch: '',
   whereClause: '',

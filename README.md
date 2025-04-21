@@ -29,10 +29,8 @@ The data for this site is housed a Google Spreadsheet and synced with CARTO. Ini
 2. In CARTO, create a new dataset and make sure the "Let CARTO automatically guess data types and content on import." box is UNCHECKED (if it is, CARTO will convert fields like Yes/No into boolean true/false)
 3. After the table is created, go to Edit => Georeference and select the latitude and longitude columns to set as the location.
 4. Set the table to visible With link
-5. Click visualize to create a map visualization layer
-6. Click Publish and copy the visualization layer URL under CartoDB.js (should be something like `https://datamade.carto.com/api/v2/viz/b9ab99de-e4e7-4625-9dc5-032097853133/viz.json`) and update `layerUrl` in `cartodb_lib.js`.
-7. Copy the table name (found by clicking on the SQL icon on the right) and update `tableName` in `cartodb_lib.js`
-8. Preview the site and make sure there are no javascript errors and the points display as expected. If the map doesn't display, open up the Network tab to diagnose errors from CARTO. It won't throw javascript errors, but the network responses from their domain will tell you the error it encountered. It is typically due to column names being slightly changed or renamed.
+5. Copy the table name (found by clicking on the SQL icon on the right) and update `tableName` in `cartodb_lib.js`
+6. Preview the site and make sure there are no javascript errors and the points display as expected. If the map doesn't display, open up the Network tab to diagnose errors from CARTO. It won't throw javascript errors, but the network responses from their domain will tell you the error it encountered. It is typically due to column names being slightly changed or renamed.
 
 ## Dependencies
 
